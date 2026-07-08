@@ -42,7 +42,7 @@ class HomePage extends StatelessWidget {
       ),
 
       // Corpo da home: lista de processos agrupados por data
-      body: const ListaProcessos(),
+      body: ListaProcessos(),
     );
   }
 }

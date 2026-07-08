@@ -2,11 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../models/calendario.dart';
 import '../../../mock/mock.dart';
+import 'filtro_categorias.dart';
 import 'item_processo.dart';
 
 
-class ListaProcessos extends StatelessWidget {
+class ListaProcessos extends StatefulWidget {
   const ListaProcessos({super.key});
+
+  @override
+  State<ListaProcessos> createState() => _ListaProcessosState();
+}
+
+class _ListaProcessosState extends State<ListaProcessos> {
+  
+  String? _categoriaSelecionada;
 
   @override
   Widget build(BuildContext context) {
@@ -19,23 +28,63 @@ class ListaProcessos extends StatelessWidget {
       return !dataEvento.isBefore(inicioDoDia);
     }).toList();
 
+    // Contagem de categorias (sempre sobre todos os eventos, não os filtrados)
+    final contagemCategorias = _contarCategorias(eventosFuturos);
 
-    final agrupados = _agruparPorData(eventosFuturos);
+    // Filtra por categoria selecionada
+    final eventosFiltrados = _filtrarPorCategoria(
+      eventosFuturos,
+      _categoriaSelecionada,
+    );
 
-    if (agrupados.isEmpty) {
-      return const _EmptyState();
-    }
+    final agrupados = _agruparPorData(eventosFiltrados);
 
-    // 4. Monta uma lista "flat" intercalando headers e cards.
-    //    Cada entrada é um _ListItem que pode ser header ou card.
-    //    Isso permite usar ListView.builder (lazy) ao invés de Column (eager).
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Título fixo: "Caixa de Entrada"
+        const Padding(
+          padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
+          child: Text(
+            'Caixa de Entrada',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+
+        // Barra de filtros por categoria (chips horizontais)
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: FiltroCategorias(
+            categorias: contagemCategorias,
+            selecionada: _categoriaSelecionada,
+            onSelecionada: (categoria) {
+              setState(() => _categoriaSelecionada = categoria);
+            },
+          ),
+        ),
+
+        const Divider(height: 1),
+
+        // Lista de processos agrupados por data (scrollável)
+        Expanded(
+          child: agrupados.isEmpty
+              ? const _EmptyState()
+              : _buildListaProcessos(agrupados),
+        ),
+      ],
+    );
+  }
+
+  /// Monta o ListView.builder com headers de data e cards de processo.
+  Widget _buildListaProcessos(Map<DateTime, List<Calendario>> agrupados) {
     final itensFlat = <_ListItem>[];
 
     for (final entry in agrupados.entries) {
-      // Adiciona o header da data
       itensFlat.add(_ListItem.header(entry.key, entry.value.length));
 
-      // Adiciona cada evento como card
       for (final evento in entry.value) {
         itensFlat.add(_ListItem.card(evento));
       }
@@ -60,6 +109,21 @@ class ListaProcessos extends StatelessWidget {
         );
       },
     );
+  }
+
+  /// Conta quantos processos existem por categoria.
+  Map<String, int> _contarCategorias(List<Calendario> lista) {
+    final mapa = <String, int>{};
+    for (final e in lista) {
+      mapa[e.category] = (mapa[e.category] ?? 0) + 1;
+    }
+    return mapa;
+  }
+
+  /// Filtra a lista por categoria. Se `categoria` for null, retorna todos.
+  List<Calendario> _filtrarPorCategoria(List<Calendario> lista, String? categoria) {
+    if (categoria == null) return lista;
+    return lista.where((e) => e.category == categoria).toList();
   }
 
   /// Agrupa uma lista de eventos por data (ignorando hora).
