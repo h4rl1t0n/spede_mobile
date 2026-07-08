@@ -1,0 +1,219 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+import 'color_schemes.dart';
+import 'styles/text_styles.dart';
+
+class ThemeConfig {
+  ThemeConfig._();
+
+  static ThemeData _buildTheme({required Brightness brightness, required ColorScheme colorScheme}) {
+    return ThemeData(
+      fontFamily: 'Cabin',
+      useMaterial3: true,
+      brightness: brightness,
+      colorScheme: colorScheme,
+      scaffoldBackgroundColor: colorScheme.surface,
+      iconTheme: IconThemeData(color: colorScheme.primary),
+
+      appBarTheme: AppBarTheme(
+        backgroundColor: colorScheme.primary,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        centerTitle: false,
+        iconTheme: IconThemeData(color: colorScheme.surface),
+        titleTextStyle: TextStyle(
+          fontFamily: 'Cabin',
+          fontWeight: FontWeight.w700,
+          fontSize: 22,
+          color: colorScheme.surface,
+        ),
+      ),
+
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          elevation: 0,
+          minimumSize: const Size.fromHeight(52),
+          backgroundColor: colorScheme.primary,
+          foregroundColor: colorScheme.onPrimary,
+          textStyle: TextStyles.instance.textButtonLabel,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        ),
+      ),
+
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          minimumSize: const Size.fromHeight(52),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        ),
+      ),
+
+      dropdownMenuTheme: DropdownMenuThemeData(
+        textStyle: TextStyle(fontFamily: 'Cabin', fontSize: 14, color: colorScheme.onSurface),
+        menuStyle: MenuStyle(
+          backgroundColor: WidgetStatePropertyAll(colorScheme.surface),
+          surfaceTintColor: const WidgetStatePropertyAll(Colors.transparent),
+          elevation: const WidgetStatePropertyAll(4),
+          shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(14))),
+        ),
+      ),
+
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          minimumSize: const Size.fromHeight(52),
+          side: BorderSide(color: colorScheme.outline),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        ),
+      ),
+
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          foregroundColor: colorScheme.primary,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        ),
+      ),
+
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: colorScheme.surfaceContainerHighest.withValues(alpha: .45),
+        isDense: true,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide(color: colorScheme.outline.withValues(alpha: .20)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide(color: colorScheme.primary, width: 1.5),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide(color: colorScheme.error),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide(color: colorScheme.error, width: 1.5),
+        ),
+        labelStyle: TextStyles.instance.textRegular.copyWith(color: colorScheme.onSurfaceVariant, fontFamily: 'Cabin'),
+        hintStyle: TextStyles.instance.textRegular.copyWith(
+          color: colorScheme.onSurfaceVariant.withValues(alpha: .7),
+          fontFamily: 'Cabin',
+          fontWeight: .w500,
+        ),
+        errorStyle: TextStyles.instance.textRegular.copyWith(color: colorScheme.error, fontFamily: 'Cabin'),
+      ),
+
+      textTheme: TextTheme(
+        titleLarge: TextStyle(
+          fontFamily: 'Cabin',
+          fontWeight: FontWeight.w700,
+          fontSize: 24,
+          color: colorScheme.onSurface,
+        ),
+        titleMedium: TextStyle(
+          fontFamily: 'Cabin',
+          fontWeight: FontWeight.w600,
+          fontSize: 18,
+          color: colorScheme.onSurface,
+        ),
+        bodyLarge: TextStyle(fontFamily: 'Cabin', fontSize: 16, color: colorScheme.onSurface),
+        bodyMedium: TextStyle(fontFamily: 'Cabin', fontSize: 14, color: colorScheme.onSurface),
+      ),
+
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: colorScheme.surface,
+        surfaceTintColor: Colors.transparent,
+        indicatorColor: colorScheme.primary.withValues(alpha: .12),
+        elevation: 0,
+        height: 72,
+        labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+        labelTextStyle: WidgetStateProperty.resolveWith((states) {
+          return TextStyle(
+            fontFamily: 'Cabin',
+            fontSize: 11,
+            fontWeight: states.contains(WidgetState.selected) ? FontWeight.w700 : FontWeight.w500,
+            color: states.contains(WidgetState.selected) ? colorScheme.primary : colorScheme.onSurfaceVariant,
+          );
+        }),
+        iconTheme: WidgetStateProperty.resolveWith((states) {
+          return IconThemeData(
+            size: 24,
+            color: states.contains(WidgetState.selected) ? colorScheme.primary : colorScheme.onSurfaceVariant,
+          );
+        }),
+      ),
+
+      dialogTheme: DialogThemeData(
+        backgroundColor: colorScheme.surface,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+        titleTextStyle: TextStyle(
+          fontFamily: 'Cabin',
+          fontSize: 22,
+          fontWeight: FontWeight.w700,
+          color: colorScheme.onSurface,
+        ),
+      ),
+
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: colorScheme.surface,
+        surfaceTintColor: Colors.transparent,
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(28))),
+      ),
+
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        color: colorScheme.primary,
+        linearTrackColor: colorScheme.surfaceContainerHighest,
+      ),
+
+      cardTheme: CardThemeData(
+        elevation: 1,
+        shadowColor: Colors.black.withValues(alpha: .05),
+        surfaceTintColor: Colors.transparent,
+        color: colorScheme.surface,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
+      ),
+
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        elevation: 2,
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      ),
+
+      snackBarTheme: SnackBarThemeData(
+        behavior: SnackBarBehavior.floating,
+        elevation: 0,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+      ),
+
+      dividerTheme: DividerThemeData(color: colorScheme.outlineVariant.withValues(alpha: .5), thickness: .5),
+
+      chipTheme: ChipThemeData(
+        backgroundColor: colorScheme.surfaceContainerHighest,
+        selectedColor: colorScheme.primary.withValues(alpha: .12),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        labelStyle: TextStyle(fontFamily: 'Cabin', color: colorScheme.onSurface),
+      ),
+
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: colorScheme.primary,
+        selectionColor: colorScheme.primary.withValues(alpha: .25),
+        selectionHandleColor: colorScheme.primary,
+      ),
+
+      pageTransitionsTheme: PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: FadeForwardsPageTransitionsBuilder(),
+          TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        },
+      ),
+    );
+  }
+
+  static final lightTheme = _buildTheme(brightness: Brightness.light, colorScheme: lightColorScheme);
+
+  static final darkTheme = _buildTheme(brightness: Brightness.dark, colorScheme: darkColorScheme);
+}
