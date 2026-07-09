@@ -51,7 +51,7 @@ class CalendarioItem extends StatelessWidget {
             itemBuilder: (_, index) {
               final date = days[index];
               final quantidade = eventos.where((evento) {
-                return evento.date.year == date.year && evento.date.month == date.month && evento.date.day == date.day;
+                return evento.dataSolicitacao.year == date.year && evento.dataSolicitacao.month == date.month && evento.dataSolicitacao.day == date.day;
               }).length;
 
               return Dia(
