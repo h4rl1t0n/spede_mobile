@@ -68,7 +68,7 @@ class FiltroCategorias extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected ? cs.primary : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(14),
           border: Border.all(color: isSelected ? cs.primary : Colors.grey.shade300),
         ),
         child: Text(

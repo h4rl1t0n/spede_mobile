@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../home_page.dart';
 import '../menu_drawer/menu_drawer.dart';
 
 class DrawerContent extends StatelessWidget {
@@ -24,11 +25,26 @@ class DrawerContent extends StatelessWidget {
                 Text('Pessoal', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18)),
               ],
             ),
-            // MenuDrawer(icon: Icons.inbox, title: 'Caixa de Entrada'),
-            // MenuDrawer(icon: Icons.work_outline, title: 'Caixa de Trabalho'),
-            // MenuDrawer(icon: Icons.outbox, title: 'Caixa de Saída'),
-            MenuDrawer(icon: CupertinoIcons.tray_arrow_down, title: 'Solicitações Recebidas'),
-            MenuDrawer(icon: CupertinoIcons.tray_arrow_up, title: 'Solicitações Enviadas'),
+            MenuDrawer(
+              icon: CupertinoIcons.tray_arrow_down,
+              title: 'Solicitações Recebidas',
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => const HomePage(title: 'Pessoal > Solicitações Recebidas')),
+                );
+              },
+            ),
+            MenuDrawer(
+              icon: CupertinoIcons.tray_arrow_up,
+              title: 'Solicitações Enviadas',
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => const HomePage(title: 'Pessoal > Solicitações Enviadas')),
+                );
+              },
+            ),
 
             SizedBox(height: 20),
 
@@ -39,11 +55,26 @@ class DrawerContent extends StatelessWidget {
                 Text('Unidade', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18)),
               ],
             ),
-            // MenuDrawer(icon: Icons.inbox, title: 'Caixa de Entrada'),
-            // MenuDrawer(icon: Icons.work_outline, title: 'Caixa de Trabalho'),
-            // MenuDrawer(icon: Icons.outbox, title: 'Caixa de Saída'),
-            MenuDrawer(icon: CupertinoIcons.tray_arrow_down, title: 'Solicitações Recebidas'),
-            MenuDrawer(icon: CupertinoIcons.tray_arrow_up, title: 'Solicitações Enviadas'),
+            MenuDrawer(
+              icon: CupertinoIcons.tray_arrow_down,
+              title: 'Solicitações Recebidas',
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => const HomePage(title: 'Unidade > Solicitações Recebidas')),
+                );
+              },
+            ),
+            MenuDrawer(
+              icon: CupertinoIcons.tray_arrow_up,
+              title: 'Solicitações Enviadas',
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => const HomePage(title: 'Unidade > Solicitações Enviadas')),
+                );
+              },
+            ),
           ],
         );
       },

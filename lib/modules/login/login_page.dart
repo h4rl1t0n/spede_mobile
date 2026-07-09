@@ -233,7 +233,10 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
       height: 50,
       child: ElevatedButton(
         onPressed: () {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const HomePage()));
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const HomePage(title: 'Pessoal > Solicitações Recebidas')),
+          );
         },
         style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
         child: const Text('Entrar', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600)),

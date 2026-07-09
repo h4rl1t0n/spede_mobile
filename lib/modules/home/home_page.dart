@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../calendario/calendario_page.dart';
 import '../perfil/perfil_page.dart';
+import '../solicitacao/solicitacao_page.dart';
 import 'widgets/drawer/drawer_home.dart';
-import 'widgets/lista_processos.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final String title;
+  const HomePage({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +44,7 @@ class HomePage extends StatelessWidget {
       ),
       drawer: DrawerHome(),
       // Corpo da home: lista de processos agrupados por data
-      body: ListaProcessos(),
+      body: SolicitacaoPage(title: title),
     );
   }
 }

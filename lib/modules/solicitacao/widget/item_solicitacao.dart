@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-// Importa o modelo Calendario que já existe no projeto
-import '../../../models/calendario.dart';
+import '../../../models/documento_model.dart';
 
-/// Card individual de um processo.
-/// Recebe um objeto [Calendario] e renderiza título, categoria, número e data.
-/// Não contém lógica de negócio — é puramente visual.
-class ItemProcesso extends StatelessWidget {
-  final Calendario item;
+class ItemSolicitacao extends StatelessWidget {
+  final DocumentoModel item;
 
-  const ItemProcesso({super.key, required this.item});
+  const ItemSolicitacao({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +17,6 @@ class ItemProcesso extends StatelessWidget {
         borderRadius: BorderRadius.circular(18),
       ),
       child: GestureDetector(
-        // Por enquanto sem ação — futuramente abrirá detalhes do processo
         onTap: () {},
         child: Row(
           children: [
@@ -42,7 +37,13 @@ class ItemProcesso extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Título do evento/processo
-                    Text(item.title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                    Row(
+                      spacing: 5,
+                      children: [
+                        item.image,
+                        Text(item.numero, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                      ],
+                    ),
 
                     const SizedBox(height: 12),
 
@@ -54,7 +55,7 @@ class ItemProcesso extends StatelessWidget {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: Text(
-                        item.category,
+                        item.tipoDocumento.name,
                         style: TextStyle(color: item.color, fontWeight: FontWeight.w600, fontSize: 12),
                       ),
                     ),
@@ -67,7 +68,7 @@ class ItemProcesso extends StatelessWidget {
                         Icon(Icons.folder_outlined, size: 18, color: Colors.grey.shade600),
                         const SizedBox(width: 8),
                         Expanded(
-                          child: Text('Processo ${item.process}', style: TextStyle(color: Colors.grey.shade700)),
+                          child: Text('Processo ${item.numero}', style: TextStyle(color: Colors.grey.shade700)),
                         ),
                       ],
                     ),
@@ -79,7 +80,10 @@ class ItemProcesso extends StatelessWidget {
                       children: [
                         Icon(Icons.calendar_today_outlined, size: 16, color: Colors.grey.shade600),
                         const SizedBox(width: 8),
-                        Text(DateFormat('dd/MM/yyyy').format(item.date), style: TextStyle(color: Colors.grey.shade700)),
+                        Text(
+                          DateFormat('dd/MM/yyyy').format(item.dataSolicitacao),
+                          style: TextStyle(color: Colors.grey.shade700),
+                        ),
                       ],
                     ),
                   ],
