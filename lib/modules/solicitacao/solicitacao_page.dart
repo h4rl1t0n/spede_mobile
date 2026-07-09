@@ -116,8 +116,7 @@ class _SolicitacaoPageState extends State<SolicitacaoPage> {
     return lista.where((e) => e.tipoSolicitacao.name == categoria).toList();
   }
 
-  /// Agrupa uma lista de eventos por data (ignorando hora).
-  /// Retorna um Map ordenado cronologicamente.
+
   Map<DateTime, List<DocumentoModel>> _agruparPorData(List<DocumentoModel> lista) {
     final map = <DateTime, List<DocumentoModel>>{};
 
@@ -132,12 +131,7 @@ class _SolicitacaoPageState extends State<SolicitacaoPage> {
   }
 }
 
-// ---------------------------------------------------------------------------
-// Tipos auxiliares internos (privados ao arquivo)
-// ---------------------------------------------------------------------------
 
-/// Representa um item na lista flat: pode ser um header de data ou um card.
-/// Isso evita usar tipos dinâmicos ou listas heterogêneas sem tipagem.
 class _ListItem {
   final bool isHeader;
   final DateTime? data;
