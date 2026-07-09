@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 
 class FiltroCategorias extends StatelessWidget {
   final Map<String, int> categorias;
-
   final String? selecionada;
-
   final ValueChanged<String?> onSelecionada;
 
   const FiltroCategorias({super.key, required this.categorias, required this.selecionada, required this.onSelecionada});
@@ -12,54 +10,58 @@ class FiltroCategorias extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-
-    // Total de processos para o chip "Todos"
-    final total = categorias.values.fold<int>(0, (sum, v) => sum + v);
+    final total = categorias.values.fold(0, (soma, valor) => soma + valor);
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
-          // Chip "Todos" — sempre primeiro
-          _buildChip(
-            context: context,
+          _CategoriaChip(
             label: 'Todos',
             count: total,
             isSelected: selecionada == null,
             onTap: () => onSelecionada(null),
-            cs: cs,
+            colorScheme: cs,
           ),
 
           const SizedBox(width: 8),
 
-          // Chips dinâmicos por categoria
-          ...categorias.entries.map((entry) {
-            return Padding(
+          ...categorias.entries.map(
+            (entry) => Padding(
               padding: const EdgeInsets.only(right: 8),
-              child: _buildChip(
-                context: context,
+              child: _CategoriaChip(
                 label: entry.key,
                 count: entry.value,
                 isSelected: selecionada == entry.key,
                 onTap: () => onSelecionada(entry.key),
-                cs: cs,
+                colorScheme: cs,
               ),
-            );
-          }),
+            ),
+          ),
         ],
       ),
     );
   }
+}
 
-  Widget _buildChip({
-    required BuildContext context,
-    required String label,
-    required int count,
-    required bool isSelected,
-    required VoidCallback onTap,
-    required ColorScheme cs,
-  }) {
+class _CategoriaChip extends StatelessWidget {
+  final String label;
+  final int count;
+  final bool isSelected;
+  final VoidCallback onTap;
+  final ColorScheme colorScheme;
+
+  const _CategoriaChip({
+    required this.label,
+    required this.count,
+    required this.isSelected,
+    required this.onTap,
+    required this.colorScheme,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
@@ -67,16 +69,16 @@ class FiltroCategorias extends StatelessWidget {
         curve: Curves.easeInOut,
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? cs.primary : Colors.transparent,
+          color: isSelected ? colorScheme.primary : Colors.transparent,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: isSelected ? cs.primary : Colors.grey.shade300),
+          border: Border.all(color: isSelected ? colorScheme.primary : Colors.grey.shade300),
         ),
         child: Text(
           '$label ($count)',
           style: TextStyle(
-            color: isSelected ? cs.onPrimary : cs.onSurface,
-            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
             fontSize: 13,
+            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+            color: isSelected ? colorScheme.onPrimary : colorScheme.onSurface,
           ),
         ),
       ),

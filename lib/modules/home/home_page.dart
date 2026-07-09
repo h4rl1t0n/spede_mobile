@@ -25,7 +25,6 @@ class HomePage extends StatelessWidget {
             ),
           ],
         ),
-
         actions: [
           IconButton(
             icon: Icon(Icons.calendar_month),
@@ -43,7 +42,6 @@ class HomePage extends StatelessWidget {
         ],
       ),
       drawer: DrawerHome(),
-      // Corpo da home: lista de processos agrupados por data
       body: SolicitacaoPage(title: title),
     );
   }

@@ -36,8 +36,16 @@ class DocumentoModel {
 
   Widget get image {
     final path = tipoEscrito == .rascunho ? 'assets/images/rascunho_20x20.png' : 'assets/images/documento_20x20.png';
-    return Image.asset(path, height: 20, width: 20);
+    return Image.asset(path, height: 25, width: 25, fit: BoxFit.contain);
   }
 
   Color get color => Colors.blue;
+
+  Color corSituacao() {
+    return switch (tipoSituacao) {
+      TipoSituacao.pendente => Colors.amber.shade900,
+      TipoSituacao.deferida => Colors.green.shade900,
+      TipoSituacao.indeferida => Colors.red.shade900,
+    };
+  }
 }
