@@ -204,6 +204,16 @@ class ThemeConfig {
         selectionHandleColor: colorScheme.primary,
       ),
 
+      datePickerTheme: DatePickerThemeData(
+        backgroundColor: Colors.transparent,
+        elevation: 5,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+        todayBorder: BorderSide(color: colorScheme.secondary, width: 2),
+        todayForegroundColor: WidgetStatePropertyAll(colorScheme.secondary),
+        todayBackgroundColor: const WidgetStatePropertyAll(Colors.transparent),
+        dayShape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+      ),
+
       pageTransitionsTheme: PageTransitionsTheme(
         builders: {
           TargetPlatform.android: FadeForwardsPageTransitionsBuilder(),
