@@ -31,10 +31,7 @@ class ItemProcesso extends StatelessWidget {
             Container(
               width: 4,
               height: 100,
-              decoration: BoxDecoration(
-                color: item.color,
-                borderRadius: BorderRadius.circular(4),
-              ),
+              decoration: BoxDecoration(color: item.color, borderRadius: BorderRadius.circular(4)),
             ),
 
             // Conteúdo principal do card
@@ -45,33 +42,20 @@ class ItemProcesso extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Título do evento/processo
-                    Text(
-                      item.title,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
+                    Text(item.title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
 
                     const SizedBox(height: 12),
 
                     // Badge da categoria com cor de fundo translúcida
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 5,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                       decoration: BoxDecoration(
-                        color: item.color.withOpacity(.12),
+                        color: item.color.withValues(alpha: .12),
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: Text(
                         item.category,
-                        style: TextStyle(
-                          color: item.color,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 12,
-                        ),
+                        style: TextStyle(color: item.color, fontWeight: FontWeight.w600, fontSize: 12),
                       ),
                     ),
 
@@ -80,17 +64,10 @@ class ItemProcesso extends StatelessWidget {
                     // Linha com ícone de pasta + número do processo
                     Row(
                       children: [
-                        Icon(
-                          Icons.folder_outlined,
-                          size: 18,
-                          color: Colors.grey.shade600,
-                        ),
+                        Icon(Icons.folder_outlined, size: 18, color: Colors.grey.shade600),
                         const SizedBox(width: 8),
                         Expanded(
-                          child: Text(
-                            'Processo ${item.process}',
-                            style: TextStyle(color: Colors.grey.shade700),
-                          ),
+                          child: Text('Processo ${item.process}', style: TextStyle(color: Colors.grey.shade700)),
                         ),
                       ],
                     ),
@@ -100,16 +77,9 @@ class ItemProcesso extends StatelessWidget {
                     // Linha com ícone de calendário + data formatada
                     Row(
                       children: [
-                        Icon(
-                          Icons.calendar_today_outlined,
-                          size: 16,
-                          color: Colors.grey.shade600,
-                        ),
+                        Icon(Icons.calendar_today_outlined, size: 16, color: Colors.grey.shade600),
                         const SizedBox(width: 8),
-                        Text(
-                          DateFormat('dd/MM/yyyy').format(item.date),
-                          style: TextStyle(color: Colors.grey.shade700),
-                        ),
+                        Text(DateFormat('dd/MM/yyyy').format(item.date), style: TextStyle(color: Colors.grey.shade700)),
                       ],
                     ),
                   ],
@@ -120,10 +90,7 @@ class ItemProcesso extends StatelessWidget {
             // Chevron indicando que o card é clicável
             Padding(
               padding: const EdgeInsets.only(right: 14),
-              child: Icon(
-                Icons.chevron_right_rounded,
-                color: Colors.grey.shade500,
-              ),
+              child: Icon(Icons.chevron_right_rounded, color: Colors.grey.shade500),
             ),
           ],
         ),

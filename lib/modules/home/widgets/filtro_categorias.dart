@@ -1,21 +1,13 @@
 import 'package:flutter/material.dart';
 
-
 class FiltroCategorias extends StatelessWidget {
-  
   final Map<String, int> categorias;
 
   final String? selecionada;
 
-
   final ValueChanged<String?> onSelecionada;
 
-  const FiltroCategorias({
-    super.key,
-    required this.categorias,
-    required this.selecionada,
-    required this.onSelecionada,
-  });
+  const FiltroCategorias({super.key, required this.categorias, required this.selecionada, required this.onSelecionada});
 
   @override
   Widget build(BuildContext context) {
@@ -77,9 +69,7 @@ class FiltroCategorias extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected ? cs.primary : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: isSelected ? cs.primary : Colors.grey.shade300,
-          ),
+          border: Border.all(color: isSelected ? cs.primary : Colors.grey.shade300),
         ),
         child: Text(
           '$label ($count)',

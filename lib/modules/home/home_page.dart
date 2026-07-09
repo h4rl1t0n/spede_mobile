@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../calendario/calendario_page.dart';
 import '../perfil/perfil_page.dart';
+import 'widgets/drawer/drawer_home.dart';
 import 'widgets/lista_processos.dart';
 
 class HomePage extends StatelessWidget {
@@ -40,7 +41,7 @@ class HomePage extends StatelessWidget {
           SizedBox(width: 10),
         ],
       ),
-
+      drawer: DrawerHome(),
       // Corpo da home: lista de processos agrupados por data
       body: ListaProcessos(),
     );
