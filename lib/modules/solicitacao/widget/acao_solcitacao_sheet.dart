@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../../../core/ui/theme/styles/text_styles.dart';
 import '../../../models/documento_model.dart';
-import '../../rejeitar_solicitacao/rejeitar_solicitacao.dart';
+import '../../decidir_solicitacao/decidir_solicitacao_page.dart';
 
 enum AcaoSolicitacao {
   atender('Atender'),
@@ -105,6 +105,17 @@ class _AcaoSolcitacaoSheetState extends State<AcaoSolcitacaoSheet> {
                         switch (_acao) {
                           case AcaoSolicitacao.atender:
                             Navigator.pop(context, AcaoSolicitacao.atender);
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) {
+                                  return DecidirSolicitacaoPage(
+                                    solicitacoes: [solicitacao],
+                                    acao: AcaoSolicitacao.atender,
+                                  );
+                                },
+                              ),
+                            );
                             break;
 
                           case AcaoSolicitacao.rejeitar:
@@ -113,7 +124,10 @@ class _AcaoSolcitacaoSheetState extends State<AcaoSolcitacaoSheet> {
                               context,
                               MaterialPageRoute(
                                 builder: (_) {
-                                  return RejeitarSolicitacao(solicitacoes: [solicitacao]);
+                                  return DecidirSolicitacaoPage(
+                                    solicitacoes: [solicitacao],
+                                    acao: AcaoSolicitacao.rejeitar,
+                                  );
                                 },
                               ),
                             );
