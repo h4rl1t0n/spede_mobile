@@ -12,7 +12,9 @@ class ListaEventos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final eventosDoDia = eventos.where((evento) {
-      return evento.dataSolicitacao.year == data.year && evento.dataSolicitacao.month == data.month && evento.dataSolicitacao.day == data.day;
+      return evento.dataSolicitacao.year == data.year &&
+          evento.dataSolicitacao.month == data.month &&
+          evento.dataSolicitacao.day == data.day;
     }).toList();
 
     return Column(
@@ -29,7 +31,7 @@ class ListaEventos extends StatelessWidget {
                   itemBuilder: (_, index) {
                     final item = eventosDoDia[index];
 
-                    return ItemSolicitacao(item: item);
+                    return ItemSolicitacao(solicitacao: item);
                   },
                 ),
         ),

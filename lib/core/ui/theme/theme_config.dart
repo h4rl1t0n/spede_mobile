@@ -158,9 +158,47 @@ class ThemeConfig {
       ),
 
       bottomSheetTheme: BottomSheetThemeData(
+        showDragHandle: true,
         backgroundColor: colorScheme.surface,
         surfaceTintColor: Colors.transparent,
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(28))),
+      ),
+
+      expansionTileTheme: ExpansionTileThemeData(
+        iconColor: colorScheme.primary,
+        collapsedIconColor: colorScheme.onSurfaceVariant,
+        textColor: colorScheme.primary,
+        collapsedTextColor: colorScheme.onSurface,
+        collapsedBackgroundColor: Colors.transparent,
+        backgroundColor: colorScheme.surfaceContainerHighest.withValues(alpha: .2),
+        collapsedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(14),
+          side: BorderSide(color: colorScheme.outlineVariant.withValues(alpha: .5), width: 0.5),
+        ),
+        tilePadding: const EdgeInsets.symmetric(horizontal: 16),
+        childrenPadding: const EdgeInsets.only(bottom: 16, left: 16, right: 16),
+      ),
+
+      listTileTheme: ListTileThemeData(
+        iconColor: colorScheme.primary,
+        textColor: colorScheme.onSurface,
+        selectedColor: colorScheme.primary,
+        selectedTileColor: colorScheme.primary.withValues(alpha: .12),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        titleTextStyle: TextStyle(
+          fontFamily: 'Cabin',
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          color: colorScheme.onSurface,
+        ),
+        subtitleTextStyle: TextStyle(
+          fontFamily: 'Cabin',
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          color: colorScheme.onSurfaceVariant,
+        ),
       ),
 
       progressIndicatorTheme: ProgressIndicatorThemeData(

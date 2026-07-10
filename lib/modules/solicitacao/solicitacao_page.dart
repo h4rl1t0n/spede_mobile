@@ -61,12 +61,12 @@ class _SolicitacaoPageState extends State<SolicitacaoPage> {
               }
 
               return ListView.separated(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(12).copyWith(bottom: 20),
                 itemCount: lista.length,
                 separatorBuilder: (_, _) => const SizedBox(height: 12),
                 itemBuilder: (_, index) {
                   final item = lista[index];
-                  return ItemSolicitacao(item: item);
+                  return ItemSolicitacao(solicitacao: item);
                 },
               );
             },

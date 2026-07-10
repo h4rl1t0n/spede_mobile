@@ -48,4 +48,11 @@ class DocumentoModel {
       TipoSituacao.indeferida => Colors.red.shade900,
     };
   }
+
+  Color corDocumento() {
+    return switch (tipoEscrito) {
+      TipoEscrito.documento => Color(0xFFD83500),
+      TipoEscrito.rascunho => Color(0xFF05A0C7),
+    };
+  }
 }

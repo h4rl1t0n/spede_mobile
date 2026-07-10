@@ -9,22 +9,30 @@ class InfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
+
     return Row(
-      spacing: 8,
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, size: 18, color: Colors.grey.shade600),
+        Icon(icon, color: colorScheme.onSurfaceVariant, size: 18),
+        const SizedBox(width: 8),
         Expanded(
-          child: Column(
-            spacing: 2,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                titulo,
-                style: TextStyle(fontSize: 11, color: Colors.grey.shade600, fontWeight: FontWeight.w600),
-              ),
-              Text(valor, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
-            ],
+          child: RichText(
+            text: TextSpan(
+              style: textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface),
+              children: [
+                TextSpan(
+                  text: '$titulo: ',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                TextSpan(
+                  text: valor,
+                  style: TextStyle(color: colorScheme.onSurfaceVariant),
+                ),
+              ],
+            ),
           ),
         ),
       ],

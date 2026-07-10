@@ -53,7 +53,7 @@ class TextStyles {
   }
 
   TextStyle get textSubTitleItemList {
-    return textRegular.copyWith(fontSize: 13, color: Colors.black54);
+    return textRegular.copyWith(fontSize: 14, color: Colors.black54);
   }
 
   TextStyle get textTitle {
