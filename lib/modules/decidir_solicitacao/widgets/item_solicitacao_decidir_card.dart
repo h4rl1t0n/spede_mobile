@@ -4,10 +4,10 @@ import '../../../core/ui/theme/styles/text_styles.dart';
 import '../../../core/ui/widgets/info_card.dart';
 import '../../../models/documento_model.dart';
 
-class ItemSolicitacaoRejeitadoCard extends StatelessWidget {
+class ItemSolicitacaoDecidirCard extends StatelessWidget {
   final DocumentoModel solicitacao;
 
-  const ItemSolicitacaoRejeitadoCard({super.key, required this.solicitacao});
+  const ItemSolicitacaoDecidirCard({super.key, required this.solicitacao});
 
   @override
   Widget build(BuildContext context) {

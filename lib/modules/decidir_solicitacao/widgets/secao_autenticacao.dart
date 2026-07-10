@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../rejeitar_solicitacao/widgets/secao_header.dart';
+import 'secao_header.dart';
 
 class SecaoAutenticacao extends StatefulWidget {
   final TextEditingController usuarioController;
