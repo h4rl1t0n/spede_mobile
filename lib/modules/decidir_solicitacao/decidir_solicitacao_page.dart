@@ -103,12 +103,18 @@ class _DecidirSolicitacaoPageState extends State<DecidirSolicitacaoPage> {
                     children: [
                       Expanded(
                         child: FilledButton(
+                          style: widget.acao == AcaoSolicitacao.rejeitar
+                              ? FilledButton.styleFrom(
+                                  backgroundColor: Theme.of(context).colorScheme.error,
+                                  foregroundColor: Theme.of(context).colorScheme.onError,
+                                )
+                              : null,
                           onPressed: _executarAcaoPrincipal,
                           child: Text(_textoBotaoAcao),
                         ),
                       ),
                       Expanded(
-                        child: FilledButton(
+                        child: OutlinedButton(
                           onPressed: () => Navigator.of(context).pop(),
                           child: const Text('Voltar'),
                         ),
