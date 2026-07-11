@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../mock/mock.dart';
+import '../../mock/documentos.dart';
 import 'helpers/solicitacao_helper.dart';
 import 'widget/filtro_categorias.dart';
 import 'widget/item_solicitacao.dart';
@@ -15,6 +15,7 @@ class SolicitacaoPage extends StatefulWidget {
 }
 
 class _SolicitacaoPageState extends State<SolicitacaoPage> {
+  String get title => widget.title;
   String? categoriaSelecionada;
 
   @override
@@ -30,10 +31,10 @@ class _SolicitacaoPageState extends State<SolicitacaoPage> {
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
           child: Row(
+            spacing: 5,
             children: [
-              Icon(widget.title.contains('Pessoal') ? Icons.person : Icons.business_center, color: cs.primary),
-              const SizedBox(width: 6),
-              Text(widget.title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+              Icon(title.contains('Pessoal') ? Icons.person : Icons.business_center, color: cs.primary),
+              Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
             ],
           ),
         ),

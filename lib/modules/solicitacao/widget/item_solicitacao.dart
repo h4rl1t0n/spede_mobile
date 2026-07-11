@@ -96,16 +96,15 @@ class ItemSolicitacao extends StatelessWidget {
                       valor: DateFormat('dd/MM/yyyy').format(solicitacao.dataSolicitacao),
                     ),
 
-                    const SizedBox(height: 12),
-                    Divider(),
+                    const SizedBox(height: 10),
+                    Divider(color: Colors.grey.shade300),
 
                     Row(
                       mainAxisAlignment: .end,
                       children: [
                         TextButton.icon(
                           onPressed: () => _abrirAcoes(context),
-                          icon: const Icon(Icons.more_horiz, size: 20),
-                          label: const Text('Outras ações'),
+                          label: const Text('Outras ações', style: TextStyle(fontSize: 15)),
                         ),
                       ],
                     ),

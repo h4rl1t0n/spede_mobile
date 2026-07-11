@@ -73,11 +73,8 @@ class SecaoRejeicao extends StatelessWidget {
               const SizedBox(height: 8),
               TextFormField(
                 controller: observacaoController,
-                maxLines: 4,
-                decoration: const InputDecoration(
-                  hintText: 'Digite a observação...',
-                  alignLabelWithHint: true,
-                ),
+                maxLines: 3,
+                decoration: const InputDecoration(hintText: 'Digite a observação...', alignLabelWithHint: true),
                 validator: (value) {
                   final observacao = value ?? '';
                   if (observacao.trim().isEmpty) {

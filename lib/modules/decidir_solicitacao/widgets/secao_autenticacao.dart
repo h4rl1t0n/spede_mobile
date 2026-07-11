@@ -6,11 +6,7 @@ class SecaoAutenticacao extends StatefulWidget {
   final TextEditingController usuarioController;
   final TextEditingController senhaController;
 
-  const SecaoAutenticacao({
-    super.key,
-    required this.usuarioController,
-    required this.senhaController,
-  });
+  const SecaoAutenticacao({super.key, required this.usuarioController, required this.senhaController});
 
   @override
   State<SecaoAutenticacao> createState() => _SecaoAutenticacaoState();
@@ -28,7 +24,7 @@ class _SecaoAutenticacaoState extends State<SecaoAutenticacao> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        SecaoHeader(title: 'Autenticação de Assinatura'),
+        SecaoHeader(title: 'Assinatura'),
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -37,16 +33,16 @@ class _SecaoAutenticacaoState extends State<SecaoAutenticacao> {
               RichText(
                 text: TextSpan(
                   text: 'Usuário',
-                  style: textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface),
+                  style: textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface, fontWeight: .w600),
                   children: [
                     TextSpan(
-                      text: '*',
-                      style: TextStyle(color: colorScheme.error),
+                      text: ' *',
+                      style: TextStyle(color: colorScheme.error, fontWeight: .w600),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
               TextFormField(
                 controller: widget.usuarioController,
                 decoration: const InputDecoration(hintText: 'Digite seu usuário'),
@@ -64,25 +60,23 @@ class _SecaoAutenticacaoState extends State<SecaoAutenticacao> {
               RichText(
                 text: TextSpan(
                   text: 'Senha',
-                  style: textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface),
+                  style: textTheme.bodyMedium?.copyWith(color: colorScheme.onSurface, fontWeight: .w600),
                   children: [
                     TextSpan(
-                      text: '*',
-                      style: TextStyle(color: colorScheme.error),
+                      text: ' *',
+                      style: TextStyle(color: colorScheme.error, fontWeight: .w600),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 4),
               TextFormField(
                 controller: widget.senhaController,
                 obscureText: !_senhaVisivel,
                 decoration: InputDecoration(
                   hintText: 'Digite sua senha',
                   suffixIcon: IconButton(
-                    icon: Icon(
-                      _senhaVisivel ? Icons.visibility : Icons.visibility_off,
-                    ),
+                    icon: Icon(_senhaVisivel ? Icons.visibility : Icons.visibility_off),
                     onPressed: () {
                       setState(() {
                         _senhaVisivel = !_senhaVisivel;

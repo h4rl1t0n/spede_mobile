@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../mock/mock.dart';
+import '../../../mock/eventos.dart';
 import '../../solicitacao/widget/item_solicitacao.dart';
 
 class ListaEventos extends StatelessWidget {

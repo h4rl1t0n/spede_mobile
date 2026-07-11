@@ -1,17 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../../../core/ui/theme/styles/text_styles.dart';
+import '../../../enum/acao_solicitacao.dart';
 import '../../../models/documento_model.dart';
 import '../../decidir_solicitacao/decidir_solicitacao_page.dart';
-
-enum AcaoSolicitacao {
-  atender('Atender'),
-  rejeitar('Rejeitar');
-
-  final String label;
-
-  const AcaoSolicitacao(this.label);
-}
 
 class AcaoSolcitacaoSheet extends StatefulWidget {
   final DocumentoModel solicitacao;
@@ -42,7 +34,7 @@ class _AcaoSolcitacaoSheetState extends State<AcaoSolcitacaoSheet> {
             Text('Outras ações', style: context.textStyles.textTitle.copyWith(fontSize: 22)),
 
             ListTile(
-              contentPadding: EdgeInsets.zero,
+              // contentPadding: EdgeInsets.zero,
               leading: solicitacao.image,
               title: Text(solicitacao.numero, style: context.textStyles.textTitleItemList),
               subtitle: Text(
@@ -67,7 +59,7 @@ class _AcaoSolcitacaoSheetState extends State<AcaoSolcitacaoSheet> {
               ),
             ),
 
-            const Divider(height: 5),
+            Divider(height: 5, color: Colors.grey.shade300),
 
             RadioGroup<AcaoSolicitacao>(
               groupValue: _acao,
@@ -98,46 +90,14 @@ class _AcaoSolcitacaoSheetState extends State<AcaoSolcitacaoSheet> {
 
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton(
-                onPressed: _acao == null
-                    ? null
-                    : () async {
-                        switch (_acao) {
-                          case AcaoSolicitacao.atender:
-                            Navigator.pop(context, AcaoSolicitacao.atender);
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) {
-                                  return DecidirSolicitacaoPage(
-                                    solicitacoes: [solicitacao],
-                                    acao: AcaoSolicitacao.atender,
-                                  );
-                                },
-                              ),
-                            );
-                            break;
-
-                          case AcaoSolicitacao.rejeitar:
-                            Navigator.pop(context, AcaoSolicitacao.rejeitar);
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) {
-                                  return DecidirSolicitacaoPage(
-                                    solicitacoes: [solicitacao],
-                                    acao: AcaoSolicitacao.rejeitar,
-                                  );
-                                },
-                              ),
-                            );
-                            break;
-
-                          case null:
-                            break;
-                        }
-                      },
-                child: Text(textButton),
+              child: Builder(
+                builder: (context) {
+                  final acao = _acao;
+                  return ElevatedButton(
+                    onPressed: acao == null ? null : () async => toDecidirSolicitacaoPage(acao: acao),
+                    child: Text(textButton),
+                  );
+                },
               ),
             ),
           ],
@@ -148,11 +108,22 @@ class _AcaoSolcitacaoSheetState extends State<AcaoSolcitacaoSheet> {
 
   String get textButton {
     final value = _acao;
+    if (value == null) return 'Selecione uma opção';
+    return value == .atender ? 'Atender' : 'Rejeitar';
+  }
 
-    if (value == null) {
-      return 'Selecione uma opção';
-    }
+  Future<void> toDecidirSolicitacaoPage({required AcaoSolicitacao acao}) async {
+    Navigator.pop(context, acao);
 
-    return value == .atender ? AcaoSolicitacao.atender.label : AcaoSolicitacao.rejeitar.label;
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) {
+          // Envia 2 solicitações repetidas apenas para teste.
+          final solicitacoes = [solicitacao, solicitacao];
+          return DecidirSolicitacaoPage(solicitacoes: solicitacoes, acao: acao);
+        },
+      ),
+    );
   }
 }

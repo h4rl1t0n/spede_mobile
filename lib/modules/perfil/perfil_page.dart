@@ -18,14 +18,12 @@ class _PerfilPageState extends State<PerfilPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textStyles = context.textStyles;
-
-    // Altura do header do topo
-    final double headerHeight = 180;
-    // Raio do avatar
+    final double headerHeight = 100;
     final double avatarRadius = 60;
 
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
+      appBar: AppBar(title: Text('Perfil Pessoal'), centerTitle: true),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -33,36 +31,7 @@ class _PerfilPageState extends State<PerfilPage> {
               clipBehavior: Clip.none,
               alignment: Alignment.center,
               children: [
-                // Bloco do topo com fundo primary do tema
-                Container(
-                  height: headerHeight,
-                  width: double.infinity,
-                  color: theme.colorScheme.primary,
-                  child: SafeArea(
-                    child: Align(
-                      alignment: Alignment.topCenter,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            IconButton(
-                              icon: Icon(Icons.arrow_back, color: theme.colorScheme.onPrimary),
-                              onPressed: () => Navigator.of(context).pop(),
-                            ),
-                            Text(
-                              'Perfil Pessoal',
-                              style: textStyles.textTitle.copyWith(color: theme.colorScheme.onPrimary, fontSize: 20),
-                            ),
-                            // SizedBox invisível para centralizar o título
-                            const SizedBox(width: 48),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                // Avatar sobreposto na borda inferior do header
+                Container(height: headerHeight, width: double.infinity, color: theme.colorScheme.primary),
                 Positioned(
                   bottom: -avatarRadius,
                   child: Container(
@@ -86,10 +55,9 @@ class _PerfilPageState extends State<PerfilPage> {
                 ),
               ],
             ),
-            // Espaçamento para compensar a metade inferior do avatar
+
             SizedBox(height: avatarRadius + 24),
 
-            // Informações do Usuário
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Column(
@@ -107,6 +75,7 @@ class _PerfilPageState extends State<PerfilPage> {
                       const SizedBox(width: 4),
                       Text(
                         'Perfil Pessoal',
+                        textAlign: .center,
                         style: textStyles.textCaption.copyWith(
                           color: theme.colorScheme.onSurfaceVariant,
                           fontWeight: FontWeight.w600,
@@ -120,7 +89,6 @@ class _PerfilPageState extends State<PerfilPage> {
             ),
             const SizedBox(height: 32),
 
-            // Lista de Opções do Perfil
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Column(
@@ -166,9 +134,7 @@ class _PerfilPageState extends State<PerfilPage> {
                     titleColor: theme.colorScheme.error,
                     onTap: () {
                       Navigator.of(context).pushAndRemoveUntil(
-                        MaterialPageRoute(
-                          builder: (context) => const LoginPage(),
-                        ),
+                        MaterialPageRoute(builder: (context) => const LoginPage()),
                         (route) => false,
                       );
                     },

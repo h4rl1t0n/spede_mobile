@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:validatorless/validatorless.dart';
 
-import '../../core/ui/helpers/loader.dart';
-import '../../core/ui/helpers/messages.dart';
+import '../../core/helpers/loader.dart';
+import '../../core/helpers/messages.dart';
 import '../home/home_page.dart';
 import 'widgets/central_de_ajuda.dart';
 
@@ -229,18 +229,14 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
   }
 
   Widget get _buttonEntrar {
-    return SizedBox(
-      height: 50,
-      child: ElevatedButton(
-        onPressed: () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (_) => const HomePage(title: 'Pessoal > Solicitações Recebidas')),
-          );
-        },
-        style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
-        child: const Text('Entrar', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600)),
-      ),
+    return FilledButton(
+      onPressed: () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const HomePage(title: 'Pessoal > Solicitações Recebidas')),
+        );
+      },
+      child: const Text('Entrar', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600)),
     );
   }
 

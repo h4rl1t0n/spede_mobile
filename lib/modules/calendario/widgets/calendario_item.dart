@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../mock/mock.dart';
+import '../../../mock/eventos.dart';
 import 'dia.dart';
 import 'dia_da_semana.dart';
 
