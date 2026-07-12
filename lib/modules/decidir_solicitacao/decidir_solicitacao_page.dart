@@ -134,7 +134,6 @@ class _DecidirSolicitacaoPageState extends State<DecidirSolicitacaoPage> with Lo
   Widget _buildFormularioAcao() {
     if (acao == AcaoSolicitacao.rejeitar) {
       return SecaoRejeicao(
-        motivoController: _motivoController,
         observacaoController: _observacaoController,
         motivos: motivos,
         onMotivoSelected: (_) => setState(() {}),

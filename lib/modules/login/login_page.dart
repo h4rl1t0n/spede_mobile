@@ -5,7 +5,6 @@ import 'package:validatorless/validatorless.dart';
 import '../../core/helpers/loader.dart';
 import '../../core/helpers/messages.dart';
 import '../home/home_page.dart';
-import 'widgets/central_de_ajuda.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -53,24 +52,28 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
 
   @override
   Widget build(BuildContext context) {
+    final teste = MediaQuery.of(context).viewInsets.bottom > 0;
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         backgroundColor: Colors.white,
         body: Stack(
           children: [
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: IgnorePointer(
-                child: Opacity(
-                  opacity: .50,
-                  child: Image.asset(
-                    'assets/images/background.png',
-                    height: 160,
-                    width: double.infinity,
-                    fit: BoxFit.fill,
+            Visibility(
+              visible: !teste,
+              child: Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: IgnorePointer(
+                  child: Opacity(
+                    opacity: .75,
+                    child: Image.asset(
+                      'assets/images/background.png',
+                      height: 200,
+                      width: double.infinity,
+                      fit: BoxFit.fill,
+                    ),
                   ),
                 ),
               ),
@@ -141,16 +144,17 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
 
                                       const SizedBox(height: 16),
                                       _inputSenha,
+                                      const SizedBox(height: 10),
 
                                       _buttonSaveMe,
 
-                                      const SizedBox(height: 16),
+                                      const SizedBox(height: 10),
                                       _buttonEntrar,
 
                                       // Empurra a Central de Ajuda lá para baixo dinamicamente
                                       const Spacer(flex: 3),
 
-                                      const CentralDeAjuda(),
+                                      // const CentralDeAjuda(),
 
                                       // Respiro de 90 de altura garante que o botão não bata na arte azul do rodapé
                                       const SizedBox(height: 90),
@@ -230,23 +234,31 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
 
   Widget get _buttonEntrar {
     return FilledButton(
-      onPressed: () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const HomePage(title: 'Pessoal > Solicitações Recebidas')),
-        );
+      onPressed: () async {
+        showLoader();
+        await Future.delayed(Duration(seconds: 1));
+        hideLoader();
+
+        await toHomePage();
       },
       child: const Text('Entrar', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600)),
     );
   }
 
   Widget get _buttonSaveMe {
-    return CheckboxListTile(
+    return SwitchListTile(
       contentPadding: EdgeInsets.zero,
       controlAffinity: ListTileControlAffinity.leading,
       title: const Text('Lembrar-me', style: TextStyle(fontSize: 14)),
       value: true,
       onChanged: (value) {},
+    );
+  }
+
+  Future<void> toHomePage() async {
+    await Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => const HomePage(title: 'Pessoal > Solicitações Recebidas')),
     );
   }
 }

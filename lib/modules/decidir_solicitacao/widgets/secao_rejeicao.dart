@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/ui/widgets/custom_dropdown_search/custom_dropdown_search.dart';
 import 'secao_header.dart';
 
 class SecaoRejeicao extends StatelessWidget {
-  final TextEditingController motivoController;
   final TextEditingController observacaoController;
   final List<String> motivos;
   final ValueChanged<String?>? onMotivoSelected;
 
-  const SecaoRejeicao({
-    super.key,
-    required this.motivoController,
-    required this.observacaoController,
-    required this.motivos,
-    this.onMotivoSelected,
-  });
+  const SecaoRejeicao({super.key, required this.observacaoController, required this.motivos, this.onMotivoSelected});
 
   @override
   Widget build(BuildContext context) {
@@ -44,18 +38,7 @@ class SecaoRejeicao extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              DropdownMenu<String>(
-                controller: motivoController,
-                width: MediaQuery.of(context).size.width - 32,
-                hintText: 'Selecione...',
-                enableSearch: true,
-                enableFilter: true,
-                dropdownMenuEntries: motivos.map((motivo) {
-                  return DropdownMenuEntry<String>(value: motivo, label: motivo);
-                }).toList(),
-                onSelected: onMotivoSelected,
-              ),
-
+              CustomDropdownSearch<String>(items: motivos, itemString: (item) => item, onSelected: onMotivoSelected),
               const SizedBox(height: 20),
 
               RichText(
