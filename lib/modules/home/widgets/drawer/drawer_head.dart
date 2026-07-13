@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class DrawerHead extends StatelessWidget {
-  const DrawerHead({super.key});
+  final String nomeSetor;
+  const DrawerHead({super.key, required this.nomeSetor});
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +62,7 @@ class DrawerHead extends StatelessWidget {
                               ),
 
                               Text(
-                                'Setin'.toUpperCase(),
+                                nomeSetor.toUpperCase(),
                                 style: TextStyle(
                                   color: Colors.white.withValues(alpha: 0.8),
                                   fontSize: 13,

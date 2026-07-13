@@ -8,10 +8,24 @@ import '../solicitacao/solicitacao_page.dart';
 import 'widgets/drawer/drawer_content.dart';
 import 'widgets/drawer/drawer_head.dart';
 import 'widgets/menu_drawer/menu_drawer.dart';
+import 'widgets/selecionar_setor_dialog/selecionar_setor_dialog.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   final String title;
   const HomePage({super.key, required this.title});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => openSelecionarSetorDialog());
+  }
+
+  String nomeSetor = 'Setin';
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +65,7 @@ class HomePage extends StatelessWidget {
 
         child: Column(
           children: [
-            DrawerHead(),
+            DrawerHead(nomeSetor: nomeSetor),
             Expanded(child: DrawerContent()),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -73,7 +87,20 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      body: SolicitacaoPage(title: title),
+      body: SolicitacaoPage(title: widget.title),
     );
+  }
+
+  Future<void> openSelecionarSetorDialog() async {
+    final result = await showDialog<String>(
+      context: context,
+      builder: (context) {
+        return SelecionarSetorDialog();
+      },
+    );
+
+    setState(() {
+      nomeSetor = result ?? 'Setin';
+    });
   }
 }
