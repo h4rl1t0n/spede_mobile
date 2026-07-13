@@ -237,15 +237,18 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
   }
 
   Widget get _buttonEntrar {
-    return FilledButton(
-      onPressed: () async {
-        showLoader();
-        await Future.delayed(Duration(seconds: 1));
-        hideLoader();
+    return SizedBox(
+      height: 50,
+      child: FilledButton(
+        onPressed: () async {
+          showLoader();
+          await Future.delayed(Duration(seconds: 1));
+          hideLoader();
 
-        await toHomePage();
-      },
-      child: const Text('Entrar', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600)),
+          await toHomePage();
+        },
+        child: const Text('Entrar', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600)),
+      ),
     );
   }
 

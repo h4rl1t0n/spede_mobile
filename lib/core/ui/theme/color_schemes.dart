@@ -4,7 +4,7 @@ const lightColorScheme = ColorScheme(
   brightness: Brightness.light,
 
   // Azul principal do logo
-  primary: Color(0xFF365365),
+  primary: Color(0xFF114B8B),
   onPrimary: Colors.white,
   primaryContainer: Color(0xFFD8E8FF),
   onPrimaryContainer: Color(0xFF0D2C55),
