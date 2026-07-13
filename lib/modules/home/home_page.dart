@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../calendario/calendario_page.dart';
+import '../agenda/agenda_page.dart';
 import '../perfil/perfil_page.dart';
 import '../solicitacao/solicitacao_page.dart';
 import 'widgets/drawer/drawer_home.dart';
@@ -26,10 +26,11 @@ class HomePage extends StatelessWidget {
           ],
         ),
         actions: [
+          IconButton(icon: Icon(Icons.notifications), onPressed: () async {}),
           IconButton(
             icon: Icon(Icons.calendar_month),
             onPressed: () async {
-              await Navigator.push(context, MaterialPageRoute(builder: (_) => const CalendarPage()));
+              await Navigator.push(context, MaterialPageRoute(builder: (_) => const AgendaPage()));
             },
           ),
           IconButton(

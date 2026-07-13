@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
                 right: 0,
                 child: IgnorePointer(
                   child: Opacity(
-                    opacity: .75,
+                    opacity: .7,
                     child: Image.asset(
                       'assets/images/background.png',
                       height: 200,
@@ -134,7 +134,7 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
                                         style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
                                       ),
                                       const Text(
-                                        'Processos e Documentos Eletrônicos',
+                                        'Sistema de Processos e Documentos\nEletrônicos',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(fontSize: 18.0),
                                       ),
@@ -178,14 +178,18 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
   }
 
   Widget _buildLogo() {
-    return Container(
-      width: 140,
-      height: 140,
-      decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.white),
-      padding: const EdgeInsets.all(12),
-      child: Hero(
-        tag: 'logo',
-        child: Image.asset('assets/images/logo_old.png', fit: BoxFit.contain),
+    return Card(
+      color: Colors.transparent,
+      elevation: 7,
+      child: Container(
+        width: 140,
+        height: 140,
+        decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+        padding: const EdgeInsets.all(12),
+        child: Hero(
+          tag: 'logo',
+          child: Image.asset('assets/images/logo_old.png', fit: BoxFit.contain),
+        ),
       ),
     );
   }
@@ -246,7 +250,8 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
   }
 
   Widget get _buttonSaveMe {
-    return SwitchListTile(
+    return CheckboxListTile(
+      checkboxShape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(4)),
       contentPadding: EdgeInsets.zero,
       controlAffinity: ListTileControlAffinity.leading,
       title: const Text('Lembrar-me', style: TextStyle(fontSize: 14)),
