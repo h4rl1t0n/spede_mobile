@@ -1,8 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
-class DrawerHead extends StatelessWidget {
-  final String nomeSetor;
-  const DrawerHead({super.key, required this.nomeSetor});
+import '../../home_controller.dart';
+
+class DrawerHead extends StatefulWidget {
+  final HomeController controller;
+  const DrawerHead({super.key, required this.controller});
+
+  @override
+  State<DrawerHead> createState() => _DrawerHeadState();
+}
+
+class _DrawerHeadState extends State<DrawerHead> {
+  HomeController get controller => widget.controller;
 
   @override
   Widget build(BuildContext context) {
@@ -61,13 +71,21 @@ class DrawerHead extends StatelessWidget {
                                 ),
                               ),
 
-                              Text(
-                                nomeSetor.toUpperCase(),
-                                style: TextStyle(
-                                  color: Colors.white.withValues(alpha: 0.8),
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                              Observer(
+                                builder: (context) {
+                                  final setor = controller.setorSelecionado;
+
+                                  if (setor == null) return SizedBox.shrink();
+
+                                  return Text(
+                                    setor.nome.toUpperCase(),
+                                    style: TextStyle(
+                                      color: Colors.white.withValues(alpha: 0.8),
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  );
+                                },
                               ),
                             ],
                           ),

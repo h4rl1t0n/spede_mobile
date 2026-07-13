@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../agenda/agenda_page.dart';
 import '../login/login_page.dart';
 import '../perfil/perfil_page.dart';
 import '../solicitacao/solicitacao_page.dart';
+import 'home_controller.dart';
 import 'widgets/drawer/drawer_content.dart';
 import 'widgets/drawer/drawer_head.dart';
 import 'widgets/menu_drawer/menu_drawer.dart';
@@ -19,13 +21,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final controller = HomeController();
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => openSelecionarSetorDialog());
   }
-
-  String nomeSetor = 'Setin';
 
   @override
   Widget build(BuildContext context) {
@@ -33,18 +35,35 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: cs.primary,
+        centerTitle: false,
+        titleSpacing: 0,
+        toolbarHeight: 80,
         title: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 10),
-              height: 50,
-              child: Image.asset('assets/images/spede_home.png'),
+            Align(
+              alignment: .centerStart,
+              child: Image.asset('assets/images/spede_home.png', height: 30, fit: .contain),
+            ),
+            Observer(
+              builder: (context) {
+                final setor = controller.setorSelecionado;
+
+                if (setor != null) {
+                  return Text(
+                    setor.nome.toUpperCase(),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 13, color: Colors.white),
+                  );
+                }
+
+                return SizedBox.shrink();
+              },
             ),
           ],
         ),
         actions: [
-          IconButton(icon: Icon(Icons.notifications), onPressed: () async {}),
           IconButton(
             icon: Icon(Icons.calendar_month),
             onPressed: () async {
@@ -65,7 +84,7 @@ class _HomePageState extends State<HomePage> {
 
         child: Column(
           children: [
-            DrawerHead(nomeSetor: nomeSetor),
+            DrawerHead(controller: controller),
             Expanded(child: DrawerContent()),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -92,15 +111,14 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> openSelecionarSetorDialog() async {
-    final result = await showDialog<String>(
+    if (controller.setorSelecionado != null) return;
+
+    await showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) {
-        return SelecionarSetorDialog();
+        return SelecionarSetorDialog(controller: controller);
       },
     );
-
-    setState(() {
-      nomeSetor = result ?? 'Setin';
-    });
   }
 }
