@@ -1,9 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../agenda/agenda_page.dart';
+import '../login/login_page.dart';
 import '../perfil/perfil_page.dart';
 import '../solicitacao/solicitacao_page.dart';
-import 'widgets/drawer/drawer_home.dart';
+import 'widgets/drawer/drawer_content.dart';
+import 'widgets/drawer/drawer_head.dart';
+import 'widgets/menu_drawer/menu_drawer.dart';
 
 class HomePage extends StatelessWidget {
   final String title;
@@ -42,7 +46,33 @@ class HomePage extends StatelessWidget {
           SizedBox(width: 10),
         ],
       ),
-      drawer: DrawerHome(),
+      drawer: Drawer(
+        backgroundColor: Colors.white,
+
+        child: Column(
+          children: [
+            DrawerHead(),
+            Expanded(child: DrawerContent()),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: MenuDrawer(
+                icon: CupertinoIcons.square_arrow_right,
+                color: cs.error,
+                title: 'Sair',
+                onTap: () {
+                  final navigator = Navigator.of(context);
+                  navigator.pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                    (route) => false,
+                  );
+                },
+              ),
+            ),
+            Text('v2.10.30'),
+            SizedBox(height: 30),
+          ],
+        ),
+      ),
       body: SolicitacaoPage(title: title),
     );
   }
