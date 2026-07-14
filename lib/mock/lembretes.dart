@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/lembrete_model.dart';
+import 'setores.dart';
 
 final lembretes = <LembreteModel>[
   LembreteModel(
@@ -15,6 +16,7 @@ final lembretes = <LembreteModel>[
     data: DateTime(2026, 7, 10),
     cor: Colors.green,
     isLembrete: false,
+    setorModel: setores[0],
   ),
 
   LembreteModel(
@@ -28,6 +30,7 @@ final lembretes = <LembreteModel>[
     data: DateTime(2026, 7, 10),
     cor: Colors.blue, // Azul padronizado no seu print para comunicações
     isLembrete: true,
+    setorModel: setores[1],
   ),
 
   LembreteModel(
@@ -42,6 +45,7 @@ final lembretes = <LembreteModel>[
     data: DateTime(2026, 7, 15),
     cor: Colors.purple,
     isLembrete: false,
+    setorModel: setores[2],
   ),
 
   LembreteModel(
@@ -56,6 +60,7 @@ final lembretes = <LembreteModel>[
     data: DateTime(2026, 7, 15),
     cor: Colors.red,
     isLembrete: true,
+    setorModel: setores[3],
   ),
 
   LembreteModel(
@@ -70,6 +75,7 @@ final lembretes = <LembreteModel>[
     data: DateTime(2026, 7, 15),
     cor: Colors.blue,
     isLembrete: false,
+    setorModel: setores[4],
   ),
 
   LembreteModel(
@@ -84,6 +90,7 @@ final lembretes = <LembreteModel>[
     data: DateTime(2026, 7, 18),
     cor: Colors.teal,
     isLembrete: false,
+    setorModel: setores[0],
   ),
 
   LembreteModel(
@@ -98,6 +105,7 @@ final lembretes = <LembreteModel>[
     data: DateTime(2026, 7, 18),
     cor: Colors.indigo,
     isLembrete: false,
+    setorModel: setores[1],
   ),
 
   LembreteModel(
@@ -112,6 +120,7 @@ final lembretes = <LembreteModel>[
     data: DateTime(2026, 7, 22),
     cor: Colors.deepOrange,
     isLembrete: true,
+    setorModel: setores[2],
   ),
 
   LembreteModel(
@@ -126,6 +135,7 @@ final lembretes = <LembreteModel>[
     data: DateTime(2026, 7, 24),
     cor: Colors.deepPurple,
     isLembrete: false,
+    setorModel: setores[3],
   ),
 
   LembreteModel(
@@ -140,6 +150,7 @@ final lembretes = <LembreteModel>[
     data: DateTime(2026, 7, 28),
     cor: Colors.green,
     isLembrete: false,
+    setorModel: setores[4],
   ),
 
   LembreteModel(
@@ -153,6 +164,7 @@ final lembretes = <LembreteModel>[
     data: DateTime(2026, 7, 30),
     cor: Colors.cyan,
     isLembrete: false,
+    setorModel: setores[0],
   ),
 
   LembreteModel(
@@ -167,6 +179,7 @@ final lembretes = <LembreteModel>[
     data: DateTime(2026, 7, 30),
     cor: Colors.red,
     isLembrete: true,
+    setorModel: setores[1],
   ),
 
   LembreteModel(
@@ -181,6 +194,7 @@ final lembretes = <LembreteModel>[
     data: DateTime(2026, 7, 30),
     cor: Colors.amber,
     isLembrete: true,
+    setorModel: setores[2],
   ),
 
   LembreteModel(
@@ -195,5 +209,6 @@ final lembretes = <LembreteModel>[
     data: DateTime(2026, 7, 30),
     cor: Colors.green,
     isLembrete: false,
+    setorModel: setores[3],
   ),
 ];

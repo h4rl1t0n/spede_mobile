@@ -4,6 +4,7 @@ import '../enum/tipo_documento.dart';
 import '../enum/tipo_escrito.dart';
 import '../enum/tipo_situacao.dart';
 import '../enum/tipo_solicitacao.dart';
+import 'setor_model.dart';
 
 class DocumentoModel {
   final String id;
@@ -18,6 +19,7 @@ class DocumentoModel {
   final DateTime dataSolicitacao;
   final DateTime dataAtendimento;
   final TipoEscrito tipoEscrito;
+  final SetorModel setorModel;
 
   DocumentoModel({
     required this.id,
@@ -32,6 +34,7 @@ class DocumentoModel {
     required this.tipoSituacao,
     required this.dataSolicitacao,
     required this.dataAtendimento,
+    required this.setorModel
   });
 
   Widget get image {
