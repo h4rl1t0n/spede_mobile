@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../../../../mock/lembretes.dart';
 import '../../../../models/lembrete_model.dart';
 import 'builders/calendario_builders.dart';
 import 'styles/calendario_styles.dart';
@@ -11,6 +10,7 @@ class CalendarioItem extends StatelessWidget {
   final DateTime selectedDate;
   final ValueChanged<DateTime> onDateSelected;
   final ValueChanged<DateTime> onMonthChanged;
+  final List<LembreteModel> lembretesList;
 
   const CalendarioItem({
     super.key,
@@ -18,6 +18,7 @@ class CalendarioItem extends StatelessWidget {
     required this.selectedDate,
     required this.onDateSelected,
     required this.onMonthChanged,
+    required this.lembretesList,
   });
 
   @override
@@ -38,7 +39,7 @@ class CalendarioItem extends StatelessWidget {
       },
       onPageChanged: onMonthChanged,
       eventLoader: (day) {
-        return lembretes.where((e) {
+        return lembretesList.where((e) {
           return isSameDay(e.data, day);
         }).toList();
       },
