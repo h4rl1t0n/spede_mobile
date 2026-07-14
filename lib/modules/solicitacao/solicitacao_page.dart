@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../mock/documentos.dart';
+import '../home/home_controller.dart';
 import 'helpers/solicitacao_helper.dart';
 import 'widget/filtro_categorias.dart';
 import 'widget/item_solicitacao.dart';
@@ -8,7 +9,8 @@ import 'widget/sem_socitacao.dart';
 
 class SolicitacaoPage extends StatefulWidget {
   final String title;
-  const SolicitacaoPage({super.key, required this.title});
+  final HomeController controller;
+  const SolicitacaoPage({super.key, required this.title, required this.controller});
 
   @override
   State<SolicitacaoPage> createState() => _SolicitacaoPageState();
@@ -22,8 +24,13 @@ class _SolicitacaoPageState extends State<SolicitacaoPage> {
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
 
-    final categorias = SolicitacaoHelper.contarCategorias(documentos);
-    final lista = SolicitacaoHelper.filtrarPorCategoria(documentos, categoriaSelecionada);
+    final setor = widget.controller.setorSelecionado;
+    final documentosFiltrados = setor == null
+        ? documentos
+        : documentos.where((doc) => doc.setorModel.id == setor.id).toList();
+
+    final categorias = SolicitacaoHelper.contarCategorias(documentosFiltrados);
+    final lista = SolicitacaoHelper.filtrarPorCategoria(documentosFiltrados, categoriaSelecionada);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
