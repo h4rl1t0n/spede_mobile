@@ -4,7 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import '../../../../core/extensions/size_extension.dart';
 import '../../../../core/ui/widgets/custom_dropdown_search/custom_dropdown_search.dart';
 import '../../../../mock/setores.dart';
-import '../../../../models/setores_model.dart';
+import '../../../../models/setor_model.dart';
 import '../../home_controller.dart';
 
 class SelecionarSetorDialog extends StatefulWidget {
@@ -27,26 +27,26 @@ class _SelecionarSetorDialogState extends State<SelecionarSetorDialog> {
         title: Text('Selecione um Setor'),
         content: SizedBox(
           width: context.widthDialog,
-          child: CustomDropdownSearch<SetoresModel>(
+          child: CustomDropdownSearch<SetorModel>(
             hintText: 'Selecione um setor',
             items: setores,
             itemString: (item) => item.sigla,
             onSelected: (item) {
-              controller.setSetor(item);
+              controller.idSetorSelecionado = item?.id;
             },
           ),
         ),
         actions: [
           Observer(
             builder: (context) {
-              final setor = controller.setorSelecionado;
+              final idSetorSelecionado = controller.idSetorSelecionado;
               return Row(
                 mainAxisAlignment: .end,
                 children: [
                   Expanded(child: SizedBox.shrink()),
                   Expanded(
                     child: FilledButton(
-                      onPressed: setor == null ? null : () => Navigator.of(context).pop(),
+                      onPressed: idSetorSelecionado == null ? null : selecionarSetor,
                       child: Text('Selecionar'),
                     ),
                   ),
@@ -63,5 +63,13 @@ class _SelecionarSetorDialogState extends State<SelecionarSetorDialog> {
         ],
       ),
     );
+  }
+
+  Future<void> selecionarSetor() async {
+    final bool selecionou = await controller.salvarSetorSelecionado();
+
+    if (selecionou && mounted) {
+      Navigator.of(context).pop(true);
+    }
   }
 }

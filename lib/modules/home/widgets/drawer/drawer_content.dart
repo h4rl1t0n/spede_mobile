@@ -1,52 +1,101 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../../agenda/agenda_page.dart';
+import '../../../login/login_page.dart';
+import '../../home_controller.dart';
 import '../../home_page.dart';
 import '../menu_drawer/menu_drawer.dart';
+import '../selecionar_setor_dialog/selecionar_setor_dialog.dart';
 
-class DrawerContent extends StatelessWidget {
-  const DrawerContent({super.key});
+class DrawerContent extends StatefulWidget {
+  final HomeController controller;
+  const DrawerContent({super.key, required this.controller});
+
+  @override
+  State<DrawerContent> createState() => _DrawerContentState();
+}
+
+class _DrawerContentState extends State<DrawerContent> {
+  HomeController get controller => widget.controller;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final cs = theme.colorScheme;
+    final cs = Theme.of(context).colorScheme;
+    return ListView(
+      padding: const EdgeInsets.only(top: 8, bottom: 0, left: 16, right: 16),
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 8.0),
+          child: Text(
+            'SOLICITAÇÕES',
+            style: TextStyle(color: Colors.grey, fontSize: 13, fontWeight: FontWeight.w600, letterSpacing: 0.5),
+          ),
+        ),
+        MenuDrawer(
+          icon: CupertinoIcons.tray_arrow_down_fill,
+          title: 'Solicitações Recebidas',
+          trailing: Badge.count(count: 11, maxCount: 10, padding: .all(4), backgroundColor: cs.secondary),
+          onTap: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => const HomePage(title: 'Solicitações Recebidas')),
+            );
+          },
+        ),
+        MenuDrawer(
+          icon: CupertinoIcons.tray_arrow_up_fill,
+          title: 'Solicitações Enviadas',
+          trailing: Badge.count(count: 8, maxCount: 10, padding: .all(4), backgroundColor: cs.secondary),
+          onTap: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => const HomePage(title: 'Solicitações Enviadas')),
+            );
+          },
+        ),
 
-    return Builder(
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 8.0),
+          child: Text(
+            'OUTROS',
+            style: TextStyle(color: Colors.grey, fontSize: 13, fontWeight: FontWeight.w600, letterSpacing: 0.5),
+          ),
+        ),
+        MenuDrawer(
+          icon: CupertinoIcons.calendar_today,
+          title: 'Agenda',
+          trailing: Icon(Icons.chevron_right),
+          onTap: () async {
+            await Navigator.push(context, MaterialPageRoute(builder: (_) => const AgendaPage()));
+          },
+        ),
+        MenuDrawer(
+          icon: Icons.business,
+          trailing: Icon(Icons.chevron_right),
+          title: 'Alterar Setor',
+          onTap: openSelecionarSetorDialog,
+        ),
+        MenuDrawer(
+          icon: Icons.exit_to_app_outlined,
+          title: 'Sair',
+          trailing: Icon(Icons.chevron_right),
+          color: cs.error,
+          onTap: () {
+            final navigator = Navigator.of(context);
+            navigator.pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const LoginPage()), (route) => false);
+          },
+        ),
+      ],
+    );
+  }
+
+  Future<void> openSelecionarSetorDialog() async {
+    await showDialog(
+      context: context,
+      barrierDismissible: false,
       builder: (context) {
-        return ListView(
-          padding: const EdgeInsets.only(top: 8, bottom: 20, left: 12, right: 12),
-          children: [
-            SizedBox(height: 5),
-            Row(
-              spacing: 5,
-              children: [
-                Icon(Icons.person, color: cs.primary, size: 20),
-                Text('Pessoal', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18)),
-              ],
-            ),
-            MenuDrawer(
-              icon: CupertinoIcons.tray_arrow_down,
-              title: 'Solicitações Recebidas',
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => const HomePage(title: 'Pessoal > Solicitações Recebidas')),
-                );
-              },
-            ),
-            MenuDrawer(
-              icon: CupertinoIcons.tray_arrow_up,
-              title: 'Solicitações Enviadas',
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => const HomePage(title: 'Pessoal > Solicitações Enviadas')),
-                );
-              },
-            ),
-          ],
-        );
+        return SelecionarSetorDialog(controller: controller);
       },
     );
   }

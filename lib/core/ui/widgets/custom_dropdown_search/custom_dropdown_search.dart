@@ -54,18 +54,18 @@ class _CustomDropdownSearchState<T> extends State<CustomDropdownSearch<T>> {
       width: size.width - 32,
       hintText: hintText,
       initialSelection: initialValue,
-      enableFilter: true,
-      enableSearch: true,
+      enableFilter: false,
+      enableSearch: false,
       requestFocusOnTap: true,
-      searchCallback: (entries, query) {
-        if (query.isEmpty) return null;
+      // searchCallback: (entries, query) {
+      //   if (query.isEmpty) return null;
 
-        final index = entries.indexWhere((entry) {
-          return entry.label.toLowerCase().contains(query.toLowerCase());
-        });
+      //   final index = entries.indexWhere((entry) {
+      //     return entry.label.toLowerCase().contains(query.toLowerCase());
+      //   });
 
-        return index == -1 ? null : index;
-      },
+      //   return index == -1 ? null : index;
+      // },
       dropdownMenuEntries: items.map((item) => DropdownMenuEntry<T>(value: item, label: itemString(item))).toList(),
       onSelected: onSelected,
     );

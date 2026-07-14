@@ -1,15 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../agenda/agenda_page.dart';
-import '../login/login_page.dart';
 import '../perfil/perfil_page.dart';
 import '../solicitacao/solicitacao_page.dart';
 import 'home_controller.dart';
-import 'widgets/drawer/drawer_content.dart';
-import 'widgets/drawer/drawer_head.dart';
-import 'widgets/menu_drawer/menu_drawer.dart';
+import 'widgets/drawer/custom_drawer.dart';
 import 'widgets/selecionar_setor_dialog/selecionar_setor_dialog.dart';
 
 class HomePage extends StatefulWidget {
@@ -26,13 +22,17 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => openSelecionarSetorDialog());
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await controller.initController();
+
+      if (controller.setorSelecionado == null) {
+        await openSelecionarSetorDialog();
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: false,
@@ -79,40 +79,12 @@ class _HomePageState extends State<HomePage> {
           SizedBox(width: 10),
         ],
       ),
-      drawer: Drawer(
-        backgroundColor: Colors.white,
-
-        child: Column(
-          children: [
-            DrawerHead(controller: controller),
-            Expanded(child: DrawerContent()),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: MenuDrawer(
-                icon: CupertinoIcons.square_arrow_right,
-                color: cs.error,
-                title: 'Sair',
-                onTap: () {
-                  final navigator = Navigator.of(context);
-                  navigator.pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
-                    (route) => false,
-                  );
-                },
-              ),
-            ),
-            Text('v2.10.30'),
-            SizedBox(height: 30),
-          ],
-        ),
-      ),
+      drawer: CustomDrawer(controller: controller),
       body: SolicitacaoPage(title: widget.title),
     );
   }
 
   Future<void> openSelecionarSetorDialog() async {
-    if (controller.setorSelecionado != null) return;
-
     await showDialog(
       context: context,
       barrierDismissible: false,

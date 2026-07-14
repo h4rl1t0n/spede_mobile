@@ -6,9 +6,10 @@ class MenuDrawer extends StatelessWidget {
   final IconData icon;
   final String title;
   final Color? color;
+  final Widget? trailing;
   final Function()? onTap;
 
-  const MenuDrawer({super.key, required this.icon, required this.title, this.onTap, this.color});
+  const MenuDrawer({super.key, required this.icon, required this.title, this.onTap, this.color, this.trailing});
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +30,7 @@ class MenuDrawer extends StatelessWidget {
           title,
           style: context.textStyles.textTitleItemList.copyWith(fontWeight: FontWeight.w600, fontSize: 15),
         ),
-        trailing: title == 'Sair'
-            ? null
-            : Badge.count(count: 6, maxCount: 10, padding: .all(4), backgroundColor: cs.secondary),
+        trailing: trailing,
         onTap: () {
           Navigator.of(context).pop();
           onTap?.call();

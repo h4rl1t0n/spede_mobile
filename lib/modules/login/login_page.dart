@@ -26,8 +26,8 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
   void initState() {
     super.initState();
 
-    usuarioTEC = TextEditingController();
-    senhaTEC = TextEditingController();
+    usuarioTEC = TextEditingController(text: 'nome.sobrenome');
+    senhaTEC = TextEditingController(text: '123456789');
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
