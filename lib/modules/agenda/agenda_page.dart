@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../mock/lembretes.dart';
+import '../../mock/setores.dart';
+import '../../models/setor_model.dart';
 import 'widgets/calendario_item/calendario_item.dart';
 import 'widgets/lembrete_item/header_lembrete.dart';
 import 'widgets/lembrete_item/lembrete_item.dart';
@@ -17,15 +19,32 @@ class AgendaPage extends StatefulWidget {
 class _AgendaPageState extends State<AgendaPage> {
   DateTime mes = DateTime.now();
   DateTime data = DateTime.now();
+  SetorModel? setorFiltrado;
 
   @override
   Widget build(BuildContext context) {
-    final lista = lembretes.where((evento) {
+    final lembretesFiltrados = setorFiltrado == null
+        ? lembretes
+        : lembretes.where((e) => e.setorModel.id == setorFiltrado!.id).toList();
+
+    final lista = lembretesFiltrados.where((evento) {
       return isSameDay(evento.data, data);
     }).toList();
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Agenda'), centerTitle: true),
+      appBar: AppBar(
+        title: const Text('Agenda'),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(
+              setorFiltrado == null ? Icons.filter_alt_outlined : Icons.filter_alt,
+              color: Colors.white,
+            ),
+            onPressed: () => _abrirFiltroSetor(context),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Column(
           spacing: 10,
@@ -44,6 +63,7 @@ class _AgendaPageState extends State<AgendaPage> {
               child: CalendarioItem(
                 mes: mes,
                 selectedDate: data,
+                lembretesList: lembretesFiltrados,
                 onMonthChanged: (novoMes) {
                   setState(() {
                     mes = novoMes;
@@ -92,5 +112,51 @@ class _AgendaPageState extends State<AgendaPage> {
         ),
       ),
     );
+  }
+
+  void _abrirFiltroSetor(BuildContext context) {
+    showDialog<SetorModel?>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Filtrar Agenda por Setor'),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  title: const Text('Todos os Setores'),
+                  trailing: setorFiltrado == null
+                      ? Icon(Icons.check, color: Theme.of(context).colorScheme.primary)
+                      : null,
+                  onTap: () {
+                    Navigator.pop(context, null);
+                  },
+                ),
+                ...setores.map((setor) {
+                  final isSelected = setorFiltrado?.id == setor.id;
+                  return ListTile(
+                    title: Text(setor.sigla),
+                    subtitle: Text(setor.nome, style: const TextStyle(fontSize: 12)),
+                    trailing: isSelected
+                        ? Icon(Icons.check, color: Theme.of(context).colorScheme.primary)
+                        : null,
+                    onTap: () {
+                      Navigator.pop(context, setor);
+                    },
+                  );
+                }),
+              ],
+            ),
+          ),
+        );
+      },
+    ).then((selectedSetor) {
+      if (selectedSetor != setorFiltrado) {
+        setState(() {
+          setorFiltrado = selectedSetor;
+        });
+      }
+    });
   }
 }

@@ -80,7 +80,15 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       drawer: CustomDrawer(controller: controller),
-      body: SolicitacaoPage(title: widget.title),
+      body: Observer(
+        builder: (_) {
+          return SolicitacaoPage(
+            key: ValueKey(controller.setorSelecionado?.id),
+            title: widget.title,
+            controller: controller,
+          );
+        },
+      ),
     );
   }
 

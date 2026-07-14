@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'setor_model.dart';
+
 class LembreteModel {
   final String id;
   final String titulo;
@@ -11,8 +13,9 @@ class LembreteModel {
   final DateTime data;
   final Color cor;
   final bool isLembrete;
+  final SetorModel setorModel;
 
-  const LembreteModel({
+  LembreteModel({
     required this.id,
     required this.titulo,
     this.descricao,
@@ -23,6 +26,7 @@ class LembreteModel {
     required this.data,
     required this.cor,
     this.isLembrete = false,
+    required this.setorModel,
   });
 
   LembreteModel copyWith({
@@ -36,6 +40,7 @@ class LembreteModel {
     DateTime? data,
     Color? cor,
     bool? isLembrete,
+    SetorModel? setorModel,
   }) {
     return LembreteModel(
       id: id ?? this.id,
@@ -48,6 +53,7 @@ class LembreteModel {
       data: data ?? this.data,
       cor: cor ?? this.cor,
       isLembrete: isLembrete ?? this.isLembrete,
+      setorModel: setorModel ?? this.setorModel,
     );
   }
 }
