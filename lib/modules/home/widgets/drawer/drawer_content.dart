@@ -77,7 +77,7 @@ class _DrawerContentState extends State<DrawerContent> {
           onTap: openSelecionarSetorDialog,
         ),
         MenuDrawer(
-          icon: Icons.exit_to_app_outlined,
+          icon: CupertinoIcons.square_arrow_right,
           title: 'Sair',
           trailing: Icon(Icons.chevron_right),
           color: cs.error,

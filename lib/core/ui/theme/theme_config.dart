@@ -76,17 +76,17 @@ class ThemeConfig {
 
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: colorScheme.surfaceContainerHighest.withValues(alpha: .45),
+        fillColor: Colors.white,
         isDense: true,
         contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: BorderSide.none),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: colorScheme.outline.withValues(alpha: .20)),
+          borderSide: BorderSide(color: colorScheme.outline.withValues(alpha: .50)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: colorScheme.primary, width: 1.5),
+          borderSide: BorderSide(color: colorScheme.primary, width: 1.2),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
@@ -94,7 +94,7 @@ class ThemeConfig {
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: colorScheme.error, width: 1.5),
+          borderSide: BorderSide(color: colorScheme.error, width: 1.25),
         ),
         labelStyle: TextStyles.instance.textRegular.copyWith(color: colorScheme.onSurfaceVariant, fontFamily: 'Cabin'),
         hintStyle: TextStyles.instance.textRegular.copyWith(

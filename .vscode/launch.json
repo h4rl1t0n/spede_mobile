@@ -7,19 +7,31 @@
           {
                "name": "Desenvolvimento",
                "request": "launch",
-               "type": "dart"
+               "type": "dart",
+               "args": [
+                    "--dart-define-from-file",
+                    "env-hml.local.json"
+               ]
           },
           {
                "name": "Homologacao",
                "request": "launch",
                "type": "dart",
-               "flutterMode": "profile"
+               "flutterMode": "profile",
+               "args": [
+                    "--dart-define-from-file",
+                    "env-hml.local.json"
+               ]
           },
           {
                "name": "Producao",
                "request": "launch",
                "type": "dart",
-               "flutterMode": "release"
+               "flutterMode": "release",
+               "args": [
+                    "--dart-define-from-file",
+                    "env-prod.local.json"
+               ]
           }
      ]
 }

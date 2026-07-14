@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:validatorless/validatorless.dart';
 
 import '../../core/helpers/loader.dart';
 import '../../core/helpers/messages.dart';
 import '../home/home_page.dart';
+import 'login_controller.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,13 +16,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> with Loader, Messages {
+  final controller = LoginController();
+
   late final TextEditingController usuarioTEC;
   late final TextEditingController senhaTEC;
-
-  final usuarioFocusNode = FocusNode();
-  final senhaFocusNode = FocusNode();
-
-  bool obscureText = true;
 
   @override
   void initState() {
@@ -45,8 +44,6 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
   void dispose() {
     usuarioTEC.dispose();
     senhaTEC.dispose();
-    usuarioFocusNode.dispose();
-    senhaFocusNode.dispose();
     super.dispose();
   }
 
@@ -111,7 +108,7 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
                                     borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
                                   ),
                                 ),
-                                Transform.translate(offset: const Offset(0, 10), child: _buildLogo()),
+                                Transform.translate(offset: const Offset(0, 10), child: _logo()),
                               ],
                             ),
 
@@ -177,7 +174,7 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
     );
   }
 
-  Widget _buildLogo() {
+  Widget _logo() {
     return Card(
       color: Colors.transparent,
       elevation: 7,
@@ -197,7 +194,6 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
   Widget get _inputUsuario {
     return TextFormField(
       controller: usuarioTEC,
-      focusNode: usuarioFocusNode,
       textInputAction: TextInputAction.next,
       validator: Validatorless.required('Informe seu usuário'),
       decoration: const InputDecoration(
@@ -209,30 +205,32 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
   }
 
   Widget get _inputSenha {
-    return TextFormField(
-      controller: senhaTEC,
-      focusNode: senhaFocusNode,
-      obscureText: obscureText,
-      validator: Validatorless.required('Informe sua senha'),
-      decoration: InputDecoration(
-        labelText: 'Senha',
-        hintText: 'Digite sua senha',
-        prefixIcon: const Icon(Icons.lock_outline),
-        suffixIcon: IconButton(
-          onPressed: () {
-            setState(() {
-              obscureText = !obscureText;
-            });
-          },
-          icon: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 250),
-            child: Icon(
-              obscureText ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-              key: ValueKey(obscureText),
+    return Observer(
+      builder: (context) {
+        final obscureText = controller.obscureText;
+        return TextFormField(
+          controller: senhaTEC,
+          obscureText: obscureText,
+          validator: Validatorless.required('Informe sua senha'),
+          decoration: InputDecoration(
+            labelText: 'Senha',
+            hintText: 'Digite sua senha',
+            prefixIcon: const Icon(Icons.lock_outline),
+            suffixIcon: IconButton(
+              onPressed: () {
+                controller.changeObscureText();
+              },
+              icon: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 250),
+                child: Icon(
+                  obscureText ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                  key: ValueKey(obscureText),
+                ),
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -241,10 +239,6 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
       height: 50,
       child: FilledButton(
         onPressed: () async {
-          showLoader();
-          await Future.delayed(Duration(seconds: 1));
-          hideLoader();
-
           await toHomePage();
         },
         child: const Text('Entrar', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600)),
@@ -266,7 +260,7 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
   Future<void> toHomePage() async {
     await Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (_) => const HomePage(title: 'Pessoal > Solicitações Recebidas')),
+      MaterialPageRoute(builder: (_) => const HomePage(title: 'Solicitações Recebidas')),
     );
   }
 }

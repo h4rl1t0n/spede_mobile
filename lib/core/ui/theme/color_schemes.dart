@@ -27,7 +27,7 @@ const lightColorScheme = ColorScheme(
   onErrorContainer: Color(0xFF410002),
 
   // Cinza da fachada
-  surface: Color(0xFFF6F7F9),
+  surface: Colors.white,
   onSurface: Color(0xFF1A2333),
 
   surfaceContainerHighest: Color(0xFFE8EBF0),

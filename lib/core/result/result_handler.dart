@@ -1,28 +1,34 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:multiple_result/multiple_result.dart';
 
-import 'failure.dart';
+import '../exceptions/failure.dart';
 
-/// Função genérica para lidar com operações que retornam um [Result].
-/// Aceita a operação, uma função de sucesso e uma função de erro.
 Future<void> fetch<T>(
-  Future<Result<T, Failure>> operation, {
+  Future<Result<T, Failure>> apiCall, {
   required Function(T success) onSuccess,
   required Function(String errorMessage) onError,
+  VoidCallback? onFinally,
 }) async {
   try {
-    final result = await operation;
-    switch (result) {
-      case Success():
-        onSuccess(result.success);
-        break;
-      case Error():
-        onError(result.error.message ?? 'Erro desconhecido');
-        break;
+    try {
+      final result = await apiCall;
+      switch (result) {
+        case Success(success: final successValue):
+          onSuccess(successValue);
+          break;
+        case Error(error: final errorValue):
+          log(name: 'handleCall - Error', errorValue.message ?? 'Erro desconhecido retornado pela API');
+          onError(errorValue.message ?? 'Erro desconhecido retornado pela API');
+          break;
+      }
+    } catch (e, s) {
+      log('Erro durante a chamada de API ou processamento', error: e, stackTrace: s);
+      onError('Erro ao realizar a operação: $e');
     }
-  } catch (e, s) {
-    log('Erro durante a operação local', error: e, stackTrace: s);
-    onError('Erro ao realizar a operação');
+  } finally {
+    onFinally?.call();
+    log('handleApiCall: onFinally executado.');
   }
 }

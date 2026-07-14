@@ -27,12 +27,17 @@ class _SelecionarSetorDialogState extends State<SelecionarSetorDialog> {
         title: Text('Selecione um Setor'),
         content: SizedBox(
           width: context.widthDialog,
-          child: CustomDropdownSearch<SetorModel>(
-            hintText: 'Selecione um setor',
-            items: setores,
-            itemString: (item) => item.sigla,
-            onSelected: (item) {
-              controller.idSetorSelecionado = item?.id;
+          child: Observer(
+            builder: (context) {
+              return CustomDropdownSearch<SetorModel>(
+                hintText: 'Selecione um setor',
+                initialValue: controller.setorSelecionado,
+                items: setores,
+                itemString: (item) => item.sigla,
+                onSelected: (item) {
+                  controller.idSetorSelecionado = item?.id;
+                },
+              );
             },
           ),
         ),

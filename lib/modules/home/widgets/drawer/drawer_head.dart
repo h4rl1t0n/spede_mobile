@@ -28,11 +28,12 @@ class DrawerHead extends StatelessWidget {
         child: SafeArea(
           bottom: false,
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+            padding: const EdgeInsets.all(20),
             child: Column(
               spacing: 10,
               children: [
                 Row(
+                  spacing: 20,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Hero(
@@ -53,17 +54,11 @@ class DrawerHead extends StatelessWidget {
                         ),
                       ),
                     ),
-
-                    const SizedBox(width: 18),
-
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('Bem-vindo', style: TextStyle(color: Colors.white.withValues(alpha: .75), fontSize: 13)),
-
-                          const SizedBox(height: 4),
-
                           Text(
                             nomeUsuario.toUpperCase(),
                             maxLines: 3,
@@ -89,7 +84,7 @@ class DrawerHead extends StatelessWidget {
                     }
 
                     return Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                      padding: const EdgeInsets.all(8),
                       child: Row(
                         spacing: 5,
                         mainAxisSize: MainAxisSize.min,

@@ -45,4 +45,7 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+env-hml.local.json
+env-prod.local.json
+
 **/*.jks
