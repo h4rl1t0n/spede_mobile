@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../mock/documentos.dart';
 import '../../../agenda/agenda_page.dart';
 import '../../../login/login_page.dart';
 import '../../home_controller.dart';
@@ -22,6 +23,9 @@ class _DrawerContentState extends State<DrawerContent> {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
+    final idSetor = controller.setorSelecionado?.id;
+    final badge = documentos.where((element) => element.setorModel.id == idSetor).toList().length;
+
     return ListView(
       padding: const EdgeInsets.only(top: 8, bottom: 0, left: 16, right: 16),
       children: [
@@ -35,7 +39,7 @@ class _DrawerContentState extends State<DrawerContent> {
         MenuDrawer(
           icon: CupertinoIcons.tray_arrow_down_fill,
           title: 'Solicitações Recebidas',
-          trailing: Badge.count(count: 11, maxCount: 10, padding: .all(4), backgroundColor: cs.secondary),
+          trailing: Badge.count(count: badge, maxCount: 10, padding: .all(4), backgroundColor: cs.secondary),
           onTap: () {
             Navigator.pushReplacement(
               context,
@@ -46,7 +50,7 @@ class _DrawerContentState extends State<DrawerContent> {
         MenuDrawer(
           icon: CupertinoIcons.tray_arrow_up_fill,
           title: 'Solicitações Enviadas',
-          trailing: Badge.count(count: 8, maxCount: 10, padding: .all(4), backgroundColor: cs.secondary),
+          trailing: Badge.count(count: badge, maxCount: 10, padding: .all(4), backgroundColor: cs.secondary),
           onTap: () {
             Navigator.pushReplacement(
               context,
@@ -74,7 +78,7 @@ class _DrawerContentState extends State<DrawerContent> {
           icon: Icons.business,
           trailing: Icon(Icons.chevron_right),
           title: 'Alterar Setor',
-          onTap: openSelecionarSetorDialog,
+          onTap: () async => openSelecionarSetorDialog(),
         ),
         MenuDrawer(
           icon: CupertinoIcons.square_arrow_right,

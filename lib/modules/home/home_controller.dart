@@ -20,14 +20,20 @@ abstract class HomeControllerBase with Store {
 
   @action
   Future<void> initController() async {
-    setorSelecionado = await LocalStorageUtils.carregarSetorSelecionado();
+    await carregarSetor();
   }
 
   @action
   Future<bool> salvarSetorSelecionado() async {
-    final int filter = idSetorSelecionado ?? setorSelecionado?.id ?? -1;
-    setorSelecionado = listaDeSetores.firstWhereOrNull((element) => element.id == filter);
+    final int idSetor = idSetorSelecionado ?? setorSelecionado?.id ?? -1;
+    setorSelecionado = listaDeSetores.firstWhereOrNull((element) => element.id == idSetor);
     await LocalStorageUtils.salvarSetor(setor: setorSelecionado);
     return true;
+  }
+
+  @action
+  Future<void> carregarSetor() async {
+    setorSelecionado = await LocalStorageUtils.carregarSetorSelecionado();
+    idSetorSelecionado = setorSelecionado?.id;
   }
 }

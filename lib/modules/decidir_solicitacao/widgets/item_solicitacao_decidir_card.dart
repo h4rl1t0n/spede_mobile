@@ -53,21 +53,21 @@ class ItemSolicitacaoDecidirCard extends StatelessWidget {
                     const SizedBox(height: 12),
 
                     InfoCard(
-                      icon: Icons.design_services_outlined,
+                      
                       titulo: 'Assunto/Natureza',
                       valor: solicitacao.assunto,
                     ),
                     const SizedBox(height: 8),
 
                     InfoCard(
-                      icon: Icons.description_outlined,
+                      
                       titulo: 'Solicitação',
                       valor: solicitacao.tipoSolicitacao.name,
                     ),
 
                     const SizedBox(height: 8),
 
-                    InfoCard(icon: Icons.person_outline, titulo: 'Remetente', valor: solicitacao.remetente),
+                    InfoCard( titulo: 'Remetente', valor: solicitacao.remetente),
                   ],
                 ),
               ),

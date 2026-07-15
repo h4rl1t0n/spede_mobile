@@ -7,6 +7,7 @@ class CustomDropdownSearch<T> extends StatefulWidget {
   final String hintText;
   final String Function(T item) itemString;
   final ValueChanged<T?>? onSelected;
+  final VoidCallback? onClear;
 
   const CustomDropdownSearch({
     super.key,
@@ -16,6 +17,7 @@ class CustomDropdownSearch<T> extends StatefulWidget {
     this.enabled = true,
     this.hintText = 'Selecione...',
     this.onSelected,
+    this.onClear,
   });
 
   @override
@@ -29,13 +31,23 @@ class _CustomDropdownSearchState<T> extends State<CustomDropdownSearch<T>> {
   String get hintText => widget.hintText;
   ValueChanged<T?>? get onSelected => widget.onSelected;
   bool get enabled => widget.enabled;
+  VoidCallback? get onClear => widget.onClear;
 
   late final TextEditingController controller;
 
   @override
   void initState() {
-    controller = TextEditingController();
+    controller = TextEditingController(text: initialValue == null ? '' : itemString(initialValue as T));
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant CustomDropdownSearch<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.initialValue != widget.initialValue) {
+      controller.text = widget.initialValue == null ? '' : itemString(widget.initialValue as T);
+    }
   }
 
   @override
@@ -54,20 +66,19 @@ class _CustomDropdownSearchState<T> extends State<CustomDropdownSearch<T>> {
       width: size.width - 32,
       hintText: hintText,
       initialSelection: initialValue,
-      enableFilter: false,
-      enableSearch: false,
-      requestFocusOnTap: true,
-      // searchCallback: (entries, query) {
-      //   if (query.isEmpty) return null;
-
-      //   final index = entries.indexWhere((entry) {
-      //     return entry.label.toLowerCase().contains(query.toLowerCase());
-      //   });
-
-      //   return index == -1 ? null : index;
-      // },
+      enableSearch: true,
+      enableFilter: true,
+      requestFocusOnTap: false,
       dropdownMenuEntries: items.map((item) => DropdownMenuEntry<T>(value: item, label: itemString(item))).toList(),
       onSelected: onSelected,
+      trailingIcon: controller.text.isEmpty
+          ? Icon(Icons.arrow_drop_down)
+          : GestureDetector(onTap: limpar, child: Icon(Icons.close, size: 16)),
     );
+  }
+
+  void limpar() {
+    controller.clear();
+    onClear?.call();
   }
 }

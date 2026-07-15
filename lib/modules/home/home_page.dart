@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
-import '../agenda/agenda_page.dart';
-import '../perfil/perfil_page.dart';
 import '../solicitacao/solicitacao_page.dart';
 import 'home_controller.dart';
 import 'widgets/drawer/custom_drawer.dart';
@@ -24,10 +22,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await controller.initController();
-
-      if (controller.setorSelecionado == null) {
-        await openSelecionarSetorDialog();
-      }
+      await openSelecionarSetorDialog();
     });
   }
 
@@ -39,22 +34,26 @@ class _HomePageState extends State<HomePage> {
         titleSpacing: 0,
         toolbarHeight: 80,
         title: Column(
+          spacing: 4,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Align(
               alignment: .centerStart,
-              child: Image.asset('assets/images/spede_home.png', height: 30, fit: .contain),
+              child: Image.asset('assets/images/spede_home_hml.png', height: 30, fit: .contain),
             ),
             Observer(
               builder: (context) {
                 final setor = controller.setorSelecionado;
 
                 if (setor != null) {
-                  return Text(
-                    setor.nome.toUpperCase(),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 13, color: Colors.white),
+                  return Align(
+                    alignment: .centerLeft,
+                    child: Text(
+                      setor.nome.toUpperCase(),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 14, color: Colors.white),
+                    ),
                   );
                 }
 
@@ -63,21 +62,15 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.calendar_month),
-            onPressed: () async {
-              await Navigator.push(context, MaterialPageRoute(builder: (_) => const AgendaPage()));
-            },
-          ),
-          IconButton(
-            icon: CircleAvatar(child: Text('AS')),
-            onPressed: () async {
-              await Navigator.push(context, MaterialPageRoute(builder: (_) => const PerfilPage()));
-            },
-          ),
-          SizedBox(width: 10),
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: CircleAvatar(child: Text('AS')),
+        //     onPressed: () async {
+        //       await Navigator.push(context, MaterialPageRoute(builder: (_) => const PerfilPage()));
+        //     },
+        //   ),
+        //   SizedBox(width: 10),
+        // ],
       ),
       drawer: CustomDrawer(controller: controller),
       body: Observer(
@@ -93,6 +86,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> openSelecionarSetorDialog() async {
+    if (controller.setorSelecionado != null) return;
+
     await showDialog(
       context: context,
       barrierDismissible: false,

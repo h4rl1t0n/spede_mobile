@@ -12,7 +12,6 @@ class NenhumLembreteContainer extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           spacing: 5,
           children: [
-            Icon(Icons.calendar_month, size: 64, color: Colors.grey.shade400),
             const Text('Nenhum lembrete encontrado', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
             Text(
               'Não há lembretes cadastrados para esta data.',

@@ -29,9 +29,10 @@ class _SelecionarSetorDialogState extends State<SelecionarSetorDialog> {
           width: context.widthDialog,
           child: Observer(
             builder: (context) {
+              final setorSelecionado = controller.setorSelecionado;
               return CustomDropdownSearch<SetorModel>(
                 hintText: 'Selecione um setor',
-                initialValue: controller.setorSelecionado,
+                initialValue: setorSelecionado,
                 items: setores,
                 itemString: (item) => item.sigla,
                 onSelected: (item) {
@@ -42,29 +43,23 @@ class _SelecionarSetorDialogState extends State<SelecionarSetorDialog> {
           ),
         ),
         actions: [
-          Observer(
-            builder: (context) {
-              final idSetorSelecionado = controller.idSetorSelecionado;
-              return Row(
-                mainAxisAlignment: .end,
-                children: [
-                  Expanded(child: SizedBox.shrink()),
-                  Expanded(
+          Row(
+            mainAxisAlignment: .end,
+            children: [
+              Expanded(child: SizedBox.shrink()),
+              Observer(
+                builder: (context) {
+                  final idSetorSelecionado = controller.idSetorSelecionado;
+                  return Expanded(
                     child: FilledButton(
                       onPressed: idSetorSelecionado == null ? null : selecionarSetor,
                       child: Text('Selecionar'),
                     ),
-                  ),
-                ],
-              );
-            },
+                  );
+                },
+              ),
+            ],
           ),
-          // TextButton(
-          //   onPressed: () {
-          //     Navigator.of(context).pop();
-          //   },
-          //   child: Text('Cancelar', style: context.textStyles.textSecondaryButtonLabel),
-          // ),
         ],
       ),
     );

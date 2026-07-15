@@ -185,7 +185,7 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
         padding: const EdgeInsets.all(12),
         child: Hero(
           tag: 'logo',
-          child: Image.asset('assets/images/logo_old.png', fit: BoxFit.contain),
+          child: Image.asset('assets/images/logo.png', fit: BoxFit.contain),
         ),
       ),
     );

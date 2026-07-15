@@ -27,6 +27,7 @@ class LembreteItem extends StatelessWidget {
             child: Theme(
               data: theme.copyWith(dividerColor: Colors.transparent),
               child: ExpansionTile(
+                backgroundColor: Colors.white,
                 tilePadding: const EdgeInsets.only(left: 12, right: 16, top: 4, bottom: 4),
                 childrenPadding: const EdgeInsets.only(left: 12, right: 12, bottom: 16),
                 iconColor: theme.colorScheme.primary,

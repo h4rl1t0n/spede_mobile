@@ -80,18 +80,13 @@ class ItemSolicitacao extends StatelessWidget {
                     const SizedBox(height: 10),
 
                     // Detalhes com Ícones (Método extraído para limpeza do código)
-                    InfoCard(
-                      icon: Icons.description_outlined,
-                      titulo: 'Solicitação',
-                      valor: solicitacao.tipoSolicitacao.name,
-                    ),
+                    InfoCard(titulo: 'Solicitação', valor: solicitacao.tipoSolicitacao.name),
                     const SizedBox(height: 8),
-                    InfoCard(icon: Icons.person_outline, titulo: 'De', valor: solicitacao.remetente),
+                    InfoCard(titulo: 'De', valor: solicitacao.remetente),
                     const SizedBox(height: 8),
-                    InfoCard(icon: Icons.person_pin_circle_outlined, titulo: 'Para', valor: solicitacao.destinatario),
+                    InfoCard(titulo: 'Para', valor: solicitacao.destinatario),
                     const SizedBox(height: 8),
                     InfoCard(
-                      icon: Icons.calendar_month_outlined,
                       titulo: 'Data Solicitação',
                       valor: DateFormat('dd/MM/yyyy').format(solicitacao.dataSolicitacao),
                     ),
@@ -104,6 +99,8 @@ class ItemSolicitacao extends StatelessWidget {
                       children: [
                         TextButton.icon(
                           onPressed: () => _abrirAcoes(context),
+                          iconAlignment: .end,
+                          icon: Icon(Icons.chevron_right),
                           label: const Text('Outras ações', style: TextStyle(fontSize: 15)),
                         ),
                       ],

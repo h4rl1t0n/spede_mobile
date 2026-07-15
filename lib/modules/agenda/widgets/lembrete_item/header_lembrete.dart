@@ -16,10 +16,7 @@ class HeaderLembrete extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        border: Border(bottom: BorderSide(color: Colors.grey.shade200)),
-      ),
+      decoration: BoxDecoration(color: Theme.of(context).colorScheme.surface),
       child: Row(
         spacing: 8,
         children: [

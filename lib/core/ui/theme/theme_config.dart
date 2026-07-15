@@ -59,6 +59,16 @@ class ThemeConfig {
         ),
       ),
 
+      menuButtonTheme: MenuButtonThemeData(
+        style: ButtonStyle(
+          textStyle: WidgetStatePropertyAll(TextStyle(fontFamily: 'Cabin', fontSize: 14, color: colorScheme.onSurface)),
+          backgroundColor: WidgetStatePropertyAll(colorScheme.surface),
+          surfaceTintColor: const WidgetStatePropertyAll(Colors.transparent),
+          elevation: const WidgetStatePropertyAll(4),
+          shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(14))),
+        ),
+      ),
+
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           minimumSize: const Size.fromHeight(45),

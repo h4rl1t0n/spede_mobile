@@ -38,7 +38,12 @@ class SecaoRejeicao extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              CustomDropdownSearch<String>(items: motivos, itemString: (item) => item, onSelected: onMotivoSelected),
+              CustomDropdownSearch<String>(
+                hintText: 'Selecione um motivo',
+                items: motivos,
+                itemString: (item) => item,
+                onSelected: onMotivoSelected,
+              ),
               const SizedBox(height: 20),
 
               RichText(
