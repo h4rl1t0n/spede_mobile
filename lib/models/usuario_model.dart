@@ -87,11 +87,19 @@ class UsuarioModel {
 
   factory UsuarioModel.fromJson(String source) => UsuarioModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
-  String get nomeSobrenome {
-    final partes = nome.trim().split(RegExp(r'\s+'));
+  String get username {
+    return email.split('@').first.toLowerCase();
+  }
 
-    if (partes.length <= 1) return nome;
+  String get avatar {
+    const ignorar = {'de', 'da', 'do', 'dos', 'das'};
 
-    return '${partes.first}.${partes.last}'.toLowerCase();
+    return nome
+        .trim()
+        .split(RegExp(r'\s+'))
+        .where((parte) => !ignorar.contains(parte.toLowerCase()))
+        .take(3)
+        .map((parte) => parte[0].toUpperCase())
+        .join();
   }
 }

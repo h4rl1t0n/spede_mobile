@@ -1,7 +1,7 @@
 enum TipoSituacao {
   pendente('Pendente'),
-  deferida('Deferida'),
-  indeferida('Indeferida');
+  atendida('Atendida'),
+  rejeitada('Rejeitada');
 
   final String name;
   const TipoSituacao(this.name);

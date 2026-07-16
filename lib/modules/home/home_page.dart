@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
+import '../../models/usuario_model.dart';
 import '../solicitacao/solicitacao_page.dart';
 import 'home_controller.dart';
 import 'widgets/drawer/custom_drawer.dart';
 import 'widgets/selecionar_setor_dialog/selecionar_setor_dialog.dart';
 
 class HomePage extends StatefulWidget {
+  final UsuarioModel usuario;
   final String title;
-  const HomePage({super.key, required this.title});
+  const HomePage({super.key, required this.title, required this.usuario});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -20,8 +22,12 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+
+    controller.usuario = widget.usuario;
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await controller.initController();
+      if (!mounted) return;
       await openSelecionarSetorDialog();
     });
   }

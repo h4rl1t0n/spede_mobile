@@ -3,9 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:validatorless/validatorless.dart';
 
+import '../../core/global/local_storage_utils.dart';
 import '../../core/helpers/loader.dart';
 import '../../core/helpers/messages.dart';
-import '../home/home_page.dart';
+import '../../enum/page_status.dart';
+import '../../shared/data/auth/auth_repository_impl.dart';
+import '../../shared/data/auth/datasource/auth_datasource_impl.dart';
+import '../../shared/service/auth/auth_service.dart';
+import '../inicializar_app/inicializar_app_page.dart';
 import 'login_controller.dart';
 
 class LoginPage extends StatefulWidget {
@@ -16,19 +21,30 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> with Loader, Messages {
-  final controller = LoginController();
+  late final AuthDatasourceImpl dataSource;
+  late final AuthRepositoryImpl repository;
+  late final AuthService service;
+  late final LoginController controller;
 
   late final TextEditingController usuarioTEC;
   late final TextEditingController senhaTEC;
+  late final GlobalKey<FormState> _formKey;
 
   @override
   void initState() {
     super.initState();
 
-    usuarioTEC = TextEditingController(text: 'nome.sobrenome');
+    dataSource = AuthDatasourceImpl();
+    repository = AuthRepositoryImpl(dataSource);
+    service = AuthService(repository);
+    controller = LoginController(service);
+
+    _formKey = GlobalKey<FormState>();
+    usuarioTEC = TextEditingController();
     senhaTEC = TextEditingController(text: '123456789');
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      usuarioTEC.text == await LocalStorageUtils.getValue(SessionStorageKeys.username.key);
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
       SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(
@@ -117,45 +133,48 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
                                 padding: const EdgeInsets.symmetric(horizontal: 24),
                                 child: ConstrainedBox(
                                   constraints: const BoxConstraints(maxWidth: 430),
-                                  child: Column(
-                                    // Alterado para MAX para permitir o uso dos Spacers
-                                    mainAxisSize: MainAxisSize.max,
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                                    children: [
-                                      // Preenche espaço superior de forma dinâmica
-                                      const Spacer(flex: 2),
+                                  child: Form(
+                                    key: _formKey,
+                                    child: Column(
+                                      // Alterado para MAX para permitir o uso dos Spacers
+                                      mainAxisSize: MainAxisSize.max,
+                                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                                      children: [
+                                        // Preenche espaço superior de forma dinâmica
+                                        const Spacer(flex: 2),
 
-                                      const Text(
-                                        'Bem-vindo ao SPEDE',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
-                                      ),
-                                      const Text(
-                                        'Sistema de Processos e Documentos\nEletrônicos',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(fontSize: 18.0),
-                                      ),
+                                        const Text(
+                                          'Bem-vindo ao SPEDE',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
+                                        ),
+                                        const Text(
+                                          'Sistema de Processos e Documentos\nEletrônicos',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(fontSize: 18.0),
+                                        ),
 
-                                      const SizedBox(height: 32),
-                                      _inputUsuario,
+                                        const SizedBox(height: 32),
+                                        _inputUsuario,
 
-                                      const SizedBox(height: 16),
-                                      _inputSenha,
-                                      const SizedBox(height: 10),
+                                        const SizedBox(height: 16),
+                                        _inputSenha,
+                                        const SizedBox(height: 10),
 
-                                      _buttonSaveMe,
+                                        _buttonSaveMe,
 
-                                      const SizedBox(height: 10),
-                                      _buttonEntrar,
+                                        const SizedBox(height: 10),
+                                        _buttonEntrar,
 
-                                      // Empurra a Central de Ajuda lá para baixo dinamicamente
-                                      const Spacer(flex: 3),
+                                        // Empurra a Central de Ajuda lá para baixo dinamicamente
+                                        const Spacer(flex: 3),
 
-                                      // const CentralDeAjuda(),
+                                        // const CentralDeAjuda(),
 
-                                      // Respiro de 90 de altura garante que o botão não bata na arte azul do rodapé
-                                      const SizedBox(height: 90),
-                                    ],
+                                        // Respiro de 90 de altura garante que o botão não bata na arte azul do rodapé
+                                        const SizedBox(height: 90),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -195,6 +214,9 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
     return TextFormField(
       controller: usuarioTEC,
       textInputAction: TextInputAction.next,
+      onChanged: (value) {
+        controller.login = value;
+      },
       validator: Validatorless.required('Informe seu usuário'),
       decoration: const InputDecoration(
         labelText: 'Usuário',
@@ -212,6 +234,9 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
           controller: senhaTEC,
           obscureText: obscureText,
           validator: Validatorless.required('Informe sua senha'),
+          onChanged: (value) {
+            controller.senha = value;
+          },
           decoration: InputDecoration(
             labelText: 'Senha',
             hintText: 'Digite sua senha',
@@ -241,7 +266,24 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
         onPressed: () async {
           await toHomePage();
         },
-        child: const Text('Entrar', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600)),
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 250),
+          child: Observer(
+            builder: (context) {
+              final isLoading = controller.status == PageStatus.loading;
+
+              if (isLoading) {
+                return const SizedBox(
+                  width: 26,
+                  height: 26,
+                  child: CircularProgressIndicator(strokeWidth: 3, color: Colors.white),
+                );
+              }
+
+              return const Text('Entrar', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600));
+            },
+          ),
+        ),
       ),
     );
   }
@@ -258,9 +300,23 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
   }
 
   Future<void> toHomePage() async {
-    await Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => const HomePage(title: 'Solicitações Recebidas')),
-    );
+    final currentState = _formKey.currentState;
+
+    if (!(currentState?.validate() ?? false)) {
+      return;
+    }
+
+    final success = await controller.auth();
+
+    if (success) {
+      return navigateToInicializar();
+    }
+
+    showError(controller.errorMessage ?? '');
+  }
+
+  Future<void> navigateToInicializar() async {
+    final navigator = Navigator.of(context);
+    await navigator.pushAndRemoveUntil(MaterialPageRoute(builder: (context) => InicializarAppPage()), (route) => false);
   }
 }

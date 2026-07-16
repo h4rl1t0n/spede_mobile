@@ -9,7 +9,7 @@ final usuarios = <UsuarioModel>[
     rg: '1234567-0',
     dataNascimento: DateTime(1990, 5, 12),
     sexo: 'Masculino',
-    email: 'antonio.souza@tce.am.gov.br',
+    email: 'antonio.harliton@tce.am.gov.br',
     interno: true,
     ativo: true,
   ),

@@ -2,12 +2,13 @@ import 'dart:developer';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../mock/usuarios.dart';
 import '../../models/setor_model.dart';
+import '../../models/usuario_model.dart';
 
 enum SessionStorageKeys {
   setorSelecionado('setorSelecionado'),
-  accesToken('accesToken'),
-  refreshToken('refreshToken');
+  username('username');
 
   final String key;
   const SessionStorageKeys(this.key);
@@ -48,8 +49,7 @@ class LocalStorageUtils {
 
   static Future<void> clean() async {
     await LocalStorageUtils.removeValue(SessionStorageKeys.setorSelecionado.key);
-    await LocalStorageUtils.removeValue(SessionStorageKeys.accesToken.key);
-    await LocalStorageUtils.removeValue(SessionStorageKeys.refreshToken.key);
+    await LocalStorageUtils.removeValue(SessionStorageKeys.username.key);
   }
 
   static Future<SetorModel?> carregarSetorSelecionado() async {
@@ -65,5 +65,10 @@ class LocalStorageUtils {
 
   static Future<void> salvarSetor({required SetorModel? setor}) async {
     await LocalStorageUtils.setValue(SessionStorageKeys.setorSelecionado.key, setor?.toJson() ?? '{}');
+  }
+
+  static Future<UsuarioModel> getUsuario() async {
+    final String username = await LocalStorageUtils.getValue(SessionStorageKeys.username.key);
+    return usuarios.firstWhere((element) => element.username == username);
   }
 }

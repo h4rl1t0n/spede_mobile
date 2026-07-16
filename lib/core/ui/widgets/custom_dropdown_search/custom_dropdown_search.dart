@@ -71,7 +71,9 @@ class _CustomDropdownSearchState<T> extends State<CustomDropdownSearch<T>> {
       requestFocusOnTap: false,
       dropdownMenuEntries: items.map((item) => DropdownMenuEntry<T>(value: item, label: itemString(item))).toList(),
       onSelected: onSelected,
-      trailingIcon: controller.text.isEmpty
+      trailingIcon: onClear == null
+          ? null
+          : initialValue == null
           ? Icon(Icons.arrow_drop_down)
           : GestureDetector(onTap: limpar, child: Icon(Icons.close, size: 16)),
     );

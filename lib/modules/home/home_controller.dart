@@ -4,6 +4,7 @@ import 'package:mobx/mobx.dart';
 import '../../core/global/local_storage_utils.dart';
 import '../../mock/setores.dart';
 import '../../models/setor_model.dart';
+import '../../models/usuario_model.dart';
 
 part 'home_controller.g.dart';
 
@@ -14,6 +15,9 @@ abstract class HomeControllerBase with Store {
 
   @observable
   SetorModel? setorSelecionado;
+
+  @observable
+  UsuarioModel? usuario;
 
   @observable
   int? idSetorSelecionado;

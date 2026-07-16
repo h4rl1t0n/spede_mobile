@@ -25,15 +25,22 @@ mixin Messages<T extends StatefulWidget> on State<T> {
       ..showSnackBar(
         SnackBar(
           dismissDirection: DismissDirection.horizontal,
-          content: Text(message, textAlign: TextAlign.justify),
-          backgroundColor: color,
-          action: SnackBarAction(
-            label: 'Fechar',
-            textColor: Colors.white,
-            onPressed: () {
-              scaffoldMessenger.hideCurrentSnackBar();
-            },
+          content: Row(
+            children: [
+              Expanded(child: Text(message)),
+              GestureDetector(
+                onTap: () {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                },
+                child: Text(
+                  'Fechar',
+                  style: TextStyle(fontWeight: .w600, color: Colors.white),
+                ),
+              ),
+            ],
           ),
+          backgroundColor: color,
+          duration: Duration(seconds: 5),
         ),
       );
   }

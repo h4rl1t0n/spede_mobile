@@ -1,33 +1,33 @@
+import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
-import 'package:dio/io.dart';
 import 'package:multiple_result/multiple_result.dart';
 
 import '../../../../core/exceptions/failure.dart';
 import '../../../../core/rest_client/error/custom_message_error.dart';
 import '../../../../core/rest_client/error/dio_failure.dart';
-import '../../../../mock/token.dart';
+import '../../../../mock/usuarios.dart';
 import '../dto/auth_request_dto.dart';
-import '../dto/auth_response_dto.dart';
 import 'auth_datasource.dart';
 
 class AuthDatasourceImpl implements AuthDatasource {
-  final DioForNative client;
-
-  AuthDatasourceImpl(this.client);
-
   @override
-  Future<Result<AuthResponseDto, Failure>> login({required AuthRequestDto auth}) async {
+  Future<Result<String, Failure>> login({required AuthRequestDto auth}) async {
     try {
-      await Future.delayed(Duration(seconds: 2));
+      await Future.delayed(Duration(seconds: 3));
 
-      final response = data;
+      final usuario = usuarios.firstWhereOrNull((element) => element.username == auth.login);
 
-      if (response.isNotEmpty) {
-        final result = AuthResponseDto.fromMap(response);
-        return Success(result);
+      if (usuario != null) {
+        final ativo = usuario.ativo;
+
+        if (ativo) {
+          return Success(usuario.username);
+        }
+
+        return Error(DioFailure(message: 'Usuário ${usuario.username} inativo.', statusCode: 404));
       }
 
-      return Error(DioFailure(message: 'Erro ao fazer login, tente novamente!', statusCode: 404));
+      return Error(DioFailure(message: 'Usuário não encontrado!', statusCode: 404));
     } on DioException catch (err) {
       return Error(CustomMessageError.getMessage(err));
     }

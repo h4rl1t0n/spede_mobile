@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../core/global/local_storage_utils.dart';
 import '../../../../mock/documentos.dart';
 import '../../../agenda/agenda_page.dart';
-import '../../../login/login_page.dart';
+import '../../../inicializar_app/inicializar_app_page.dart';
 import '../../home_controller.dart';
-import '../../home_page.dart';
 import '../menu_drawer/menu_drawer.dart';
 import '../selecionar_setor_dialog/selecionar_setor_dialog.dart';
 
@@ -41,10 +41,10 @@ class _DrawerContentState extends State<DrawerContent> {
           title: 'Solicitações Recebidas',
           trailing: Badge.count(count: badge, maxCount: 10, padding: .all(4), backgroundColor: cs.secondary),
           onTap: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (_) => const HomePage(title: 'Solicitações Recebidas')),
-            );
+            // Navigator.pushReplacement(
+            //   context,
+            //   MaterialPageRoute(builder: (_) => const HomePage(title: 'Solicitações Recebidas')),
+            // );
           },
         ),
         MenuDrawer(
@@ -52,10 +52,10 @@ class _DrawerContentState extends State<DrawerContent> {
           title: 'Solicitações Enviadas',
           trailing: Badge.count(count: badge, maxCount: 10, padding: .all(4), backgroundColor: cs.secondary),
           onTap: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (_) => const HomePage(title: 'Solicitações Enviadas')),
-            );
+            // Navigator.pushReplacement(
+            //   context,
+            //   MaterialPageRoute(builder: (_) => const HomePage(title: 'Solicitações Enviadas')),
+            // );
           },
         ),
 
@@ -85,9 +85,8 @@ class _DrawerContentState extends State<DrawerContent> {
           title: 'Sair',
           trailing: Icon(Icons.chevron_right),
           color: cs.error,
-          onTap: () {
-            final navigator = Navigator.of(context);
-            navigator.pushAndRemoveUntil(MaterialPageRoute(builder: (context) => const LoginPage()), (route) => false);
+          onTap: () async {
+            await sair();
           },
         ),
       ],
@@ -102,5 +101,17 @@ class _DrawerContentState extends State<DrawerContent> {
         return SelecionarSetorDialog(controller: controller);
       },
     );
+  }
+
+  Future<void> sair() async {
+    await LocalStorageUtils.clean();
+
+    if (mounted) {
+      final navigator = Navigator.of(context);
+      await navigator.pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const InicializarAppPage()),
+        (route) => false,
+      );
+    }
   }
 }

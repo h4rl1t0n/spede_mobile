@@ -34,7 +34,7 @@ class DocumentoModel {
     required this.tipoSituacao,
     required this.dataSolicitacao,
     required this.dataAtendimento,
-    required this.setorModel
+    required this.setorModel,
   });
 
   Widget get image {
@@ -46,9 +46,9 @@ class DocumentoModel {
 
   Color corSituacao() {
     return switch (tipoSituacao) {
-      TipoSituacao.pendente => Colors.amber.shade900,
-      TipoSituacao.deferida => Colors.green.shade900,
-      TipoSituacao.indeferida => Colors.red.shade900,
+      TipoSituacao.pendente => Colors.grey.shade900,
+      TipoSituacao.atendida => Colors.green.shade900,
+      TipoSituacao.rejeitada => Colors.red.shade900,
     };
   }
 
