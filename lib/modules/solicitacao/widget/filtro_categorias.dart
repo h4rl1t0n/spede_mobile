@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
 
 class FiltroCategorias extends StatelessWidget {
+  final int total;
   final Map<String, int> categorias;
   final String? selecionada;
   final ValueChanged<String?> onSelecionada;
 
-  const FiltroCategorias({super.key, required this.categorias, required this.selecionada, required this.onSelecionada});
+  const FiltroCategorias({
+    super.key,
+    required this.categorias,
+    required this.selecionada,
+    required this.onSelecionada,
+    required this.total,
+  });
 
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    final total = categorias.values.fold(0, (soma, valor) => soma + valor);
+    //final total = categorias.values.fold(0, (soma, valor) => soma + valor);
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,

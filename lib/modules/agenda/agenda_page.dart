@@ -24,11 +24,12 @@ class _AgendaPageState extends State<AgendaPage> {
       appBar: AppBar(title: const Text('Agenda'), centerTitle: true),
       body: SafeArea(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           spacing: 10,
           children: [
             AnimatedContainer(
               duration: const Duration(milliseconds: 250),
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(24),
@@ -43,21 +44,23 @@ class _AgendaPageState extends State<AgendaPage> {
                   final lembretesFiltrados = controller.lembretesFiltrados;
 
                   return CalendarioItem(
+                    setor: controller.setorFiltrado?.sigla,
                     mes: mes,
                     selectedDate: data,
                     lembretesList: lembretesFiltrados,
+                    calendarFormat: controller.calendarFormat,
                     onMonthChanged: (novoMes) {
                       controller.mes = novoMes;
                     },
                     onDateSelected: (novaData) {
                       controller.data = novaData;
                     },
+                    onFormatChanged: controller.alterarFormato,
                   );
                 },
               ),
             ),
-
-            Expanded(
+            Flexible(
               child: ClipRRect(
                 borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
                 child: Material(

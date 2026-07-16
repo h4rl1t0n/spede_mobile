@@ -1,36 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
-import '../../mock/documentos.dart';
-import '../home/home_controller.dart';
-import 'helpers/solicitacao_helper.dart';
+import '../../models/setor_model.dart';
+import 'solicitacao_controller.dart';
 import 'widget/filtro_categorias.dart';
 import 'widget/item_solicitacao.dart';
 import 'widget/sem_socitacao.dart';
 
 class SolicitacaoPage extends StatefulWidget {
   final String title;
-  final HomeController controller;
-  const SolicitacaoPage({super.key, required this.title, required this.controller});
+  final SetorModel? setor;
+  const SolicitacaoPage({super.key, required this.title, required this.setor});
 
   @override
   State<SolicitacaoPage> createState() => _SolicitacaoPageState();
 }
 
 class _SolicitacaoPageState extends State<SolicitacaoPage> {
+  final controller = SolicitacaoController();
+
   String get title => widget.title;
-  String? categoriaSelecionada;
+  SetorModel? get setor => widget.setor;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-
-    final setor = widget.controller.setorSelecionado;
-    final documentosFiltrados = setor == null
-        ? documentos
-        : documentos.where((doc) => doc.setorModel.id == setor.id).toList();
-
-    final categorias = SolicitacaoHelper.contarCategorias(documentosFiltrados);
-    final lista = SolicitacaoHelper.filtrarPorCategoria(documentosFiltrados, categoriaSelecionada);
+    controller.setorSelecionado = setor;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,13 +48,20 @@ class _SolicitacaoPageState extends State<SolicitacaoPage> {
 
         Padding(
           padding: const EdgeInsets.only(bottom: 8),
-          child: FiltroCategorias(
-            categorias: categorias,
-            selecionada: categoriaSelecionada,
-            onSelecionada: (categoria) {
-              setState(() {
-                categoriaSelecionada = categoria;
-              });
+          child: Observer(
+            builder: (context) {
+              final categoriaSelecionada = controller.categoriaSelecionada;
+              final categorias = controller.contarCategorias;
+              final lista = controller.filtrarPorCategoria;
+
+              return FiltroCategorias(
+                total: lista.length,
+                categorias: categorias,
+                selecionada: categoriaSelecionada,
+                onSelecionada: (categoria) {
+                  controller.alterarCategoria(categoria);
+                },
+              );
             },
           ),
         ),
@@ -62,8 +69,10 @@ class _SolicitacaoPageState extends State<SolicitacaoPage> {
         const Divider(height: 1),
 
         Expanded(
-          child: Builder(
+          child: Observer(
             builder: (context) {
+              final lista = controller.filtrarPorCategoria;
+
               if (lista.isEmpty) {
                 return const SemSocitacao();
               }

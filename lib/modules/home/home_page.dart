@@ -68,15 +68,6 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
-        // actions: [
-        //   IconButton(
-        //     icon: CircleAvatar(child: Text('AS')),
-        //     onPressed: () async {
-        //       await Navigator.push(context, MaterialPageRoute(builder: (_) => const PerfilPage()));
-        //     },
-        //   ),
-        //   SizedBox(width: 10),
-        // ],
       ),
       drawer: CustomDrawer(controller: controller),
       body: Observer(
@@ -84,7 +75,7 @@ class _HomePageState extends State<HomePage> {
           return SolicitacaoPage(
             key: ValueKey(controller.setorSelecionado?.id),
             title: widget.title,
-            controller: controller,
+            setor: controller.setorSelecionado,
           );
         },
       ),

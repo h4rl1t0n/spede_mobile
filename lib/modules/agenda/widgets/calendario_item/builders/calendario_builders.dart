@@ -6,8 +6,9 @@ import '../../../../../core/extensions/string_extension.dart';
 import '../../../../../models/lembrete_model.dart';
 
 class CalendarioBuilders {
-  static CalendarBuilders<LembreteModel> getBuilders(ThemeData theme) {
+  static CalendarBuilders<LembreteModel> getBuilders(ThemeData theme, String? setor) {
     final colorScheme = theme.colorScheme;
+    final dateFormat = DateFormat('MMMM \'de\' yyyy', 'pt_BR');
 
     return CalendarBuilders<LembreteModel>(
       dowBuilder: (context, day) {
@@ -15,13 +16,48 @@ class CalendarioBuilders {
 
         Color corTexto = colorScheme.onSurfaceVariant;
         if (day.weekday == DateTime.sunday) corTexto = Colors.red;
-        if (day.weekday == DateTime.saturday) corTexto = Colors.grey.shade900;
+        if (day.weekday == DateTime.saturday) corTexto = Colors.grey;
 
         return Center(
           child: Text(
             text.capitalize(),
             style: TextStyle(color: corTexto, fontWeight: FontWeight.w600, fontSize: 13),
           ),
+        );
+      },
+
+      headerTitleBuilder: (context, day) {
+        final theme = Theme.of(context);
+        final colorScheme = theme.colorScheme;
+
+        final date = dateFormat.format(day).replaceFirstMapped(RegExp(r'^\w'), (m) => m.group(0)!.toUpperCase());
+
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              date,
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w700,
+                color: colorScheme.onSurface,
+                letterSpacing: .3,
+              ),
+            ),
+            SizedBox(height: 2),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(color: colorScheme.primaryContainer, borderRadius: BorderRadius.circular(20)),
+              child: Text(
+                setor != null ? 'Filtrando por: $setor' : 'Todos os setores',
+                style: theme.textTheme.labelMedium?.copyWith(
+                  fontSize: 14,
+                  color: colorScheme.onPrimaryContainer,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            SizedBox(height: 10),
+          ],
         );
       },
 
@@ -57,7 +93,7 @@ class CalendarioBuilders {
     if (day.weekday == DateTime.sunday) {
       corTexto = Colors.red;
     } else if (day.weekday == DateTime.saturday) {
-      corTexto = Colors.grey.shade600;
+      corTexto = Colors.grey;
     }
 
     if (isOutside) {

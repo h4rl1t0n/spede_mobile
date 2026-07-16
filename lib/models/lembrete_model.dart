@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../core/ui/theme/styles/colors_app.dart';
 import 'setor_model.dart';
 
 class LembreteModel {
@@ -11,7 +12,6 @@ class LembreteModel {
   final String assunto;
   final String orgao;
   final DateTime data;
-  final Color cor;
   final bool isLembrete;
   final SetorModel setorModel;
 
@@ -24,7 +24,6 @@ class LembreteModel {
     required this.assunto,
     required this.orgao,
     required this.data,
-    required this.cor,
     this.isLembrete = false,
     required this.setorModel,
   });
@@ -38,7 +37,6 @@ class LembreteModel {
     String? assunto,
     String? orgao,
     DateTime? data,
-    Color? cor,
     bool? isLembrete,
     SetorModel? setorModel,
   }) {
@@ -51,9 +49,10 @@ class LembreteModel {
       assunto: assunto ?? this.assunto,
       orgao: orgao ?? this.orgao,
       data: data ?? this.data,
-      cor: cor ?? this.cor,
       isLembrete: isLembrete ?? this.isLembrete,
       setorModel: setorModel ?? this.setorModel,
     );
   }
+
+  Color get cor => !isLembrete ? ColorsApp.instance.primary : Colors.orange;
 }

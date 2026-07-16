@@ -74,13 +74,11 @@ class _AcaoSolcitacaoSheetState extends State<AcaoSolcitacaoSheet> {
                     value: AcaoSolicitacao.atender,
                     title: Text('Atender solicitação de ${solicitacao.tipoSolicitacao.name.toLowerCase()}'),
                     subtitle: const Text('Abrir o documento para analisar e registrar a decisão.'),
-                    secondary: const Icon(Icons.check_circle, color: Colors.green),
                   ),
                   RadioListTile<AcaoSolicitacao>(
                     value: AcaoSolicitacao.rejeitar,
                     title: const Text('Rejeitar solicitação'),
                     subtitle: const Text('Recusar a solicitação e informar o motivo da rejeição.'),
-                    secondary: const Icon(Icons.cancel, color: Colors.red),
                   ),
                 ],
               ),

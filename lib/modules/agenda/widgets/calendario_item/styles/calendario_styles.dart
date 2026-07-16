@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarioStyles {
@@ -20,14 +19,10 @@ class CalendarioStyles {
   static HeaderStyle getHeaderStyle(ColorScheme colorScheme) {
     return HeaderStyle(
       titleCentered: true,
-      formatButtonVisible: true,
-      titleTextFormatter: (date, locale) {
-        return DateFormat(
-          'MMMM \'de\' yyyy',
-          'pt_BR',
-        ).format(date).replaceFirstMapped(RegExp(r'^\w'), (match) => match.group(0)!.toUpperCase());
-      },
-      // headerPadding: const EdgeInsets.only(bottom: 0),
+      formatButtonVisible: false,
+      // leftChevronVisible: false,
+      // rightChevronVisible: false,
+      headerPadding: const EdgeInsets.only(top: 5),
       titleTextStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: colorScheme.onSurface),
       leftChevronIcon: Container(
         padding: const EdgeInsets.all(6),

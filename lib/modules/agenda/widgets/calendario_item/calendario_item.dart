@@ -6,11 +6,14 @@ import 'builders/calendario_builders.dart';
 import 'styles/calendario_styles.dart';
 
 class CalendarioItem extends StatelessWidget {
+  final String? setor;
+  final CalendarFormat calendarFormat;
   final DateTime mes;
   final DateTime selectedDate;
   final ValueChanged<DateTime> onDateSelected;
   final ValueChanged<DateTime> onMonthChanged;
   final List<LembreteModel> lembretesList;
+  final ValueChanged<CalendarFormat> onFormatChanged;
 
   const CalendarioItem({
     super.key,
@@ -19,6 +22,9 @@ class CalendarioItem extends StatelessWidget {
     required this.onDateSelected,
     required this.onMonthChanged,
     required this.lembretesList,
+    required this.calendarFormat,
+    required this.onFormatChanged,
+    this.setor,
   });
 
   @override
@@ -43,13 +49,14 @@ class CalendarioItem extends StatelessWidget {
           return isSameDay(e.data, day);
         }).toList();
       },
-      availableCalendarFormats: const {CalendarFormat.month: 'Mês'},
+      calendarFormat: calendarFormat,
+      onFormatChanged: onFormatChanged,
+      availableGestures: AvailableGestures.all,
+      availableCalendarFormats: const {CalendarFormat.month: 'Mês', CalendarFormat.week: 'Semana'},
       sixWeekMonthsEnforced: true,
-      // daysOfWeekHeight: 30,
-      // rowHeight: 54,
       calendarStyle: CalendarioStyles.getCalendarStyle(colorScheme),
       headerStyle: CalendarioStyles.getHeaderStyle(colorScheme),
-      calendarBuilders: CalendarioBuilders.getBuilders(theme),
+      calendarBuilders: CalendarioBuilders.getBuilders(theme, setor),
     );
   }
 }

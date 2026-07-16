@@ -13,7 +13,7 @@ class AgendaController = AgendaControllerBase with _$AgendaController;
 
 abstract class AgendaControllerBase with Store {
   @observable
-  ObservableList<LembreteModel> listLembretes = ObservableList.of(lembretes);
+  var listLembretes = ObservableList.of(lembretes);
 
   @observable
   SetorModel? setorFiltrado;
@@ -22,10 +22,18 @@ abstract class AgendaControllerBase with Store {
   int? idSetorSelecionado;
 
   @observable
+  var calendarFormat = CalendarFormat.month;
+
+  @observable
   DateTime mes = DateTime.now();
 
   @observable
   DateTime data = DateTime.now();
+
+  @action
+  void alterarFormato(CalendarFormat formato) {
+    calendarFormat = formato;
+  }
 
   @action
   Future<void> alterarSetor() async {
