@@ -98,7 +98,7 @@ class UsuarioModel {
         .trim()
         .split(RegExp(r'\s+'))
         .where((parte) => !ignorar.contains(parte.toLowerCase()))
-        .take(3)
+        .take(2)
         .map((parte) => parte[0].toUpperCase())
         .join();
   }

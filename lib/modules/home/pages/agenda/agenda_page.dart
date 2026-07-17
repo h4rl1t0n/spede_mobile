@@ -21,7 +21,7 @@ class _AgendaPageState extends State<AgendaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Agenda'), centerTitle: true),
+      // appBar: AppBar(title: const Text('Agenda'), centerTitle: true),
       body: SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.min,

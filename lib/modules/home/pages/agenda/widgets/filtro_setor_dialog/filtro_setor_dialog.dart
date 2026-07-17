@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
-import '../../../../core/extensions/size_extension.dart';
-import '../../../../core/ui/widgets/custom_dropdown_search/custom_dropdown_search.dart';
-import '../../../../mock/setores.dart';
-import '../../../../models/setor_model.dart';
+import '../../../../../../core/extensions/size_extension.dart';
+import '../../../../../../core/ui/widgets/custom_dropdown_search/custom_dropdown_search.dart';
+import '../../../../../../mock/setores.dart';
+import '../../../../../../models/setor_model.dart';
 import '../../agenda_controller.dart';
 
 class FiltroSetorDialog extends StatefulWidget {
@@ -22,7 +22,6 @@ class _FiltroSetorDialogState extends State<FiltroSetorDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('Filtrar Por Setor'),
-      insetPadding: EdgeInsets.all(15),
       content: SingleChildScrollView(
         child: SizedBox(
           width: context.widthDialog,

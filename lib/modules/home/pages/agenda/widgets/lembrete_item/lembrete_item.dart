@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/ui/theme/styles/text_styles.dart';
-import '../../../../models/lembrete_model.dart';
+import '../../../../../../core/ui/theme/styles/text_styles.dart';
+import '../../../../../../models/lembrete_model.dart';
 
 class LembreteItem extends StatelessWidget {
   final LembreteModel lembrete;

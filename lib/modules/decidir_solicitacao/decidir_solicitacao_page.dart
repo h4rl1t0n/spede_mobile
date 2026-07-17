@@ -90,12 +90,12 @@ class _DecidirSolicitacaoPageState extends State<DecidirSolicitacaoPage> with Lo
               spacing: 10,
               children: [
                 Expanded(
-                  child: FilledButton(onPressed: _executarAcaoPrincipal, child: Text(_textoBotaoAcao)),
+                  child: ElevatedButton(onPressed: _executarAcaoPrincipal, child: Text(_textoBotaoAcao)),
                 ),
                 Expanded(
-                  child: FilledButton(
+                  child: ElevatedButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    style: FilledButton.styleFrom(backgroundColor: Colors.grey),
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
                     child: const Text('Voltar'),
                   ),
                 ),

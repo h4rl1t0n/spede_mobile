@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../theme/styles/text_styles.dart';
 
 class ItemTile extends StatelessWidget {
+  final EdgeInsetsGeometry padding;
   final String title;
   final String? subTitle;
   final TextAlign textAlign;
@@ -18,16 +19,17 @@ class ItemTile extends StatelessWidget {
     this.textAlign = TextAlign.justify,
     this.overflow,
     this.colorSubTitleText,
+    this.padding = const EdgeInsets.only(left: 10, right: 10, top: 5),
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
+      padding: padding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, overflow: overflow, style: context.textStyles.textTitleItemList.copyWith(fontSize: 16)),
+          Text(title, overflow: overflow, style: context.textStyles.textTitleItemList.copyWith(fontSize: 14)),
           subtite(context),
         ],
       ),

@@ -1,8 +1,8 @@
 import 'package:mobx/mobx.dart';
 
-import '../../mock/documentos.dart';
-import '../../models/documento_model.dart';
-import '../../models/setor_model.dart';
+import '../../../../mock/documentos.dart';
+import '../../../../models/documento_model.dart';
+import '../../../../models/setor_model.dart';
 
 part 'solicitacao_controller.g.dart';
 
@@ -11,6 +11,9 @@ class SolicitacaoController = SolicitacaoControllerBase with _$SolicitacaoContro
 abstract class SolicitacaoControllerBase with Store {
   @observable
   var listDocumentos = ObservableList.of(documentos);
+
+  @observable
+  var listDocumentosSelecionados = ObservableList<DocumentoModel>();
 
   @observable
   SetorModel? setorSelecionado;

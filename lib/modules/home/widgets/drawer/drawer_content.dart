@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/global/local_storage_utils.dart';
 import '../../../../mock/documentos.dart';
-import '../../../agenda/agenda_page.dart';
+import '../../pages/agenda/agenda_page.dart';
 import '../../../inicializar_app/inicializar_app_page.dart';
 import '../../home_controller.dart';
 import '../menu_drawer/menu_drawer.dart';

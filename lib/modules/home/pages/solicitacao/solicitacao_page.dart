@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
-import '../../models/setor_model.dart';
+import '../../../../enum/tipo_caixa.dart';
+import '../../../../models/setor_model.dart';
 import 'solicitacao_controller.dart';
-import 'widget/filtro_categorias.dart';
+import 'widget/filtro_categorias/filtro_categorias.dart';
 import 'widget/item_solicitacao.dart';
 import 'widget/sem_socitacao.dart';
 
 class SolicitacaoPage extends StatefulWidget {
-  final String title;
+  final TipoCaixa caixa;
   final SetorModel? setor;
-  const SolicitacaoPage({super.key, required this.title, required this.setor});
+  const SolicitacaoPage({super.key, required this.caixa, required this.setor});
 
   @override
   State<SolicitacaoPage> createState() => _SolicitacaoPageState();
@@ -19,8 +20,10 @@ class SolicitacaoPage extends StatefulWidget {
 class _SolicitacaoPageState extends State<SolicitacaoPage> {
   final controller = SolicitacaoController();
 
-  String get title => widget.title;
+  TipoCaixa get caixa => widget.caixa;
   SetorModel? get setor => widget.setor;
+
+  bool result = false;
 
   @override
   void initState() {
@@ -40,8 +43,8 @@ class _SolicitacaoPageState extends State<SolicitacaoPage> {
           child: Row(
             spacing: 5,
             children: [
-              Icon(title.contains('Pessoal') ? Icons.person : Icons.business_center, color: cs.primary),
-              Text(title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+              Icon(Icons.business_center, color: cs.primary),
+              Text(caixa.descricao, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
             ],
           ),
         ),
@@ -52,10 +55,8 @@ class _SolicitacaoPageState extends State<SolicitacaoPage> {
             builder: (context) {
               final categoriaSelecionada = controller.categoriaSelecionada;
               final categorias = controller.contarCategorias;
-              final lista = controller.filtrarPorCategoria;
 
               return FiltroCategorias(
-                total: lista.length,
                 categorias: categorias,
                 selecionada: categoriaSelecionada,
                 onSelecionada: (categoria) {
@@ -83,7 +84,7 @@ class _SolicitacaoPageState extends State<SolicitacaoPage> {
                 separatorBuilder: (_, _) => const SizedBox(height: 12),
                 itemBuilder: (_, index) {
                   final item = lista[index];
-                  return ItemSolicitacao(solicitacao: item);
+                  return ItemSolicitacao(solicitacao: item, controller: controller);
                 },
               );
             },

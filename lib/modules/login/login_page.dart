@@ -262,7 +262,7 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
   Widget get _buttonEntrar {
     return SizedBox(
       height: 50,
-      child: FilledButton(
+      child: ElevatedButton(
         onPressed: () async {
           await toHomePage();
         },

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../../../../../core/extensions/string_extension.dart';
-import '../../../../../models/lembrete_model.dart';
+import '../../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../../models/lembrete_model.dart';
 
 class CalendarioBuilders {
   static CalendarBuilders<LembreteModel> getBuilders(ThemeData theme, String? setor) {

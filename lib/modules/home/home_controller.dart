@@ -22,9 +22,17 @@ abstract class HomeControllerBase with Store {
   @observable
   int? idSetorSelecionado;
 
+  @observable
+  int currentPage = 0;
+
   @action
   Future<void> initController() async {
     await carregarSetor();
+  }
+
+  @action
+  void setPage(int page) {
+    currentPage = page;
   }
 
   @action

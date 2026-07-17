@@ -153,9 +153,7 @@ class _InicializarAppPageState extends State<InicializarAppPage> with SingleTick
   Future<void> navigateToHome({required UsuarioModel usuario}) async {
     final navigator = Navigator.of(context);
     await navigator.pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (context) => HomePage(title: 'Solicitações Recebidas', usuario: usuario),
-      ),
+      MaterialPageRoute(builder: (context) => HomePage(usuario: usuario)),
       (route) => false,
     );
   }

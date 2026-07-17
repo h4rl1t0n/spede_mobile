@@ -23,7 +23,6 @@ class _SelecionarSetorDialogState extends State<SelecionarSetorDialog> {
     return PopScope(
       canPop: false,
       child: AlertDialog(
-        insetPadding: EdgeInsets.all(15),
         title: Text('Selecione um Setor'),
         content: SizedBox(
           width: context.widthDialog,
@@ -43,22 +42,15 @@ class _SelecionarSetorDialogState extends State<SelecionarSetorDialog> {
           ),
         ),
         actions: [
-          Row(
-            mainAxisAlignment: .end,
-            children: [
-              Expanded(child: SizedBox.shrink()),
-              Observer(
-                builder: (context) {
-                  final idSetorSelecionado = controller.idSetorSelecionado;
-                  return Expanded(
-                    child: FilledButton(
-                      onPressed: idSetorSelecionado == null ? null : selecionarSetor,
-                      child: Text('Selecionar'),
-                    ),
-                  );
-                },
-              ),
-            ],
+          TextButton(onPressed: () {}, child: Text('data')),
+          Observer(
+            builder: (context) {
+              final idSetorSelecionado = controller.idSetorSelecionado;
+              return ElevatedButton(
+                onPressed: idSetorSelecionado == null ? null : selecionarSetor,
+                child: Text('Selecionar'),
+              );
+            },
           ),
         ],
       ),

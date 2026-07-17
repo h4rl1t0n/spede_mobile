@@ -2,10 +2,10 @@ import 'package:collection/collection.dart';
 import 'package:mobx/mobx.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../../mock/lembretes.dart';
-import '../../mock/setores.dart';
-import '../../models/lembrete_model.dart';
-import '../../models/setor_model.dart';
+import '../../../../mock/lembretes.dart';
+import '../../../../mock/setores.dart';
+import '../../../../models/lembrete_model.dart';
+import '../../../../models/setor_model.dart';
 
 part 'agenda_controller.g.dart';
 

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'color_schemes.dart';
+import 'styles/button_styles.dart';
 import 'styles/text_styles.dart';
 
 class ThemeConfig {
@@ -31,24 +32,6 @@ class ThemeConfig {
         ),
       ),
 
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          elevation: 0,
-          minimumSize: const Size.fromHeight(45),
-          backgroundColor: colorScheme.primary,
-          foregroundColor: colorScheme.onPrimary,
-          textStyle: TextStyles.instance.textButtonLabel,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-        ),
-      ),
-
-      filledButtonTheme: FilledButtonThemeData(
-        style: FilledButton.styleFrom(
-          minimumSize: const Size.fromHeight(45),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-        ),
-      ),
-
       dropdownMenuTheme: DropdownMenuThemeData(
         textStyle: TextStyle(fontFamily: 'Cabin', fontSize: 14, color: colorScheme.onSurface),
         menuStyle: MenuStyle(
@@ -65,7 +48,7 @@ class ThemeConfig {
           backgroundColor: WidgetStatePropertyAll(colorScheme.surface),
           surfaceTintColor: const WidgetStatePropertyAll(Colors.transparent),
           elevation: const WidgetStatePropertyAll(4),
-          shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(14))),
+          shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
         ),
       ),
 
@@ -73,16 +56,12 @@ class ThemeConfig {
         style: OutlinedButton.styleFrom(
           minimumSize: const Size.fromHeight(45),
           side: BorderSide(color: colorScheme.outline),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
       ),
 
-      textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(
-          foregroundColor: colorScheme.primary,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-        ),
-      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(style: ButtonStyles.instance.primary),
+      textButtonTheme: TextButtonThemeData(style: ButtonStyles.instance.text),
 
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -156,15 +135,11 @@ class ThemeConfig {
       ),
 
       dialogTheme: DialogThemeData(
+        insetPadding: EdgeInsets.all(15),
         backgroundColor: colorScheme.surface,
         surfaceTintColor: Colors.transparent,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
-        titleTextStyle: TextStyle(
-          fontFamily: 'Cabin',
-          fontSize: 22,
-          fontWeight: FontWeight.w700,
-          color: colorScheme.onSurface,
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        titleTextStyle: TextStyles.instance.textTitle.copyWith(fontSize: 22, color: colorScheme.onSurface),
       ),
 
       bottomSheetTheme: BottomSheetThemeData(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/extensions/size_extension.dart';
 import '../../home_controller.dart';
 import 'drawer_content.dart';
 import 'drawer_head.dart';
@@ -12,6 +13,7 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      width: context.screenWidth,
       backgroundColor: Colors.white,
       child: Column(
         children: [

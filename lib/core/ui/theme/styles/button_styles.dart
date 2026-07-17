@@ -13,10 +13,11 @@ class ButtonStyles {
 
   ButtonStyle get primary {
     return ElevatedButton.styleFrom(
+      minimumSize: const Size.fromHeight(45),
       backgroundColor: ColorsApp.instance.primary,
-      textStyle: TextStyles.instance.textButtonLabel,
+      textStyle: TextStyles.instance.textMedium,
       foregroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(7))),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
     );
   }
 
@@ -25,10 +26,7 @@ class ButtonStyles {
   }
 
   ButtonStyle get text {
-    return TextButton.styleFrom(
-      textStyle: TextStyles.instance.textSecondaryButtonLabel,
-      foregroundColor: ColorsApp.instance.primary,
-    );
+    return TextButton.styleFrom(foregroundColor: ColorsApp.instance.primary);
   }
 }
 

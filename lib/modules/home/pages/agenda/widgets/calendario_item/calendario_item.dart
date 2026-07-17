@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../../../../models/lembrete_model.dart';
+import '../../../../../../models/lembrete_model.dart';
 import 'builders/calendario_builders.dart';
 import 'styles/calendario_styles.dart';
 

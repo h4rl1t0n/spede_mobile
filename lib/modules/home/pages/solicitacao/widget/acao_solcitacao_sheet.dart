@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../../core/ui/theme/styles/text_styles.dart';
-import '../../../enum/acao_solicitacao.dart';
-import '../../../models/documento_model.dart';
-import '../../decidir_solicitacao/decidir_solicitacao_page.dart';
+import '../../../../../../../../../core/ui/theme/styles/text_styles.dart';
+import '../../../../../enum/acao_solicitacao.dart';
+import '../../../../../models/documento_model.dart';
+import '../../../../decidir_solicitacao/decidir_solicitacao_page.dart';
 
 class AcaoSolcitacaoSheet extends StatefulWidget {
   final DocumentoModel solicitacao;
