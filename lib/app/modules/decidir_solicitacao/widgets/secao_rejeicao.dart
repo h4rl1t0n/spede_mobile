@@ -6,9 +6,14 @@ import 'secao_header.dart';
 class SecaoRejeicao extends StatelessWidget {
   final TextEditingController observacaoController;
   final List<String> motivos;
-  final ValueChanged<String?>? onMotivoSelected;
+  final ValueChanged<String?> onMotivoSelected;
 
-  const SecaoRejeicao({super.key, required this.observacaoController, required this.motivos, this.onMotivoSelected});
+  const SecaoRejeicao({
+    super.key,
+    required this.observacaoController,
+    required this.motivos,
+    required this.onMotivoSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +44,14 @@ class SecaoRejeicao extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               CustomDropdownSearch<String>(
-                hintText: 'Selecione um motivo',
+                label: 'Selecione um motivo',
+                title: 'Selecione um motivo',
+                selectedItem: null,
                 items: motivos,
-                title: (item) => item,
-                onSelected: onMotivoSelected,
+                itemAsString: (item) => item,
+                onSelected: (value) {
+                  onMotivoSelected(value);
+                },
               ),
               const SizedBox(height: 20),
 

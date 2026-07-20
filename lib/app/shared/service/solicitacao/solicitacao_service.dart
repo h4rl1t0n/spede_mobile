@@ -3,7 +3,8 @@ import 'dart:developer';
 import 'package:multiple_result/multiple_result.dart';
 
 import '../../../core/exceptions/failure.dart';
-import '../../data/solicitacao/dto/solicitacao_response_dto.dart';
+import '../../../enum/tipo_caixa.dart';
+import '../../../models/documento_model.dart';
 import '../../domain/solicitacao/solicitacao_repository.dart';
 
 class SolicitacaoService {
@@ -11,12 +12,12 @@ class SolicitacaoService {
 
   SolicitacaoService(this.repository);
 
-  Future<Result<SolicitacoesResponse, Failure>> carregarTodasSolicitacoes() async {
-    final result = await repository.carregarTodasSolicitacoes();
+  Future<Result<List<DocumentoModel>, Failure>> carregarTodasSolicitacoes({required TipoCaixa tipoCaixa}) async {
+    final result = await repository.carregarTodasSolicitacoes(tipoCaixa: tipoCaixa);
 
     return result.when(
       (success) {
-        log('enviadas ${success.enviadas.length} | recebidas ${success.recebidas.length}');
+        log('Carregou ${success.length} ${tipoCaixa.descricao.toLowerCase()}');
         return Success(success);
       },
       (error) {

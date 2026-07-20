@@ -2,6 +2,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../../core/result/result_handler.dart';
+import '../../../../enum/acao_solicitacao.dart';
 import '../../../../enum/page_status.dart';
 import '../../../../enum/tipo_caixa.dart';
 import '../../../../enum/tipo_solicitacao.dart';
@@ -15,6 +16,9 @@ class SolicitacaoController = SolicitacaoControllerBase with _$SolicitacaoContro
 
 abstract class SolicitacaoControllerBase with Store {
   final SolicitacaoService service;
+
+  @observable
+  AcaoSolicitacao? acao;
 
   @observable
   var status = PageStatus.initial;
@@ -34,30 +38,23 @@ abstract class SolicitacaoControllerBase with Store {
   SolicitacaoControllerBase(this.service);
 
   @action
-  void iniciarController(List<DocumentoModel> listaInicial) {
-    solicitacoes.clear();
-    solicitacoes.addAll(listaInicial);
-    status = PageStatus.loaded;
-  }
-
-  @action
-  Future<void> carregarSolicitacoes(TipoCaixa tipoCaixa) async {
+  Future<void> carregarSolicitacoes(TipoCaixa caixa) async {
     errorMessage = null;
     status = PageStatus.loading;
 
     await fetch(
-      service.carregarTodasSolicitacoes(),
+      service.carregarTodasSolicitacoes(tipoCaixa: caixa),
       onSuccess: (result) {
         solicitacoes.clear();
-
-        if (tipoCaixa == TipoCaixa.enviadas) {
-          solicitacoes.addAll(result.enviadas);
-        } else {
-          solicitacoes.addAll(result.recebidas);
-        }
+        solicitacoes.addAll(result);
 
         final homeController = Modular.get<HomeController>();
-        homeController.atualizarBadges(result.enviadas.length, result.recebidas.length);
+        if (caixa == .enviadas) {
+          homeController.qtdEnviadas = result.length;
+        }
+        if (caixa == .recebidas) {
+          homeController.qtdRecebidas = result.length;
+        }
 
         status = PageStatus.loaded;
       },

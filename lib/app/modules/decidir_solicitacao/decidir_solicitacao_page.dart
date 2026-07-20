@@ -1,38 +1,36 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../core/helpers/loader.dart';
 import '../../core/helpers/messages.dart';
 import '../../enum/acao_solicitacao.dart';
 import '../../enum/tipo_solicitacao.dart';
 import '../../mock/motivos_rejeicao.dart';
-import '../../models/documento_model.dart';
+import '../home/pages/solicitacao/solicitacao_controller.dart';
 import 'widgets/item_solicitacao_decidir_card.dart';
 import 'widgets/secao_autenticacao.dart';
 import 'widgets/secao_header.dart';
 import 'widgets/secao_rejeicao.dart';
 
 class DecidirSolicitacaoPage extends StatefulWidget {
-  final List<DocumentoModel> solicitacoes;
-  final AcaoSolicitacao acao;
+  final SolicitacaoController controller;
 
-  const DecidirSolicitacaoPage({super.key, required this.solicitacoes, required this.acao});
+  const DecidirSolicitacaoPage({super.key, required this.controller});
 
   @override
   State<DecidirSolicitacaoPage> createState() => _DecidirSolicitacaoPageState();
 }
 
 class _DecidirSolicitacaoPageState extends State<DecidirSolicitacaoPage> with Loader, Messages {
-  List<DocumentoModel> get solicitacoes => widget.solicitacoes;
-  AcaoSolicitacao get acao => widget.acao;
+  SolicitacaoController get controller => widget.controller;
 
   late final GlobalKey<FormState> _formKey;
 
   // Controllers para Aceitar [Assinatura | Visto]
   late final TextEditingController _usuarioController;
   late final TextEditingController _senhaController;
-
   // Controllers para Rejeitar
   late final TextEditingController _motivoController;
   late final TextEditingController _observacaoController;
@@ -40,7 +38,7 @@ class _DecidirSolicitacaoPageState extends State<DecidirSolicitacaoPage> with Lo
   @override
   void initState() {
     _formKey = GlobalKey<FormState>();
-    _usuarioController = TextEditingController(text: 'NOME DO USUÁRIO COMPLETO');
+    _usuarioController = TextEditingController(text: '');
     _senhaController = TextEditingController(text: '123456');
     _motivoController = TextEditingController();
     _observacaoController = TextEditingController();
@@ -58,65 +56,77 @@ class _DecidirSolicitacaoPageState extends State<DecidirSolicitacaoPage> with Lo
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        appBar: AppBar(title: Text(_titulo), centerTitle: true),
-        body: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _buildFormularioAcao(),
-              const SecaoHeader(title: 'Solicitações Selecionadas'),
-              Expanded(
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: solicitacoes.length,
-                  itemBuilder: (context, index) {
-                    return ItemSolicitacaoDecidirCard(solicitacao: solicitacoes[index]);
-                  },
+    return Observer(
+      builder: (context) {
+        return GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Scaffold(
+            appBar: AppBar(title: Text(_titulo), centerTitle: true),
+            body: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _buildFormularioAcao(),
+                  const SecaoHeader(title: 'Solicitações Selecionadas'),
+                  Expanded(
+                    child: Observer(
+                      builder: (context) {
+                        final selecionados = controller.selecionados;
+                        return ListView.builder(
+                          padding: const EdgeInsets.all(16),
+                          itemCount: selecionados.length,
+                          itemBuilder: (context, index) {
+                            return ItemSolicitacaoDecidirCard(solicitacao: selecionados[index]);
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            bottomNavigationBar: Container(
+              decoration: BoxDecoration(
+                border: Border(top: BorderSide(color: Colors.grey.shade300, width: 1)),
+              ),
+              child: BottomAppBar(
+                child: Row(
+                  spacing: 10,
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(onPressed: _executarAcaoPrincipal, child: Text(_textoBotaoAcao)),
+                    ),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
+                        child: const Text('Voltar'),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            border: Border(top: BorderSide(color: Colors.grey.shade300, width: 1)),
-          ),
-          child: BottomAppBar(
-            child: Row(
-              spacing: 10,
-              children: [
-                Expanded(
-                  child: ElevatedButton(onPressed: _executarAcaoPrincipal, child: Text(_textoBotaoAcao)),
-                ),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
-                    child: const Text('Voltar'),
-                  ),
-                ),
-              ],
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
   /// Verifica se todas as solicitações são do tipo ciência.
   bool get _isCiencia {
-    return solicitacoes.every((s) => s.tipoSolicitacao == TipoSolicitacao.ciencia);
+    final selecionados = controller.selecionados;
+    return selecionados.every((s) => s.tipoSolicitacao == TipoSolicitacao.ciencia);
   }
 
   String get _nomesSolicitacoes {
-    return solicitacoes.map((s) => s.tipoSolicitacao.name).first;
+    final selecionados = controller.selecionados;
+    return selecionados.map((s) => s.tipoSolicitacao.name).first;
   }
 
   String get _titulo {
+    final acao = controller.acao;
     if (acao == AcaoSolicitacao.rejeitar) {
       return 'Rejeitar Solicitações';
     }
@@ -124,6 +134,7 @@ class _DecidirSolicitacaoPageState extends State<DecidirSolicitacaoPage> with Lo
   }
 
   String get _textoBotaoAcao {
+    final acao = controller.acao;
     if (acao == AcaoSolicitacao.rejeitar) {
       return 'Rejeitar';
     }
@@ -132,6 +143,8 @@ class _DecidirSolicitacaoPageState extends State<DecidirSolicitacaoPage> with Lo
 
   /// Constrói a seção de formulário dinamicamente baseada na ação.
   Widget _buildFormularioAcao() {
+    final acao = controller.acao;
+
     if (acao == AcaoSolicitacao.rejeitar) {
       return SecaoRejeicao(
         observacaoController: _observacaoController,
@@ -150,6 +163,8 @@ class _DecidirSolicitacaoPageState extends State<DecidirSolicitacaoPage> with Lo
 
   /// Trata o clique no botão de ação principal.
   void _executarAcaoPrincipal() {
+    final acao = controller.acao;
+
     if (acao == AcaoSolicitacao.rejeitar) {
       _rejeitar();
     } else {
@@ -163,16 +178,18 @@ class _DecidirSolicitacaoPageState extends State<DecidirSolicitacaoPage> with Lo
 
   /// Ação de assinar (visto/assinatura).
   void _assinar() {
+    final selecionados = controller.selecionados;
     if (_formKey.currentState!.validate()) {
       log('Usuário: ${_usuarioController.text}');
-      log('Assinando ${solicitacoes.length} solicitação(ões)');
+      log('Assinando ${selecionados.length} solicitação(ões)');
       showSuccess('Solicitação assinada com sucesso!');
     }
   }
 
   /// Ação de dar ciência.
   void _darCiencia() {
-    log('Dando ciência em ${solicitacoes.length} solicitação(ões)');
+    final selecionados = controller.selecionados;
+    log('Dando ciência em ${selecionados.length} solicitação(ões)');
     showSuccess('Ciência registrada com sucesso!');
   }
 
@@ -184,9 +201,11 @@ class _DecidirSolicitacaoPageState extends State<DecidirSolicitacaoPage> with Lo
     }
 
     if (_formKey.currentState!.validate()) {
+      final selecionados = controller.selecionados;
+
       log('Motivo: ${_motivoController.text}');
       log('Observação: ${_observacaoController.text}');
-      log('Rejeitando ${solicitacoes.length} solicitação(ões)');
+      log('Rejeitando ${selecionados.length} solicitação(ões)');
       showSuccess('Solicitação rejeitada com sucesso!');
     }
   }

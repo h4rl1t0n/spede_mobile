@@ -6,7 +6,6 @@ import '../../../../../core/ui/theme/styles/text_styles.dart';
 import '../../../../../core/ui/widgets/item_tile.dart';
 import '../../../../../models/documento_model.dart';
 import '../solicitacao_controller.dart';
-import 'acao_solcitacao_sheet.dart';
 
 class ItemSolicitacao extends StatelessWidget {
   final SolicitacaoController controller;
@@ -33,7 +32,7 @@ class ItemSolicitacao extends StatelessWidget {
               toggleSelecionado();
             }
 
-            return false; // impede a remoção
+            return false;
           },
 
           child: GestureDetector(
@@ -45,7 +44,6 @@ class ItemSolicitacao extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(color: Colors.grey.shade300),
               ),
-              // Substituímos o IntrinsicHeight e a Row por um Stack
               child: Stack(
                 children: [
                   Positioned(top: 0, bottom: 0, left: 0, width: 5, child: Container(color: corDocumento)),
@@ -134,19 +132,19 @@ class ItemSolicitacao extends StatelessWidget {
                               title: 'Destinatário',
                               subTitle: solicitacao.destinatario,
                             ),
-                            const SizedBox(height: 15),
-                            Divider(color: Colors.grey.shade300),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                TextButton.icon(
-                                  onPressed: toggleSelecionado,
-                                  iconAlignment: IconAlignment.end,
-                                  icon: const Icon(Icons.chevron_right),
-                                  label: const Text('Outras ações', style: TextStyle(fontSize: 15)),
-                                ),
-                              ],
-                            ),
+                            // const SizedBox(height: 15),
+                            // Divider(color: Colors.grey.shade300),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.end,
+                            //   children: [
+                            //     TextButton.icon(
+                            //       onPressed: () => abrirAcoes(context),
+                            //       iconAlignment: IconAlignment.end,
+                            //       icon: const Icon(Icons.chevron_right),
+                            //       label: const Text('Outras ações', style: TextStyle(fontSize: 15)),
+                            //     ),
+                            //   ],
+                            // ),
                           ],
                         ),
                       ],
@@ -161,13 +159,15 @@ class ItemSolicitacao extends StatelessWidget {
     );
   }
 
-  Future<void> abrirAcoes(BuildContext context) async {
-    await showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (_) => AcaoSolcitacaoSheet(solicitacao: solicitacao),
-    );
-  }
+  // Future<void> abrirAcoes(BuildContext context) async {
+  //   await showModalBottomSheet(
+  //     context: context,
+  //     isScrollControlled: true,
+  //     builder: (_) {
+  //       return AcaoSolcitacaoSheet(solicitacoes: controller.selecionados);
+  //     },
+  //   );
+  // }
 
   void toggleSelecionado() {
     final documentos = controller.selecionados;

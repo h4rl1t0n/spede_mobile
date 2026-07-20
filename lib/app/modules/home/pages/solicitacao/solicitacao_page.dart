@@ -8,17 +8,15 @@ import '../../../../core/helpers/messages.dart';
 import '../../../../core/ui/theme/styles/colors_app.dart';
 import '../../../../enum/page_status.dart';
 import '../../../../enum/tipo_caixa.dart';
-import '../../../../models/documento_model.dart';
 import 'solicitacao_controller.dart';
+import 'widget/acao_solcitacao_sheet/acao_solcitacao_sheet.dart';
 import 'widget/filtro_categorias/filtro_categorias.dart';
 import 'widget/item_solicitacao.dart';
 import 'widget/sem_socitacao.dart';
 
 class SolicitacaoPage extends StatefulWidget {
-  final List<DocumentoModel> solicitacaoes;
-  final TipoCaixa tipoCaixa;
-
-  const SolicitacaoPage({super.key, required this.tipoCaixa, required this.solicitacaoes});
+  final TipoCaixa caixa;
+  const SolicitacaoPage({super.key, required this.caixa});
 
   @override
   State<SolicitacaoPage> createState() => _SolicitacaoPageState();
@@ -27,17 +25,14 @@ class SolicitacaoPage extends StatefulWidget {
 class _SolicitacaoPageState extends State<SolicitacaoPage> with Loader, Messages, AutomaticKeepAliveClientMixin {
   final controller = Modular.get<SolicitacaoController>();
 
-  List<DocumentoModel> get solicitacaoes => widget.solicitacaoes;
-  TipoCaixa get tipoCaixa => widget.tipoCaixa;
-  String get descricao => tipoCaixa.descricao;
+  TipoCaixa get caixa => widget.caixa;
+  String get descricao => caixa.descricao;
 
   late List<ReactionDisposer> disposers = [];
 
   @override
   void initState() {
     super.initState();
-    controller.iniciarController(solicitacaoes);
-
     WidgetsBinding.instance.addPostFrameCallback((_) async => setupReactions());
   }
 
@@ -55,68 +50,97 @@ class _SolicitacaoPageState extends State<SolicitacaoPage> with Loader, Messages
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-          child: Row(
-            spacing: 8,
-            children: [
-              Icon(Icons.business_center, color: context.colors.primary),
-              Text(descricao, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-            ],
-          ),
-        ),
-
-        Padding(
-          padding: const EdgeInsets.only(bottom: 8),
-          child: Observer(
+    return Scaffold(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Observer(
             builder: (context) {
-              final categoriaSelecionada = controller.categoriaSelecionada;
-              final categorias = controller.contarCategorias;
+              final lista = controller.solicitacoes;
 
-              return FiltroCategorias(
-                categorias: categorias,
-                selecionada: categoriaSelecionada,
-                onSelecionada: controller.alterarCategoria,
-              );
-            },
-          ),
-        ),
-
-        Expanded(
-          child: Observer(
-            builder: (context) {
-              final lista = controller.filtrarPorCategoria;
-              final status = controller.status;
-
-              if (lista.isEmpty && status == PageStatus.loading) {
-                return Center(child: Text('Carregando ${descricao.toLowerCase()}...'));
-              }
-
-              if (lista.isEmpty) {
-                return const SemSocitacao();
-              }
-
-              return RefreshIndicator.adaptive(
-                onRefresh: () async {
-                  await controller.carregarSolicitacoes(tipoCaixa);
-                },
-                child: ListView.separated(
-                  padding: const EdgeInsets.all(12).copyWith(bottom: 20),
-                  itemCount: lista.length,
-                  separatorBuilder: (_, _) => const SizedBox(height: 12),
-                  itemBuilder: (_, index) {
-                    final item = lista[index];
-                    return ItemSolicitacao(solicitacao: item, controller: controller);
-                  },
+              return Visibility(
+                visible: lista.isNotEmpty,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                  child: Row(
+                    spacing: 8,
+                    children: [
+                      Icon(Icons.business_center, color: context.colors.primary),
+                      Text(
+                        '$descricao (${lista.length})',
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
           ),
-        ),
-      ],
+
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Observer(
+              builder: (context) {
+                final categoriaSelecionada = controller.categoriaSelecionada;
+                final categorias = controller.contarCategorias;
+                final lista = controller.solicitacoes;
+
+                return Visibility(
+                  visible: lista.isNotEmpty,
+                  child: FiltroCategorias(
+                    categorias: categorias,
+                    selecionada: categoriaSelecionada,
+                    onSelecionada: controller.alterarCategoria,
+                  ),
+                );
+              },
+            ),
+          ),
+
+          Expanded(
+            child: Observer(
+              builder: (context) {
+                final lista = controller.filtrarPorCategoria;
+                final status = controller.status;
+                final categoriaSelecionada = controller.categoriaSelecionada;
+
+                if (lista.isEmpty && status == PageStatus.loading) {
+                  return Center(child: Text('Carregando ${descricao.toLowerCase()}...'));
+                }
+
+                if (lista.isEmpty) {
+                  return SemSocitacao(caixa: caixa, solicitacao: categoriaSelecionada);
+                }
+
+                return RefreshIndicator.adaptive(
+                  onRefresh: () async {
+                    controller.solicitacoes.clear();
+                    await controller.carregarSolicitacoes(caixa);
+                  },
+                  child: ListView.separated(
+                    padding: const EdgeInsets.all(12).copyWith(bottom: 20),
+                    itemCount: lista.length,
+                    separatorBuilder: (_, _) => const SizedBox(height: 12),
+                    itemBuilder: (_, index) {
+                      final item = lista[index];
+                      return ItemSolicitacao(solicitacao: item, controller: controller);
+                    },
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: Observer(
+        builder: (context) {
+          final selecionados = controller.selecionados;
+          return Visibility(
+            visible: selecionados.isNotEmpty,
+            child: FloatingActionButton.extended(label: Text('data'), onPressed: abrirAcoes),
+          );
+        },
+      ),
     );
   }
 
@@ -141,6 +165,22 @@ class _SolicitacaoPageState extends State<SolicitacaoPage> with Loader, Messages
             break;
         }
       }),
+      when((_) => controller.filtrarPorCategoria.isEmpty, () {
+        controller.carregarSolicitacoes(caixa);
+      }),
     ];
+  }
+
+  Future<void> abrirAcoes() async {
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) {
+        return AcaoSolcitacaoSheet(controller: controller, caixa: caixa);
+      },
+    );
+
+    controller.acao = null;
+    controller.selecionados.clear();
   }
 }

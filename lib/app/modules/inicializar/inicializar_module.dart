@@ -6,7 +6,7 @@ import '../../shared/data/solicitacao/solicitacao_repository_impl.dart';
 import '../../shared/domain/solicitacao/solicitacao_repository.dart';
 import '../../shared/service/solicitacao/solicitacao_service.dart';
 import '../core/core_module.dart';
-import 'controller/inicializar_controller.dart';
+import 'inicializar_controller.dart';
 import 'inicializar_page.dart';
 
 class InicializarModule extends Module {

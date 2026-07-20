@@ -29,11 +29,12 @@ class _FiltroSetorDialogState extends State<FiltroSetorDialog> {
             builder: (context) {
               final setorFiltrado = controller.setorFiltrado;
               return CustomDropdownSearch<SetorModel>(
-                hintText: 'Selecione um setor',
-                initialValue: setorFiltrado,
+                label: 'Selecione um setor',
+                title: 'Selecione um setor',
+                selectedItem: setorFiltrado,
                 items: setores,
-                title: (item) => item.sigla,
-                subtitle: (item) => item.nome,
+                itemAsString: (item) => item.sigla,
+                //  subtitle: (item) => item.nome,
                 onSelected: (item) {
                   controller.idSetorSelecionado = item?.id;
                 },

@@ -21,9 +21,9 @@ class HomeModule extends Module {
     i.addSingleton<SolicitacaoRepository>(SolicitacaoRepositoryImpl.new);
     i.addSingleton(SolicitacaoService.new);
 
-    i.add(SolicitacaoController.new);
-    i.addSingleton(AgendaController.new);
     i.addSingleton(HomeController.new);
+    i.addSingleton(AgendaController.new);
+    i.add(SolicitacaoController.new);
   }
 
   @override
@@ -31,11 +31,7 @@ class HomeModule extends Module {
     r.child(
       Modular.initialRoute,
       child: (context) {
-        return HomePage(
-          usuario: r.args.data['usuario'],
-          setores: r.args.data['setores'],
-          solicitacao: r.args.data['solicitacao'],
-        );
+        return HomePage(usuario: r.args.data['usuario'], setores: r.args.data['setores']);
       },
     );
   }

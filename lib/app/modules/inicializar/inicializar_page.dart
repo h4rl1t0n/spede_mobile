@@ -8,8 +8,7 @@ import '../../core/ui/theme/styles/colors_app.dart';
 import '../../core/ui/theme/styles/text_styles.dart';
 import '../../mock/setores.dart';
 import '../../models/usuario_model.dart';
-import '../../shared/data/solicitacao/dto/solicitacao_response_dto.dart';
-import 'controller/inicializar_controller.dart';
+import 'inicializar_controller.dart';
 
 class InicializarPage extends StatefulWidget {
   const InicializarPage({super.key});
@@ -138,9 +137,8 @@ class _InicializarPageState extends State<InicializarPage> with SingleTickerProv
       await navigateToLogin();
     } else {
       await Future.delayed(const Duration(milliseconds: 3000));
-      final solicitacao = await controller.carregarSolicitacoes();
       final usuario = await LocalStorageUtils.getUsuario();
-      await navigateToHome(usuario: usuario, solicitacao: solicitacao);
+      await navigateToHome(usuario: usuario);
     }
   }
 
@@ -148,8 +146,9 @@ class _InicializarPageState extends State<InicializarPage> with SingleTickerProv
     await Modular.to.pushReplacementNamed(Routes.login);
   }
 
-  Future<void> navigateToHome({required UsuarioModel usuario, required SolicitacoesResponse solicitacao}) async {
-    final arguments = {'usuario': usuario, 'setores': setores, 'solicitacao': solicitacao};
-    await Modular.to.pushReplacementNamed(Routes.home, arguments: arguments);
+  Future<void> navigateToHome({required UsuarioModel usuario}) async {
+    final arguments = {'usuario': usuario, 'setores': setores};
+    await Modular.to.pushNamed(Routes.home, arguments: arguments);
+    // await Modular.to.pushReplacementNamed(Routes.home, arguments: arguments);
   }
 }

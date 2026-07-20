@@ -131,6 +131,7 @@ class ThemeConfig {
             color: states.contains(WidgetState.selected) ? colorScheme.primary : colorScheme.onSurfaceVariant,
           );
         }),
+        
       ),
 
       dialogTheme: DialogThemeData(
@@ -202,6 +203,7 @@ class ThemeConfig {
         elevation: 2,
         backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.onPrimary,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       ),
 
       snackBarTheme: SnackBarThemeData(

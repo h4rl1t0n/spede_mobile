@@ -10,38 +10,37 @@ import '../../core/helpers/messages.dart';
 import '../../enum/tipo_caixa.dart';
 import '../../models/setor_model.dart';
 import '../../models/usuario_model.dart';
-import '../../shared/data/solicitacao/dto/solicitacao_response_dto.dart';
 import 'home_controller.dart';
 import 'pages/agenda/agenda_page.dart';
+import 'pages/estatistica/estatistica_page.dart';
 import 'pages/solicitacao/solicitacao_page.dart';
 import 'widgets/selecionar_setor_dialog/selecionar_setor_dialog.dart';
 
 class HomePage extends StatefulWidget {
   final UsuarioModel usuario;
   final List<SetorModel> setores;
-  final SolicitacoesResponse solicitacao;
 
-  const HomePage({super.key, required this.usuario, required this.setores, required this.solicitacao});
+  const HomePage({super.key, required this.usuario, required this.setores});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with Loader, Messages {
+class _HomePageState extends State<HomePage> with Loader, Messages, SingleTickerProviderStateMixin {
   final controller = Modular.get<HomeController>();
 
   UsuarioModel get usuario => widget.usuario;
   List<SetorModel>? get setores => widget.setores;
-  SolicitacoesResponse get solicitacao => widget.solicitacao;
   late List<ReactionDisposer> disposers = [];
+  late final TabController tabController;
 
   @override
   void initState() {
+    tabController = TabController(length: 4, vsync: this);
     controller.listaDeSetores = setores ?? [];
     controller.usuario = usuario;
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      controller.atualizarBadges(solicitacao.enviadas.length, solicitacao.recebidas.length);
       await controller.initController();
       setupReactions();
     });
@@ -51,9 +50,12 @@ class _HomePageState extends State<HomePage> with Loader, Messages {
 
   @override
   void dispose() {
+    tabController.dispose();
+
     for (final disposer in disposers) {
       disposer();
     }
+
     super.dispose();
   }
 
@@ -62,25 +64,13 @@ class _HomePageState extends State<HomePage> with Loader, Messages {
     return Observer(
       builder: (context) {
         final page = controller.currentPage;
-        final setor = controller.setorSelecionado;
         return Scaffold(
           appBar: AppBar(
+            automaticallyImplyLeading: false,
             titleSpacing: 0,
-            leadingWidth: 60,
             toolbarHeight: 80,
             leading: Image.asset('assets/images/spede_home_prod.png', fit: .contain),
-            title: Visibility(
-              visible: setor != null,
-              child: Align(
-                alignment: .centerLeft,
-                child: Text(
-                  setor?.nome.toUpperCase() ?? '',
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 14, color: Colors.white),
-                ),
-              ),
-            ),
+            title: buildTitle(),
             actions: [
               IconButton(
                 onPressed: () async {
@@ -94,24 +84,19 @@ class _HomePageState extends State<HomePage> with Loader, Messages {
                 },
                 icon: CircleAvatar(child: Text(controller.usuario?.avatar ?? '')),
               ),
-
               const SizedBox(width: 10),
             ],
           ),
 
-          body: Builder(
-            builder: (context) {
-              final enviadas = solicitacao.enviadas;
-              final recebidas = solicitacao.recebidas;
-              return IndexedStack(
-                index: page,
-                children: [
-                  SolicitacaoPage(solicitacaoes: enviadas, tipoCaixa: TipoCaixa.enviadas),
-                  SolicitacaoPage(solicitacaoes: recebidas, tipoCaixa: TipoCaixa.recebidas),
-                  AgendaPage(),
-                ],
-              );
-            },
+          body: TabBarView(
+            controller: tabController,
+            physics: const NeverScrollableScrollPhysics(),
+            children: [
+              EstatisticaPage(),
+              SolicitacaoPage(caixa: TipoCaixa.enviadas),
+              SolicitacaoPage(caixa: TipoCaixa.recebidas),
+              AgendaPage(),
+            ],
           ),
           bottomNavigationBar: Container(
             decoration: BoxDecoration(
@@ -121,24 +106,54 @@ class _HomePageState extends State<HomePage> with Loader, Messages {
               builder: (context) {
                 final qtdEnviadas = controller.qtdEnviadas;
                 final qtdRecebidas = controller.qtdRecebidas;
-
                 return NavigationBar(
                   selectedIndex: page,
-                  onDestinationSelected: controller.setPage,
+                  onDestinationSelected: (index) {
+                    tabController.animateTo(
+                      index,
+                      duration: const Duration(milliseconds: 350),
+                      curve: Curves.easeInOutCubic,
+                    );
+                    controller.setPage(index);
+                  },
                   destinations: [
                     NavigationDestination(
-                      icon: Badge.count(count: qtdEnviadas, child: Icon(CupertinoIcons.tray_arrow_up)),
-                      selectedIcon: Badge.count(count: qtdEnviadas, child: Icon(CupertinoIcons.tray_arrow_up_fill)),
-                      label: 'Solicitações Enviadas',
+                      icon: Icon(CupertinoIcons.house),
+                      selectedIcon: Icon(CupertinoIcons.house_fill),
+                      label: 'Home',
+                      tooltip: 'Home',
                     ),
                     NavigationDestination(
-                      icon: Badge.count(count: qtdRecebidas, child: Icon(CupertinoIcons.tray_arrow_down)),
-                      selectedIcon: Badge.count(count: qtdRecebidas, child: Icon(CupertinoIcons.tray_arrow_down_fill)),
-                      label: 'Solicitações Recebidas',
+                      icon: Badge.count(
+                        count: qtdEnviadas,
+                        isLabelVisible: qtdEnviadas > 0,
+                        child: Icon(CupertinoIcons.tray_arrow_up),
+                      ),
+                      selectedIcon: Badge.count(
+                        count: qtdEnviadas,
+                        isLabelVisible: qtdEnviadas > 0,
+                        child: Icon(CupertinoIcons.tray_arrow_up_fill),
+                      ),
+                      label: 'Solic. Enviadas',
+                      tooltip: 'Solicitações Enviadas',
                     ),
                     NavigationDestination(
-                      icon: Badge.count(count: 3, child: Icon(Icons.calendar_month_outlined)),
-                      selectedIcon: Badge.count(count: 3, child: Icon(Icons.calendar_month)),
+                      icon: Badge.count(
+                        count: qtdRecebidas,
+                        isLabelVisible: qtdRecebidas > 0,
+                        child: Icon(CupertinoIcons.tray_arrow_down),
+                      ),
+                      selectedIcon: Badge.count(
+                        count: qtdRecebidas,
+                        isLabelVisible: qtdRecebidas > 0,
+                        child: Icon(CupertinoIcons.tray_arrow_down_fill),
+                      ),
+                      label: 'Solic. Recebidas',
+                      tooltip: 'Solicitações Recebidas',
+                    ),
+                    NavigationDestination(
+                      icon: Icon(Icons.calendar_month_outlined),
+                      selectedIcon: Icon(Icons.calendar_month),
                       label: 'Lembretes',
                       tooltip: 'Lembretes',
                     ),
@@ -181,4 +196,28 @@ class _HomePageState extends State<HomePage> with Loader, Messages {
       }, fireImmediately: true),
     ];
   }
+
+  Widget buildTitle() => InkWell(
+    onTap: () async {
+      await openSelecionarSetorDialog(initializer: false);
+    },
+    child: Observer(
+      builder: (context) {
+        final nome = controller.usuario?.nome;
+        final setor = controller.setorSelecionado?.sigla;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (setor != null) Text(setor, style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
+            if (nome != null)
+              Text(
+                nome.toUpperCase(),
+                style: const TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w400),
+                overflow: TextOverflow.ellipsis,
+              ),
+          ],
+        );
+      },
+    ),
+  );
 }

@@ -1,8 +1,9 @@
 import 'package:multiple_result/multiple_result.dart';
 
 import '../../../../core/exceptions/failure.dart';
-import '../dto/solicitacao_response_dto.dart';
+import '../../../../enum/tipo_caixa.dart';
+import '../../../../models/documento_model.dart';
 
 abstract class SolicitacaoDatasource {
-  Future<Result<SolicitacoesResponse, Failure>> carregarTodasSolicitacoes();
+  Future<Result<List<DocumentoModel>, Failure>> carregarTodasSolicitacoes({required TipoCaixa tipoCaixa});
 }
