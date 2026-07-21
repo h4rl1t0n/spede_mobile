@@ -90,10 +90,11 @@ flutter:
     - family: Cabin
       fonts:
         - asset: assets/fonts/Cabin-Regular.ttf
+          weight: 400
         - asset: assets/fonts/Cabin-Medium.ttf
-          weight: 700
+          weight: 500
         - asset: assets/fonts/Cabin-Bold.ttf
-          weight: 900
+          weight: 700
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package

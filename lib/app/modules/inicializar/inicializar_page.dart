@@ -22,15 +22,27 @@ class _InicializarPageState extends State<InicializarPage> with SingleTickerProv
 
   late Image logo;
   List<ReactionDisposer> disposers = [];
-
   late AnimationController _animationController;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _fadeAnimation;
 
   @override
   void initState() {
     super.initState();
     _iniciarVariaveis();
 
-    _animationController = AnimationController(vsync: this, duration: const Duration(seconds: 2));
+    _animationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 2200));
+
+    _scaleAnimation = Tween<double>(
+      begin: 0.92,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _animationController, curve: Curves.easeInOut));
+
+    _fadeAnimation = Tween<double>(
+      begin: 0.4,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _animationController, curve: Curves.easeInOut));
+
     _animationController.repeat(reverse: true);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -59,74 +71,102 @@ class _InicializarPageState extends State<InicializarPage> with SingleTickerProv
 
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFFFFFFFF), Color(0xFFF5FAFF), Color(0xFFEAF4FF)],
-            stops: [0.0, 0.5, 1.0],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [colors.primary.withValues(alpha: 0.03), const Color(0xFFF8FBFF), const Color(0xFFEEF5FF)],
+            stops: const [0.0, 0.4, 1.0],
           ),
         ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 40,
-            children: <Widget>[
-              Hero(
-                tag: 'app_logo',
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: colors.primary.withValues(alpha: 0.08),
-                        blurRadius: 30,
-                        spreadRadius: 10,
-                        offset: const Offset(0, 15),
+        child: Stack(
+          children: [
+            // Elementos de fundo decorativos (Glow effect moderno)
+            Positioned(
+              top: -100,
+              right: -100,
+              child: Container(
+                width: 300,
+                height: 300,
+                decoration: BoxDecoration(shape: BoxShape.circle, color: colors.primary.withValues(alpha: 0.06)),
+              ),
+            ),
+            Positioned(
+              bottom: -80,
+              left: -80,
+              child: Container(
+                width: 250,
+                height: 250,
+                decoration: BoxDecoration(shape: BoxShape.circle, color: colors.secondary.withValues(alpha: 0.05)),
+              ),
+            ),
+            // Conteúdo principal centralizado
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Bloco do Logotipo com animação fluida de escala
+                    AnimatedBuilder(
+                      animation: _animationController,
+                      builder: (context, child) {
+                        return Transform.scale(scale: _scaleAnimation.value, child: child);
+                      },
+                      child: Hero(tag: 'app_logo', child: logo),
+                    ),
+                    const SizedBox(height: 30),
+                    // Mensagem de Status com Fade animado
+                    FadeTransition(
+                      opacity: _fadeAnimation,
+                      child: Column(
+                        children: [
+                          Text(
+                            'Carregando suas informações',
+                            style: context.textStyles.textMedium.copyWith(
+                              color: colors.black.withValues(alpha: 0.85),
+                              fontSize: 18,
+                              letterSpacing: -0.4,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Por favor, aguarde um instante...',
+                            textAlign: TextAlign.center,
+                            style: context.textStyles.textRegular.copyWith(
+                              color: colors.black.withValues(alpha: 0.7),
+                              fontSize: 14,
+                              letterSpacing: -0.2,
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  child: logo,
+                    ),
+                    const SizedBox(height: 20),
+                    // Barra de Progresso Moderna com bordas totalmente arredondadas
+                    SizedBox(
+                      width: 160,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                        child: LinearProgressIndicator(
+                          minHeight: 5,
+                          color: colors.primary,
+                          backgroundColor: colors.primary.withValues(alpha: 0.08),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Column(
-                spacing: 24,
-                children: [
-                  Text(
-                    'Carregando suas informações.\nPor favor, aguarde...',
-                    textAlign: TextAlign.center,
-                    style: context.textStyles.textRegular.copyWith(
-                      color: colors.black,
-                      fontSize: 16,
-                      height: 1.4,
-                      letterSpacing: -0.3,
-                    ),
-                  ),
-
-                  SizedBox(
-                    width: 180,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: LinearProgressIndicator(
-                        minHeight: 4,
-                        color: colors.secondary,
-                        backgroundColor: colors.primary.withValues(alpha: 0.08),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 
   Future<void> _iniciarVariaveis() async {
-    logo = Image.asset('assets/images/logo.png', height: 150, width: 150);
+    logo = Image.asset('assets/images/logo.png', height: 180, width: 180, fit: .contain);
   }
 
   Future<void> transition() async {
@@ -149,6 +189,5 @@ class _InicializarPageState extends State<InicializarPage> with SingleTickerProv
   Future<void> navigateToHome({required UsuarioModel usuario}) async {
     final arguments = {'usuario': usuario, 'setores': setores};
     await Modular.to.pushNamed(Routes.home, arguments: arguments);
-    // await Modular.to.pushReplacementNamed(Routes.home, arguments: arguments);
   }
 }
