@@ -5,10 +5,10 @@ import '../../../../core/extensions/size_extension.dart';
 import '../../../../core/ui/widgets/custom_dropdown_search/custom_dropdown_search.dart';
 import '../../../../mock/setores.dart';
 import '../../../../models/setor_model.dart';
-import '../../home_controller.dart';
+import '../../main_controller.dart';
 
 class SelecionarSetorDialog extends StatefulWidget {
-  final HomeController controller;
+  final MainController controller;
   final bool initializer;
   const SelecionarSetorDialog({super.key, required this.controller, required this.initializer});
 
@@ -17,7 +17,7 @@ class SelecionarSetorDialog extends StatefulWidget {
 }
 
 class _SelecionarSetorDialogState extends State<SelecionarSetorDialog> {
-  HomeController get controller => widget.controller;
+  MainController get controller => widget.controller;
   bool get initializer => widget.initializer;
 
   @override

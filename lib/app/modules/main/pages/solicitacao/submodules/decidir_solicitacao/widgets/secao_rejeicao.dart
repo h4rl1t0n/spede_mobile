@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/ui/widgets/custom_dropdown_search/custom_dropdown_search.dart';
+import '../../../../../../../core/ui/widgets/custom_dropdown_search/custom_dropdown_search.dart';
 import 'secao_header.dart';
 
 class SecaoRejeicao extends StatelessWidget {

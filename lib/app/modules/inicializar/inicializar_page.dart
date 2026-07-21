@@ -178,7 +178,7 @@ class _InicializarPageState extends State<InicializarPage> with SingleTickerProv
     } else {
       await Future.delayed(const Duration(milliseconds: 3000));
       final usuario = await LocalStorageUtils.getUsuario();
-      await navigateToHome(usuario: usuario);
+      await navigateToMain(usuario: usuario);
     }
   }
 
@@ -186,8 +186,8 @@ class _InicializarPageState extends State<InicializarPage> with SingleTickerProv
     await Modular.to.pushReplacementNamed(Routes.login);
   }
 
-  Future<void> navigateToHome({required UsuarioModel usuario}) async {
+  Future<void> navigateToMain({required UsuarioModel usuario}) async {
     final arguments = {'usuario': usuario, 'setores': setores};
-    await Modular.to.pushNamed(Routes.home, arguments: arguments);
+    await Modular.to.pushReplacementNamed(Routes.main, arguments: arguments);
   }
 }

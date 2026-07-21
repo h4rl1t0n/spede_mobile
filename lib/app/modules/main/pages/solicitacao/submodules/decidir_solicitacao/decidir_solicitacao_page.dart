@@ -3,12 +3,12 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
-import '../../core/helpers/loader.dart';
-import '../../core/helpers/messages.dart';
-import '../../enum/acao_solicitacao.dart';
-import '../../enum/tipo_solicitacao.dart';
-import '../../mock/motivos_rejeicao.dart';
-import '../home/pages/solicitacao/solicitacao_controller.dart';
+import '../../../../../../core/helpers/loader.dart';
+import '../../../../../../core/helpers/messages.dart';
+import '../../../../../../enum/acao_solicitacao.dart';
+import '../../../../../../enum/tipo_solicitacao.dart';
+import '../../../../../../mock/motivos_rejeicao.dart';
+import '../../solicitacao_controller.dart';
 import 'widgets/item_solicitacao_decidir_card.dart';
 import 'widgets/secao_autenticacao.dart';
 import 'widgets/secao_header.dart';

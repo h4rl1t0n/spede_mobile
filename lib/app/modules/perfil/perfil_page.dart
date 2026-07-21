@@ -6,7 +6,7 @@ import '../../app_module.dart';
 import '../../core/global/local_storage_utils.dart';
 import '../../models/usuario_model.dart';
 import 'controller/perfil_controller.dart';
-import 'widgets/header_container.dart';
+import 'widgets/header_perfil_container.dart';
 import 'widgets/menu_pefil_tile.dart';
 import 'widgets/selecionar_setor_dialog.dart';
 
@@ -55,7 +55,7 @@ class _PerfilPageState extends State<PerfilPage> {
       ),
       body: Column(
         children: [
-          HeaderContainer(controller: controller),
+          HeaderPerfilContainer(controller: controller),
           Expanded(
             child: ListView(
               padding: const EdgeInsets.only(top: 16, bottom: 0, left: 16, right: 16),

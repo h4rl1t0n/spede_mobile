@@ -3,13 +3,13 @@ import 'package:mobx/mobx.dart';
 
 import '../../core/global/local_storage_utils.dart';
 import '../../models/setor_model.dart';
-import '../../models/usuario_model.dart';
+import '../../models/usuario_model.dart' show UsuarioModel;
 
-part 'home_controller.g.dart';
+part 'main_controller.g.dart';
 
-class HomeController = HomeControllerBase with _$HomeController;
+class MainController = MainControllerBase with _$MainController;
 
-abstract class HomeControllerBase with Store {
+abstract class MainControllerBase with Store {
   List<SetorModel> listaDeSetores = [];
 
   @observable
@@ -23,18 +23,6 @@ abstract class HomeControllerBase with Store {
 
   @observable
   int currentPage = 0;
-
-  @observable
-  int qtdEnviadas = 0;
-
-  @observable
-  int qtdRecebidas = 0;
-
-  @action
-  void atualizarBadges(int novasEnviadas, int novasRecebidas) {
-    qtdEnviadas = novasEnviadas;
-    qtdRecebidas = novasRecebidas;
-  }
 
   @action
   Future<void> initController() async {

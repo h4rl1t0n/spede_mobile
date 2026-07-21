@@ -114,7 +114,6 @@ class _SolicitacaoPageState extends State<SolicitacaoPage> with Loader, Messages
 
                 return RefreshIndicator.adaptive(
                   onRefresh: () async {
-                    controller.solicitacoes.clear();
                     await controller.carregarSolicitacoes(caixa);
                   },
                   child: ListView.separated(
@@ -132,12 +131,54 @@ class _SolicitacaoPageState extends State<SolicitacaoPage> with Loader, Messages
           ),
         ],
       ),
-      floatingActionButton: Observer(
+      bottomNavigationBar: Observer(
         builder: (context) {
           final selecionados = controller.selecionados;
-          return Visibility(
-            visible: selecionados.isNotEmpty,
-            child: FloatingActionButton.extended(label: Text('data'), onPressed: abrirAcoes),
+
+          if (selecionados.isEmpty) return SizedBox.shrink();
+
+          return Container(
+            decoration: BoxDecoration(
+              border: Border(top: BorderSide(color: Colors.grey.shade400, width: .5)),
+            ),
+            child: BottomAppBar(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+              color: Colors.white,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        caixa.descricao,
+                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, letterSpacing: 1),
+                      ),
+                      Row(
+                        spacing: 4,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.business_center, size: 15),
+                          Text(
+                            '${selecionados.length} '
+                            '${selecionados.length == 1 ? 'solicitação' : 'solicitações'} '
+                            'de ${selecionados.first.tipoSolicitacao.name.toLowerCase()}',
+                            style: const TextStyle(fontSize: 14, fontFamily: 'Cabin'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: abrirAcoes,
+                    icon: const Icon(Icons.check_circle),
+                    label: const Text('Concluir'),
+                  ),
+                ],
+              ),
+            ),
           );
         },
       ),
@@ -179,8 +220,5 @@ class _SolicitacaoPageState extends State<SolicitacaoPage> with Loader, Messages
         return AcaoSolcitacaoSheet(controller: controller, caixa: caixa);
       },
     );
-
-    controller.acao = null;
-    controller.selecionados.clear();
   }
 }

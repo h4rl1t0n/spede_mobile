@@ -91,6 +91,10 @@ class UsuarioModel {
     return email.split('@').first.toLowerCase();
   }
 
+  String get firstName {
+    return nome.split(' ').first;
+  }
+
   String get avatar {
     const ignorar = {'de', 'da', 'do', 'dos', 'das'};
 

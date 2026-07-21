@@ -3,10 +3,10 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../controller/perfil_controller.dart';
 
-class HeaderContainer extends StatelessWidget {
+class HeaderPerfilContainer extends StatelessWidget {
   final PerfilController controller;
 
-  const HeaderContainer({super.key, required this.controller});
+  const HeaderPerfilContainer({super.key, required this.controller});
 
   @override
   Widget build(BuildContext context) {

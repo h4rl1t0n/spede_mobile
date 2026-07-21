@@ -3,7 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../../../../../enum/acao_solicitacao.dart';
 import '../../../../../../enum/tipo_caixa.dart';
-import '../../../../../decidir_solicitacao/decidir_solicitacao_page.dart';
+import '../../submodules/decidir_solicitacao/decidir_solicitacao_page.dart';
 import '../../solicitacao_controller.dart';
 import 'action_button.dart';
 import 'item_solicitacao_sheet.dart';
@@ -37,6 +37,9 @@ class _AcaoSolcitacaoSheetState extends State<AcaoSolcitacaoSheet> {
             return Observer(
               builder: (context) {
                 final selecionados = controller.selecionados;
+
+                if (selecionados.isEmpty) return SizedBox.shrink();
+
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [

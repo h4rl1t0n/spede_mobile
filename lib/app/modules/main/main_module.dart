@@ -6,12 +6,12 @@ import '../../shared/data/solicitacao/solicitacao_repository_impl.dart';
 import '../../shared/domain/solicitacao/solicitacao_repository.dart';
 import '../../shared/service/solicitacao/solicitacao_service.dart';
 import '../core/core_module.dart';
-import 'home_controller.dart';
-import 'home_page.dart';
+import 'main_controller.dart';
+import 'main_page.dart';
 import 'pages/agenda/agenda_controller.dart';
 import 'pages/solicitacao/solicitacao_controller.dart';
 
-class HomeModule extends Module {
+class MainModule extends Module {
   @override
   List<Module> get imports => [CoreModule()];
 
@@ -21,7 +21,7 @@ class HomeModule extends Module {
     i.addSingleton<SolicitacaoRepository>(SolicitacaoRepositoryImpl.new);
     i.addSingleton(SolicitacaoService.new);
 
-    i.addSingleton(HomeController.new);
+    i.addSingleton(MainController.new);
     i.addSingleton(AgendaController.new);
     i.add(SolicitacaoController.new);
   }
@@ -31,7 +31,7 @@ class HomeModule extends Module {
     r.child(
       Modular.initialRoute,
       child: (context) {
-        return HomePage(usuario: r.args.data['usuario'], setores: r.args.data['setores']);
+        return MainPage(usuario: r.args.data['usuario'], setores: r.args.data['setores']);
       },
     );
   }

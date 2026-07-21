@@ -1,4 +1,3 @@
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../../core/result/result_handler.dart';
@@ -8,7 +7,6 @@ import '../../../../enum/tipo_caixa.dart';
 import '../../../../enum/tipo_solicitacao.dart';
 import '../../../../models/documento_model.dart';
 import '../../../../shared/service/solicitacao/solicitacao_service.dart';
-import '../../home_controller.dart';
 
 part 'solicitacao_controller.g.dart';
 
@@ -41,21 +39,11 @@ abstract class SolicitacaoControllerBase with Store {
   Future<void> carregarSolicitacoes(TipoCaixa caixa) async {
     errorMessage = null;
     status = PageStatus.loading;
-
     await fetch(
       service.carregarTodasSolicitacoes(tipoCaixa: caixa),
       onSuccess: (result) {
         solicitacoes.clear();
         solicitacoes.addAll(result);
-
-        final homeController = Modular.get<HomeController>();
-        if (caixa == .enviadas) {
-          homeController.qtdEnviadas = result.length;
-        }
-        if (caixa == .recebidas) {
-          homeController.qtdRecebidas = result.length;
-        }
-
         status = PageStatus.loaded;
       },
       onError: (message) {
@@ -68,6 +56,7 @@ abstract class SolicitacaoControllerBase with Store {
   @action
   void alterarCategoria(TipoSolicitacao? value) {
     categoriaSelecionada = value;
+    selecionados.clear();
   }
 
   @computed

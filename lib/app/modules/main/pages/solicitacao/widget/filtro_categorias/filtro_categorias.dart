@@ -23,7 +23,9 @@ class FiltroCategorias extends StatelessWidget {
             label: 'Todos',
             count: total,
             isSelected: selecionada == null,
-            onTap: () => onSelecionada(null),
+            onTap: () {},
+
+            // onTap: () => onSelecionada(null),
           ),
           SizedBox(width: 6),
           ...categorias.entries.map((entry) {

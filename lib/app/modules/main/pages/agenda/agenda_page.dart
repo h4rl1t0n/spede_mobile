@@ -110,15 +110,10 @@ class _AgendaPageState extends State<AgendaPage> {
           ),
         ],
       ),
-      floatingActionButton: Observer(
-        builder: (context) {
-          final setorFiltrado = controller.setorFiltrado;
-          return FloatingActionButton.extended(
-            onPressed: abrirFiltroSetor,
-            label: Text('Filtros por Setor'),
-            icon: Icon(setorFiltrado == null ? Icons.filter_alt_outlined : Icons.filter_alt, color: Colors.white),
-          );
-        },
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: abrirFiltroSetor,
+        label: Text('Filtros por Setor'),
+        icon: Icon(Icons.tune_rounded, color: Colors.white),
       ),
     );
   }

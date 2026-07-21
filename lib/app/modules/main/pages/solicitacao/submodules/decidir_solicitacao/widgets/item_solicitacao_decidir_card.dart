@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/ui/theme/styles/text_styles.dart';
-import '../../../core/ui/widgets/info_card.dart';
-import '../../../models/documento_model.dart';
+import '../../../../../../../core/ui/theme/styles/text_styles.dart';
+import '../../../../../../../core/ui/widgets/info_card.dart';
+import '../../../../../../../models/documento_model.dart';
 
 class ItemSolicitacaoDecidirCard extends StatelessWidget {
   final DocumentoModel solicitacao;

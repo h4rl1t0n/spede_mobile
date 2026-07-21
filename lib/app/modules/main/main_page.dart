@@ -10,24 +10,24 @@ import '../../core/helpers/messages.dart';
 import '../../enum/tipo_caixa.dart';
 import '../../models/setor_model.dart';
 import '../../models/usuario_model.dart';
-import 'home_controller.dart';
+import 'main_controller.dart';
 import 'pages/agenda/agenda_page.dart';
-import 'pages/estatistica/estatistica_page.dart';
+import 'pages/home/home_page.dart';
 import 'pages/solicitacao/solicitacao_page.dart';
 import 'widgets/selecionar_setor_dialog/selecionar_setor_dialog.dart';
 
-class HomePage extends StatefulWidget {
+class MainPage extends StatefulWidget {
   final UsuarioModel usuario;
   final List<SetorModel> setores;
 
-  const HomePage({super.key, required this.usuario, required this.setores});
+  const MainPage({super.key, required this.usuario, required this.setores});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<MainPage> createState() => _MainPageState();
 }
 
-class _HomePageState extends State<HomePage> with Loader, Messages, SingleTickerProviderStateMixin {
-  final controller = Modular.get<HomeController>();
+class _MainPageState extends State<MainPage> with Loader, Messages, SingleTickerProviderStateMixin {
+  final controller = Modular.get<MainController>();
 
   UsuarioModel get usuario => widget.usuario;
   List<SetorModel>? get setores => widget.setores;
@@ -65,6 +65,7 @@ class _HomePageState extends State<HomePage> with Loader, Messages, SingleTicker
       builder: (context) {
         final page = controller.currentPage;
         return Scaffold(
+          backgroundColor: const Color(0xffF5F7FB),
           appBar: AppBar(
             automaticallyImplyLeading: false,
             titleSpacing: 0,
@@ -81,6 +82,7 @@ class _HomePageState extends State<HomePage> with Loader, Messages, SingleTicker
               IconButton(
                 onPressed: () async {
                   await Modular.to.pushNamed(Routes.perfil, arguments: controller.usuario);
+                  await controller.initController();
                 },
                 icon: CircleAvatar(child: Text(controller.usuario?.avatar ?? '')),
               ),
@@ -92,75 +94,44 @@ class _HomePageState extends State<HomePage> with Loader, Messages, SingleTicker
             controller: tabController,
             physics: const NeverScrollableScrollPhysics(),
             children: [
-              EstatisticaPage(),
+              HomePage(usuarioLogado: controller.usuario ?? usuario),
               SolicitacaoPage(caixa: TipoCaixa.enviadas),
               SolicitacaoPage(caixa: TipoCaixa.recebidas),
               AgendaPage(),
             ],
           ),
-          bottomNavigationBar: Container(
-            decoration: BoxDecoration(
-              border: Border(top: BorderSide(color: Colors.grey.shade400, width: .5)),
-            ),
-            child: Observer(
-              builder: (context) {
-                final qtdEnviadas = controller.qtdEnviadas;
-                final qtdRecebidas = controller.qtdRecebidas;
-                return NavigationBar(
-                  selectedIndex: page,
-                  onDestinationSelected: (index) {
-                    tabController.animateTo(
-                      index,
-                      duration: const Duration(milliseconds: 350),
-                      curve: Curves.easeInOutCubic,
-                    );
-                    controller.setPage(index);
-                  },
-                  destinations: [
-                    NavigationDestination(
-                      icon: Icon(CupertinoIcons.house),
-                      selectedIcon: Icon(CupertinoIcons.house_fill),
-                      label: 'Home',
-                      tooltip: 'Home',
-                    ),
-                    NavigationDestination(
-                      icon: Badge.count(
-                        count: qtdEnviadas,
-                        isLabelVisible: qtdEnviadas > 0,
-                        child: Icon(CupertinoIcons.tray_arrow_up),
-                      ),
-                      selectedIcon: Badge.count(
-                        count: qtdEnviadas,
-                        isLabelVisible: qtdEnviadas > 0,
-                        child: Icon(CupertinoIcons.tray_arrow_up_fill),
-                      ),
-                      label: 'Solic. Enviadas',
-                      tooltip: 'Solicitações Enviadas',
-                    ),
-                    NavigationDestination(
-                      icon: Badge.count(
-                        count: qtdRecebidas,
-                        isLabelVisible: qtdRecebidas > 0,
-                        child: Icon(CupertinoIcons.tray_arrow_down),
-                      ),
-                      selectedIcon: Badge.count(
-                        count: qtdRecebidas,
-                        isLabelVisible: qtdRecebidas > 0,
-                        child: Icon(CupertinoIcons.tray_arrow_down_fill),
-                      ),
-                      label: 'Solic. Recebidas',
-                      tooltip: 'Solicitações Recebidas',
-                    ),
-                    NavigationDestination(
-                      icon: Icon(Icons.calendar_month_outlined),
-                      selectedIcon: Icon(Icons.calendar_month),
-                      label: 'Lembretes',
-                      tooltip: 'Lembretes',
-                    ),
-                  ],
-                );
-              },
-            ),
+          bottomNavigationBar: NavigationBar(
+            selectedIndex: page,
+            onDestinationSelected: (index) {
+              tabController.animateTo(index, duration: const Duration(milliseconds: 350), curve: Curves.easeInOutCubic);
+              controller.setPage(index);
+            },
+            destinations: [
+              NavigationDestination(
+                icon: Icon(CupertinoIcons.house),
+                selectedIcon: Icon(CupertinoIcons.house_fill),
+                label: 'Home',
+                tooltip: 'Home',
+              ),
+              NavigationDestination(
+                icon: Icon(CupertinoIcons.tray_arrow_up),
+                selectedIcon: Icon(CupertinoIcons.tray_arrow_up_fill),
+                label: 'Solic. Enviadas',
+                tooltip: 'Solicitações Enviadas',
+              ),
+              NavigationDestination(
+                icon: Icon(CupertinoIcons.tray_arrow_down),
+                selectedIcon: Icon(CupertinoIcons.tray_arrow_down_fill),
+                label: 'Solic. Recebidas',
+                tooltip: 'Solicitações Recebidas',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.calendar_month_outlined),
+                selectedIcon: Icon(Icons.calendar_month),
+                label: 'Lembretes',
+                tooltip: 'Lembretes',
+              ),
+            ],
           ),
         );
       },
