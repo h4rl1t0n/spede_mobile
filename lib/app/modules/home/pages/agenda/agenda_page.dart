@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../../../core/ui/theme/styles/colors_app.dart';
 import 'agenda_controller.dart';
@@ -17,7 +18,7 @@ class AgendaPage extends StatefulWidget {
 }
 
 class _AgendaPageState extends State<AgendaPage> {
-  final controller = AgendaController();
+  final controller = Modular.get<AgendaController>();
 
   @override
   Widget build(BuildContext context) {
