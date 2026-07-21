@@ -24,6 +24,12 @@ class DashboardCard extends StatefulWidget {
 class _DashboardCardState extends State<DashboardCard> {
   late final PageController controller;
 
+  String get title => widget.title;
+  String get value => widget.value;
+  IconData get icon => widget.icon;
+  Color get color => widget.color;
+  List<DashboardSetor> get items => widget.items;
+
   @override
   void initState() {
     super.initState();
@@ -59,8 +65,8 @@ class _DashboardCardState extends State<DashboardCard> {
                     children: [
                       CircleAvatar(
                         radius: 25,
-                        backgroundColor: widget.color.withValues(alpha: .12),
-                        child: Icon(widget.icon, color: widget.color, size: 25),
+                        backgroundColor: color.withValues(alpha: .12),
+                        child: Icon(icon, color: color, size: 25),
                       ),
                     ],
                   ),
@@ -68,12 +74,12 @@ class _DashboardCardState extends State<DashboardCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.title.toUpperCase(),
+                        title.toUpperCase(),
                         style: TextStyle(color: Colors.grey.shade700, fontSize: 12, letterSpacing: 1),
                       ),
                       Text(
-                        widget.value,
-                        style: TextStyle(color: widget.color, fontSize: 34, fontWeight: FontWeight.bold),
+                        value,
+                        style: TextStyle(color: color, fontSize: 34, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -85,15 +91,25 @@ class _DashboardCardState extends State<DashboardCard> {
                 controller: controller,
                 clipBehavior: Clip.hardEdge,
                 padEnds: false,
-                itemCount: widget.items.length,
+                itemCount: items.length,
                 itemBuilder: (context, index) {
-                  final dashboard = widget.items[index];
-                  final dashboards = dashboard.dashboards;
+                  final dashboard = items[index];
+                  final dashboards = dashboard.dashboards ?? [];
+                  final total = dashboards
+                      .map((e) => int.parse(e.value.replaceAll('.', '')))
+                      .fold(0, (soma, valor) => soma + valor);
+
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: 2.5),
-                      Text(dashboard.nomeSetor.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold)),
+                      Row(
+                        spacing: 5,
+                        children: [
+                          Text(dashboard.nomeSetor.toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold)),
+                          Text('($total)', style: TextStyle(fontSize: 13)),
+                        ],
+                      ),
                       SizedBox(height: 2.5),
                       ...dashboards.map((e) {
                         return Padding(
@@ -117,17 +133,18 @@ class _DashboardCardState extends State<DashboardCard> {
                 },
               ),
               SizedBox(height: 5),
-              Row(
-                spacing: 5,
-                mainAxisAlignment: .center,
-                children: widget.items.map((e) {
-                  return Container(
-                    width: 8,
-                    height: 8,
-                    decoration: BoxDecoration(color: Colors.grey, shape: BoxShape.circle),
-                  );
-                }).toList(),
-              ),
+              if (title != 'Eventos da Agenda')
+                Row(
+                  spacing: 5,
+                  mainAxisAlignment: .center,
+                  children: items.map((e) {
+                    return Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(color: Colors.grey, shape: BoxShape.circle),
+                    );
+                  }).toList(),
+                ),
             ],
           ),
         ),
@@ -146,7 +163,7 @@ class DashboardItem {
 
 class DashboardSetor {
   final String nomeSetor;
-  final List<DashboardItem> dashboards;
+  final List<DashboardItem>? dashboards;
 
-  const DashboardSetor({required this.nomeSetor, required this.dashboards});
+  const DashboardSetor({required this.nomeSetor, this.dashboards});
 }

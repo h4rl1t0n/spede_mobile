@@ -12,12 +12,12 @@ class SolicitacaoService {
 
   SolicitacaoService(this.repository);
 
-  Future<Result<List<DocumentoModel>, Failure>> carregarTodasSolicitacoes({required TipoCaixa tipoCaixa}) async {
-    final result = await repository.carregarTodasSolicitacoes(tipoCaixa: tipoCaixa);
+  Future<Result<List<DocumentoModel>, Failure>> carregarTodasSolicitacoes({required TipoCaixa caixa}) async {
+    final result = await repository.carregarTodasSolicitacoes(caixa: caixa);
 
     return result.when(
       (success) {
-        log('Carregou ${success.length} ${tipoCaixa.descricao.toLowerCase()}');
+        log('Carregou ${success.length} ${caixa.descricao.toLowerCase()}');
         return Success(success);
       },
       (error) {

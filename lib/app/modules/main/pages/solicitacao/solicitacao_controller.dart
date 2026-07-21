@@ -40,7 +40,7 @@ abstract class SolicitacaoControllerBase with Store {
     errorMessage = null;
     status = PageStatus.loading;
     await fetch(
-      service.carregarTodasSolicitacoes(tipoCaixa: caixa),
+      service.carregarTodasSolicitacoes(caixa: caixa),
       onSuccess: (result) {
         solicitacoes.clear();
         solicitacoes.addAll(result);

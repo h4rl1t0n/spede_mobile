@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../enum/tipo_caixa.dart';
 import '../enum/tipo_documento.dart';
 import '../enum/tipo_escrito.dart';
-import '../enum/tipo_situacao.dart';
 import '../enum/tipo_solicitacao.dart';
 import 'setor_model.dart';
 
@@ -14,7 +14,7 @@ class DocumentoModel {
   final TipoSolicitacao tipoSolicitacao;
   final String remetente;
   final String destinatario;
-  final TipoSituacao tipoSituacao;
+  final TipoCaixa tipoCaixa;
   final int dias;
   final DateTime dataSolicitacao;
   final DateTime dataAtendimento;
@@ -31,7 +31,7 @@ class DocumentoModel {
     this.remetente = 'DICAD / HARLITON MARTINS DE SOUZA',
     this.destinatario = 'GERSON CAVALCANTE CRUZ NETO / SETIN',
     this.dias = 6,
-    required this.tipoSituacao,
+    required this.tipoCaixa,
     required this.dataSolicitacao,
     required this.dataAtendimento,
     required this.setorModel,
@@ -43,14 +43,6 @@ class DocumentoModel {
   }
 
   Color get color => Colors.blue;
-
-  Color corSituacao() {
-    return switch (tipoSituacao) {
-      TipoSituacao.pendente => Colors.grey.shade900,
-      TipoSituacao.atendida => Colors.green.shade900,
-      TipoSituacao.rejeitada => Colors.red.shade900,
-    };
-  }
 
   Color corDocumento() {
     return switch (tipoEscrito) {

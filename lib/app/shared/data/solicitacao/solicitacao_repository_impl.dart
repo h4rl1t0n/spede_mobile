@@ -12,7 +12,7 @@ class SolicitacaoRepositoryImpl implements SolicitacaoRepository {
   SolicitacaoRepositoryImpl(this.datasource);
 
   @override
-  Future<Result<List<DocumentoModel>, Failure>> carregarTodasSolicitacoes({required TipoCaixa tipoCaixa}) async {
-    return datasource.carregarTodasSolicitacoes(tipoCaixa: tipoCaixa);
+  Future<Result<List<DocumentoModel>, Failure>> carregarTodasSolicitacoes({required TipoCaixa caixa}) async {
+    return datasource.carregarTodasSolicitacoes(caixa: caixa);
   }
 }

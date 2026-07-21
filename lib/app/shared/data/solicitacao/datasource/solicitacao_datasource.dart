@@ -5,5 +5,5 @@ import '../../../../enum/tipo_caixa.dart';
 import '../../../../models/documento_model.dart';
 
 abstract class SolicitacaoDatasource {
-  Future<Result<List<DocumentoModel>, Failure>> carregarTodasSolicitacoes({required TipoCaixa tipoCaixa});
+  Future<Result<List<DocumentoModel>, Failure>> carregarTodasSolicitacoes({required TipoCaixa caixa});
 }

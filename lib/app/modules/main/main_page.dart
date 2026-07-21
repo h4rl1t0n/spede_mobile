@@ -95,8 +95,8 @@ class _MainPageState extends State<MainPage> with Loader, Messages, SingleTicker
             physics: const NeverScrollableScrollPhysics(),
             children: [
               HomePage(usuarioLogado: controller.usuario ?? usuario),
-              SolicitacaoPage(caixa: TipoCaixa.enviadas),
               SolicitacaoPage(caixa: TipoCaixa.recebidas),
+              SolicitacaoPage(caixa: TipoCaixa.enviadas),
               AgendaPage(),
             ],
           ),
@@ -114,17 +114,18 @@ class _MainPageState extends State<MainPage> with Loader, Messages, SingleTicker
                 tooltip: 'Home',
               ),
               NavigationDestination(
-                icon: Icon(CupertinoIcons.tray_arrow_up),
-                selectedIcon: Icon(CupertinoIcons.tray_arrow_up_fill),
-                label: 'Solic. Enviadas',
-                tooltip: 'Solicitações Enviadas',
-              ),
-              NavigationDestination(
                 icon: Icon(CupertinoIcons.tray_arrow_down),
                 selectedIcon: Icon(CupertinoIcons.tray_arrow_down_fill),
                 label: 'Solic. Recebidas',
                 tooltip: 'Solicitações Recebidas',
               ),
+              NavigationDestination(
+                icon: Icon(CupertinoIcons.tray_arrow_up),
+                selectedIcon: Icon(CupertinoIcons.tray_arrow_up_fill),
+                label: 'Solic. Enviadas',
+                tooltip: 'Solicitações Enviadas',
+              ),
+
               NavigationDestination(
                 icon: Icon(Icons.calendar_month_outlined),
                 selectedIcon: Icon(Icons.calendar_month),

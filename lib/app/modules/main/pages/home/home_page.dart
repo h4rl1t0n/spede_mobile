@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../models/usuario_model.dart';
-import 'widgets/button_action.dart';
 import 'widgets/dashboard_item_card.dart';
 import 'widgets/header_home_container.dart';
 
@@ -20,6 +19,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final primary = colorScheme.primary;
     final secondary = colorScheme.secondary;
     final tertiary = colorScheme.tertiary;
 
@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
                 padding: const EdgeInsets.all(8),
                 children: [
                   DashboardCard(
-                    title: 'Solicitações Recebidas',
+                    title: 'Solicitações Recebidas Pendentes',
                     value: '964',
                     icon: CupertinoIcons.tray_arrow_down,
                     color: secondary,
@@ -43,31 +43,31 @@ class _HomePageState extends State<HomePage> {
                       DashboardSetor(
                         nomeSetor: 'Setin',
                         dashboards: [
-                          DashboardItem('Assinatura', '1', Colors.red),
-                          DashboardItem('Ciência', '3', Colors.orange),
+                          DashboardItem('Assinatura', '8', Colors.red),
+                          DashboardItem('Ciência', '9', Colors.orange),
                           DashboardItem('Visto', '51', Colors.blue),
                         ],
                       ),
                       DashboardSetor(
                         nomeSetor: 'Diproj',
                         dashboards: [
-                          DashboardItem('Assinatura', '1', Colors.red),
+                          DashboardItem('Assinatura', '7', Colors.red),
                           DashboardItem('Ciência', '3', Colors.orange),
-                          DashboardItem('Visto', '51', Colors.blue),
+                          DashboardItem('Visto', '20', Colors.blue),
                         ],
                       ),
                       DashboardSetor(
                         nomeSetor: 'get-iti',
                         dashboards: [
                           DashboardItem('Assinatura', '1', Colors.red),
-                          DashboardItem('Ciência', '3', Colors.orange),
-                          DashboardItem('Visto', '51', Colors.blue),
+                          DashboardItem('Ciência', '5', Colors.orange),
+                          DashboardItem('Visto', '10', Colors.blue),
                         ],
                       ),
                     ],
                   ),
                   DashboardCard(
-                    title: 'Solicitações Enviadas',
+                    title: 'Solicitações Enviadas Pendentes',
                     value: '1.314',
                     icon: CupertinoIcons.tray_arrow_up,
                     color: tertiary,
@@ -90,21 +90,28 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Text('Ações rápidas', style: Theme.of(context).textTheme.titleLarge),
+                  DashboardCard(
+                    title: 'Eventos da Agenda',
+                    value: '256',
+                    icon: CupertinoIcons.calendar,
+                    color: primary,
+                    items: [DashboardSetor(nomeSetor: 'Deap')],
                   ),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.all(16),
-                    child: Row(
-                      spacing: 10,
-                      children: [
-                        ButtonAction(icon: Icons.description_rounded, label: 'Solicitações Enviadas'),
-                        ButtonAction(icon: Icons.chat_rounded, label: 'Solicitações Enviadas'),
-                      ],
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: 16),
+                  //   child: Text('Ações rápidas', style: Theme.of(context).textTheme.titleLarge),
+                  // ),
+                  // SingleChildScrollView(
+                  //   scrollDirection: Axis.horizontal,
+                  //   padding: const EdgeInsets.all(16),
+                  //   child: Row(
+                  //     spacing: 10,
+                  //     children: [
+                  //       ButtonAction(icon: Icons.description_rounded, label: 'Solicitações Enviadas'),
+                  //       ButtonAction(icon: Icons.chat_rounded, label: 'Solicitações Enviadas'),
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               ),
             ),
