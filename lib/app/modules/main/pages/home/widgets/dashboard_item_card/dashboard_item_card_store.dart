@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
+import '../../../../../../models/setor_model.dart';
 import 'dashboard_item_card.dart';
 
 part 'dashboard_item_card_store.g.dart';
@@ -40,8 +41,8 @@ abstract class DashboardItemCardStoreBase with Store {
       final Map<String, int> somaAgrupada = {};
       final Map<String, Color> mapaDeCores = {};
 
-      for (var setor in items) {
-        for (var dash in (setor.dashboards ?? <DashboardItem>[])) {
+      for (var dashSetor in items) {
+        for (var dash in (dashSetor.dashboards ?? <DashboardItem>[])) {
           final valorLimpo = int.tryParse(dash.value.replaceAll('.', '')) ?? 0;
           somaAgrupada[dash.title] = (somaAgrupada[dash.title] ?? 0) + valorLimpo;
           mapaDeCores[dash.title] = dash.color; // Salva a cor original
@@ -52,9 +53,11 @@ abstract class DashboardItemCardStoreBase with Store {
         return DashboardItem(entry.key, entry.value.toString(), mapaDeCores[entry.key] ?? Colors.grey);
       }).toList();
 
-      return [DashboardSetor(nomeSetor: 'Total Geral', dashboards: listaAgrupada)];
+      final setorTotal = SetorModel(id: 0, sigla: 'GERAL', nome: 'Total Geral');
+
+      return [DashboardSetor(setor: setorTotal, dashboards: listaAgrupada)];
     } else {
-      return items.where((e) => e.nomeSetor == filtro).toList();
+      return items.where((e) => e.setor.sigla == filtro).toList();
     }
   }
 }

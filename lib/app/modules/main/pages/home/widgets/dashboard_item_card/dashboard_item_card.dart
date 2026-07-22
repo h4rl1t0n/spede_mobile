@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
+import '../../../../../../models/setor_model.dart';
 import 'dashboard_item_card_store.dart';
 
 class DashboardCard extends StatefulWidget {
@@ -50,7 +51,7 @@ class _DashboardCardState extends State<DashboardCard> {
   }
 
   void _abrirModalFiltro() {
-    final opcoesDeFiltro = ['Todos (Detalhado)', 'Todos (Visão Geral)', ...items.map((e) => e.nomeSetor).toSet()];
+    final listaSetores = items.map((e) => e.setor).toList();
 
     showModalBottomSheet(
       context: context,
@@ -65,26 +66,52 @@ class _DashboardCardState extends State<DashboardCard> {
                 child: Text('Filtrar por Setor', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               ),
               const Divider(height: 1),
-              Expanded(
-                // Expanded ou shrinkWrap: true + container limitando altura caso tenham muitos setores
+              // Usei Flexible ao invés de Expanded para evitar crash de layout em BottomSheets com MainAxisSize.min
+              Flexible(
                 child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: opcoesDeFiltro.length,
+                  // O tamanho é 2 (os itens "Todos") + a quantidade de setores
+                  itemCount: 2 + listaSetores.length,
                   itemBuilder: (context, index) {
-                    final opcao = opcoesDeFiltro[index];
-                    final isSelected = store.selectedFilter == opcao;
+                    String tituloFiltro;
+                    String? subtitulo;
+
+                    // 2. Definimos as opções fixas vs setores
+                    if (index == 0) {
+                      tituloFiltro = 'Todos (Detalhado)';
+                    } else if (index == 1) {
+                      tituloFiltro = 'Todos (Visão Geral)';
+                    } else {
+                      // Subtraímos 2 do index para pegar o setor correto na lista
+                      final setor = listaSetores[index - 2];
+                      tituloFiltro = setor.sigla;
+                      subtitulo = setor.nome; // Adicionamos o nome completo aqui
+                    }
+
+                    final isSelected = store.selectedFilter == tituloFiltro;
 
                     return ListTile(
+                      dense: true,
                       title: Text(
-                        opcao.toUpperCase(),
+                        tituloFiltro.toUpperCase(),
                         style: TextStyle(
                           fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                           color: isSelected ? color : Colors.black87,
                         ),
                       ),
+
+                      subtitle: subtitulo != null
+                          ? Text(
+                              subtitulo,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: isSelected ? color.withValues(alpha: 0.8) : Colors.grey.shade600,
+                              ),
+                            )
+                          : null,
                       trailing: isSelected ? Icon(Icons.check_circle, color: color) : null,
                       onTap: () {
-                        store.setFilter(opcao);
+                        store.setFilter(tituloFiltro);
                         Navigator.pop(context);
                       },
                     );
@@ -189,7 +216,7 @@ class _DashboardCardState extends State<DashboardCard> {
                             spacing: 5,
                             children: [
                               Text(
-                                dashboard.nomeSetor.toUpperCase(),
+                                dashboard.setor.sigla.toUpperCase(),
                                 style: const TextStyle(fontWeight: FontWeight.bold),
                               ),
                               Text('($total)', style: const TextStyle(fontSize: 13)),
@@ -268,8 +295,8 @@ class DashboardItem {
 }
 
 class DashboardSetor {
-  final String nomeSetor;
+  final SetorModel setor;
   final List<DashboardItem>? dashboards;
 
-  const DashboardSetor({required this.nomeSetor, this.dashboards});
+  const DashboardSetor({required this.setor, this.dashboards});
 }

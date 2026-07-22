@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> with Messages, Loader {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final primary = colorScheme.primary;
+    // final primary = colorScheme.primary;
     final secondary = colorScheme.secondary;
     final tertiary = colorScheme.tertiary;
 
@@ -61,37 +61,57 @@ class _HomePageState extends State<HomePage> with Messages, Loader {
               return Center(child: Text(controller.errorMessage ?? 'Erro ao carregar os dados do dashboard'));
             }
 
-            return RefreshIndicator(
-              onRefresh: () async {
-                await controller.carregarResumoDashboard();
-              },
-              child: ListView(
-                shrinkWrap: true,
-                padding: const EdgeInsets.all(8),
-                children: [
-                  DashboardCard(
-                    title: 'Solicitações Recebidas Pendentes',
-                    value: resumo.totalRecebidos.toString(),
-                    icon: CupertinoIcons.tray_arrow_down,
-                    color: secondary,
-                    items: resumo.setoresRecebidos,
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Olá, ${usuarioLogado.firstName}👋',
+                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      Text('Bem-vindo ao sistema', style: TextStyle(color: Colors.grey.shade600)),
+                    ],
                   ),
-                  DashboardCard(
-                    title: 'Solicitações Enviadas Pendentes',
-                    value: resumo.totalEnviados.toString(),
-                    icon: CupertinoIcons.tray_arrow_up,
-                    color: tertiary,
-                    items: resumo.setoresEnviados,
+                ),
+                Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      await controller.carregarResumoDashboard();
+                    },
+                    child: ListView(
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.all(8),
+                      children: [
+                        DashboardCard(
+                          title: 'Solicitações Recebidas Pendentes',
+                          value: resumo.totalRecebidos.toString(),
+                          icon: CupertinoIcons.tray_arrow_down,
+                          color: secondary,
+                          items: resumo.setoresRecebidos,
+                        ),
+                        DashboardCard(
+                          title: 'Solicitações Enviadas Pendentes',
+                          value: resumo.totalEnviados.toString(),
+                          icon: CupertinoIcons.tray_arrow_up,
+                          color: tertiary,
+                          items: resumo.setoresEnviados,
+                        ),
+                        // DashboardCard(
+                        //   title: 'Eventos da Agenda',
+                        //   value: '256',
+                        //   icon: CupertinoIcons.calendar,
+                        //   color: primary,
+                        //   items: [DashboardSetor(nomeSetor: 'Deap')],
+                        // ),
+                      ],
+                    ),
                   ),
-                  DashboardCard(
-                    title: 'Eventos da Agenda',
-                    value: '256',
-                    icon: CupertinoIcons.calendar,
-                    color: primary,
-                    items: [DashboardSetor(nomeSetor: 'Deap')],
-                  ),
-                ],
-              ),
+                ),
+              ],
             );
           },
         ),

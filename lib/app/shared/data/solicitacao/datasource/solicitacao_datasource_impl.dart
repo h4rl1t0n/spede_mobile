@@ -9,6 +9,7 @@ import '../../../../enum/tipo_caixa.dart';
 import '../../../../enum/tipo_solicitacao.dart';
 import '../../../../mock/documentos.dart';
 import '../../../../models/documento_model.dart';
+import '../../../../models/setor_model.dart';
 import '../../../../modules/main/pages/home/widgets/dashboard_item_card/dashboard_item_card.dart';
 import '../dto/dashboard_resumo_model.dart';
 import 'solicitacao_datasource.dart';
@@ -47,11 +48,18 @@ class SolicitacaoDatasourceImpl extends SolicitacaoDatasource {
   }
 
   List<DashboardSetor> _agruparPorSetor(List<DocumentoModel> documentos) {
+    // Mapa para as contagens
     final contagemAgrupada = <String, Map<TipoSolicitacao, int>>{};
+    // Mapa auxiliar para guardar o objeto SetorModel inteiro usando a sigla como chave
+    final mapeamentoSetores = <String, SetorModel>{};
 
     for (var doc in documentos) {
-      final sigla = doc.setorModel.sigla;
+      final setor = doc.setorModel;
+      final sigla = setor.sigla;
       final tipo = doc.tipoSolicitacao;
+
+      // Guarda o objeto do setor no mapa auxiliar
+      mapeamentoSetores[sigla] = setor;
 
       contagemAgrupada.putIfAbsent(
         sigla,
@@ -62,22 +70,29 @@ class SolicitacaoDatasourceImpl extends SolicitacaoDatasource {
     }
 
     return contagemAgrupada.entries.map((entry) {
+      final sigla = entry.key;
       final contagens = entry.value;
+      // Recupera o objeto SetorModel completo usando a sigla
+      final setorCompleto = mapeamentoSetores[sigla]!;
 
       return DashboardSetor(
-        nomeSetor: entry.key,
+        setor: setorCompleto, // Passando o objeto inteiro aqui
         dashboards: [
           DashboardItem(
             'Assinatura',
             contagens[TipoSolicitacao.assinatura].toString(),
-            const Color(0xFFF44336),
-          ), // Colors.red
+            const Color(0xFFF44336), // Colors.red
+          ),
           DashboardItem(
             'Ciência',
             contagens[TipoSolicitacao.ciencia].toString(),
-            const Color(0xFFFF9800),
-          ), // Colors.orange
-          DashboardItem('Visto', contagens[TipoSolicitacao.visto].toString(), const Color(0xFF2196F3)), // Colors.blue
+            const Color(0xFFFF9800), // Colors.orange
+          ),
+          DashboardItem(
+            'Visto',
+            contagens[TipoSolicitacao.visto].toString(),
+            const Color(0xFF2196F3), // Colors.blue
+          ),
         ],
       );
     }).toList();
