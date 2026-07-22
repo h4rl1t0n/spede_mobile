@@ -8,6 +8,7 @@ import '../../core/ui/theme/styles/colors_app.dart';
 import '../../core/ui/theme/styles/text_styles.dart';
 import '../../mock/setores.dart';
 import '../../models/usuario_model.dart';
+import '../../shared/data/solicitacao/dto/dashboard_resumo_model.dart';
 import 'inicializar_controller.dart';
 
 class InicializarPage extends StatefulWidget {
@@ -178,7 +179,8 @@ class _InicializarPageState extends State<InicializarPage> with SingleTickerProv
     } else {
       await Future.delayed(const Duration(milliseconds: 3000));
       final usuario = await LocalStorageUtils.getUsuario();
-      await navigateToMain(usuario: usuario);
+      final resumo = await controller.carregarResumoDashboard();
+      await navigateToMain(usuario: usuario, resumo: resumo);
     }
   }
 
@@ -186,8 +188,8 @@ class _InicializarPageState extends State<InicializarPage> with SingleTickerProv
     await Modular.to.pushReplacementNamed(Routes.login);
   }
 
-  Future<void> navigateToMain({required UsuarioModel usuario}) async {
-    final arguments = {'usuario': usuario, 'setores': setores};
+  Future<void> navigateToMain({required UsuarioModel usuario, required DashboardResumoModel resumo}) async {
+    final arguments = {'usuario': usuario, 'setores': setores, 'resumo': resumo};
     await Modular.to.pushReplacementNamed(Routes.main, arguments: arguments);
   }
 }

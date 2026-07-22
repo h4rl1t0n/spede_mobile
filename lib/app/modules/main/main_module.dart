@@ -9,6 +9,8 @@ import '../core/core_module.dart';
 import 'main_controller.dart';
 import 'main_page.dart';
 import 'pages/agenda/agenda_controller.dart';
+import 'pages/home/home_controller.dart';
+import 'pages/home/widgets/dashboard_item_card/dashboard_item_card_store.dart';
 import 'pages/solicitacao/solicitacao_controller.dart';
 
 class MainModule extends Module {
@@ -21,8 +23,10 @@ class MainModule extends Module {
     i.addSingleton<SolicitacaoRepository>(SolicitacaoRepositoryImpl.new);
     i.addSingleton(SolicitacaoService.new);
 
+    i.addSingleton(HomeController.new);
     i.addSingleton(MainController.new);
     i.addSingleton(AgendaController.new);
+    i.add(DashboardItemCardStore.new);
     i.add(SolicitacaoController.new);
   }
 
@@ -31,7 +35,11 @@ class MainModule extends Module {
     r.child(
       Modular.initialRoute,
       child: (context) {
-        return MainPage(usuario: r.args.data['usuario'], setores: r.args.data['setores']);
+        return MainPage(
+          usuario: r.args.data['usuario'],
+          setores: r.args.data['setores'],
+          resumo: r.args.data['resumo'],
+        );
       },
     );
   }

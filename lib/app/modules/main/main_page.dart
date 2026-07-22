@@ -10,6 +10,7 @@ import '../../core/helpers/messages.dart';
 import '../../enum/tipo_caixa.dart';
 import '../../models/setor_model.dart';
 import '../../models/usuario_model.dart';
+import '../../shared/data/solicitacao/dto/dashboard_resumo_model.dart';
 import 'main_controller.dart';
 import 'pages/agenda/agenda_page.dart';
 import 'pages/home/home_page.dart';
@@ -18,9 +19,10 @@ import 'widgets/selecionar_setor_dialog/selecionar_setor_dialog.dart';
 
 class MainPage extends StatefulWidget {
   final UsuarioModel usuario;
+  final DashboardResumoModel resumo;
   final List<SetorModel> setores;
 
-  const MainPage({super.key, required this.usuario, required this.setores});
+  const MainPage({super.key, required this.usuario, required this.setores, required this.resumo});
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -29,6 +31,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> with Loader, Messages, SingleTickerProviderStateMixin {
   final controller = Modular.get<MainController>();
 
+  DashboardResumoModel get resumo => widget.resumo;
   UsuarioModel get usuario => widget.usuario;
   List<SetorModel>? get setores => widget.setores;
   late List<ReactionDisposer> disposers = [];
@@ -94,7 +97,7 @@ class _MainPageState extends State<MainPage> with Loader, Messages, SingleTicker
             controller: tabController,
             physics: const NeverScrollableScrollPhysics(),
             children: [
-              HomePage(usuarioLogado: controller.usuario ?? usuario),
+              HomePage(usuarioLogado: controller.usuario ?? usuario, resumo: resumo,),
               SolicitacaoPage(caixa: TipoCaixa.recebidas),
               SolicitacaoPage(caixa: TipoCaixa.enviadas),
               AgendaPage(),

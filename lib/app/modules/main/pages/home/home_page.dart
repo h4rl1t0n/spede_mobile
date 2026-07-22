@@ -1,20 +1,48 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:mobx/mobx.dart';
 
+import '../../../../core/helpers/loader.dart';
+import '../../../../core/helpers/messages.dart';
+import '../../../../enum/page_status.dart';
 import '../../../../models/usuario_model.dart';
-import 'widgets/dashboard_item_card.dart';
-import 'widgets/header_home_container.dart';
+import '../../../../shared/data/solicitacao/dto/dashboard_resumo_model.dart';
+import 'home_controller.dart';
+import 'widgets/dashboard_item_card/dashboard_item_card.dart';
 
 class HomePage extends StatefulWidget {
   final UsuarioModel usuarioLogado;
-  const HomePage({super.key, required this.usuarioLogado});
+  final DashboardResumoModel resumo;
+  const HomePage({super.key, required this.usuarioLogado, required this.resumo});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with Messages, Loader {
+  final controller = Modular.get<HomeController>();
+
   UsuarioModel get usuarioLogado => widget.usuarioLogado;
+  DashboardResumoModel get resumo => widget.resumo;
+
+  late List<ReactionDisposer> disposers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    controller.setResumo(value: resumo);
+    WidgetsBinding.instance.addPostFrameCallback((_) async => setupReactions());
+  }
+
+  @override
+  void dispose() {
+    for (var dispose in disposers) {
+      dispose();
+    }
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,70 +53,35 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            HeaderHomeContainer(usuarioLogado: usuarioLogado),
-            Expanded(
+        child: Observer(
+          builder: (context) {
+            final resumo = controller.resumo;
+
+            if (resumo == null) {
+              return Center(child: Text(controller.errorMessage ?? 'Erro ao carregar os dados do dashboard'));
+            }
+
+            return RefreshIndicator(
+              onRefresh: () async {
+                await controller.carregarResumoDashboard();
+              },
               child: ListView(
                 shrinkWrap: true,
                 padding: const EdgeInsets.all(8),
                 children: [
                   DashboardCard(
                     title: 'Solicitações Recebidas Pendentes',
-                    value: '964',
+                    value: resumo.totalRecebidos.toString(),
                     icon: CupertinoIcons.tray_arrow_down,
                     color: secondary,
-                    items: [
-                      DashboardSetor(
-                        nomeSetor: 'Setin',
-                        dashboards: [
-                          DashboardItem('Assinatura', '8', Colors.red),
-                          DashboardItem('Ciência', '9', Colors.orange),
-                          DashboardItem('Visto', '51', Colors.blue),
-                        ],
-                      ),
-                      DashboardSetor(
-                        nomeSetor: 'Diproj',
-                        dashboards: [
-                          DashboardItem('Assinatura', '7', Colors.red),
-                          DashboardItem('Ciência', '3', Colors.orange),
-                          DashboardItem('Visto', '20', Colors.blue),
-                        ],
-                      ),
-                      DashboardSetor(
-                        nomeSetor: 'get-iti',
-                        dashboards: [
-                          DashboardItem('Assinatura', '1', Colors.red),
-                          DashboardItem('Ciência', '5', Colors.orange),
-                          DashboardItem('Visto', '10', Colors.blue),
-                        ],
-                      ),
-                    ],
+                    items: resumo.setoresRecebidos,
                   ),
                   DashboardCard(
                     title: 'Solicitações Enviadas Pendentes',
-                    value: '1.314',
+                    value: resumo.totalEnviados.toString(),
                     icon: CupertinoIcons.tray_arrow_up,
                     color: tertiary,
-                    items: [
-                      DashboardSetor(
-                        nomeSetor: 'Segin',
-                        dashboards: [
-                          DashboardItem('Assinatura', '1', Colors.orange),
-                          DashboardItem('Ciência', '30', Colors.red),
-                          DashboardItem('Visto', '1.283', Colors.green),
-                        ],
-                      ),
-                      DashboardSetor(
-                        nomeSetor: 'Deas',
-                        dashboards: [
-                          DashboardItem('Assinatura', '1', Colors.orange),
-                          DashboardItem('Ciência', '30', Colors.red),
-                          DashboardItem('Visto', '1.283', Colors.green),
-                        ],
-                      ),
-                    ],
+                    items: resumo.setoresEnviados,
                   ),
                   DashboardCard(
                     title: 'Eventos da Agenda',
@@ -97,27 +90,36 @@ class _HomePageState extends State<HomePage> {
                     color: primary,
                     items: [DashboardSetor(nomeSetor: 'Deap')],
                   ),
-                  // Padding(
-                  //   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  //   child: Text('Ações rápidas', style: Theme.of(context).textTheme.titleLarge),
-                  // ),
-                  // SingleChildScrollView(
-                  //   scrollDirection: Axis.horizontal,
-                  //   padding: const EdgeInsets.all(16),
-                  //   child: Row(
-                  //     spacing: 10,
-                  //     children: [
-                  //       ButtonAction(icon: Icons.description_rounded, label: 'Solicitações Enviadas'),
-                  //       ButtonAction(icon: Icons.chat_rounded, label: 'Solicitações Enviadas'),
-                  //     ],
-                  //   ),
-                  // ),
                 ],
               ),
-            ),
-          ],
+            );
+          },
         ),
       ),
     );
+  }
+
+  void setupReactions() {
+    disposers = [
+      reaction((_) => controller.status, (status) {
+        switch (status) {
+          case PageStatus.initial:
+            break;
+          case PageStatus.loading:
+            showLoader();
+            break;
+          case PageStatus.loaded:
+            hideLoader();
+            break;
+          case PageStatus.success:
+            hideLoader();
+            break;
+          case PageStatus.error:
+            hideLoader();
+            showError(controller.errorMessage ?? 'Erro ao carregar os dados do dashboard');
+            break;
+        }
+      }),
+    ];
   }
 }
