@@ -30,9 +30,15 @@ class ItemSolicitacao extends StatelessWidget {
           child: Row(
             children: [
               if (controller.modoSelecao) ...[
-                IconButton(
-                  onPressed: toggleSelecionado,
-                  icon: Icon(isSelecionado ? Icons.radio_button_on : Icons.radio_button_off),
+                Checkbox(
+                  value: isSelecionado,
+                  onChanged: (bool? value) {
+                    toggleSelecionado();
+                  },
+                  activeColor: Theme.of(context).colorScheme.primary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5), // Deixa um pouco arredondado
+                  ),
                 ),
               ],
               Flexible(

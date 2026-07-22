@@ -1,7 +1,6 @@
 import 'package:mobx/mobx.dart';
 
 import '../../../../core/result/result_handler.dart';
-import '../../../../enum/acao_solicitacao.dart';
 import '../../../../enum/page_status.dart';
 import '../../../../enum/tipo_caixa.dart';
 import '../../../../enum/tipo_solicitacao.dart';
@@ -16,10 +15,10 @@ abstract class SolicitacaoControllerBase with Store {
   final SolicitacaoService service;
 
   @observable
-  AcaoSolicitacao? acao;
+  var status = PageStatus.initial;
 
   @observable
-  var status = PageStatus.initial;
+  var messageLoader = '';
 
   @observable
   var solicitacoes = ObservableList<DocumentoModel>();
@@ -37,18 +36,22 @@ abstract class SolicitacaoControllerBase with Store {
 
   @action
   Future<void> carregarSolicitacoes(TipoCaixa caixa) async {
-    errorMessage = null;
     status = PageStatus.loading;
+    messageLoader = 'Carregando ${caixa.descricao.toLowerCase()}...';
+    errorMessage = null;
+
     await fetch(
       service.carregarTodasSolicitacoes(caixa: caixa),
       onSuccess: (result) {
         solicitacoes.clear();
         solicitacoes.addAll(result);
         status = PageStatus.loaded;
+        messageLoader = '';
       },
       onError: (message) {
         status = PageStatus.error;
         errorMessage = message;
+        messageLoader = '';
       },
     );
   }

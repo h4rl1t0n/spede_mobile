@@ -1,7 +1,7 @@
 enum TipoSolicitacao {
   visto('Visto'),
   assinatura('Assinatura'),
-  ciencia('Ciência');
+  ciencia('Ciencia');
 
   final String name;
   const TipoSolicitacao(this.name);

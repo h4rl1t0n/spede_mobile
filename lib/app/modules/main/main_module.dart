@@ -12,6 +12,7 @@ import 'pages/agenda/agenda_controller.dart';
 import 'pages/home/home_controller.dart';
 import 'pages/home/widgets/dashboard_item_card/dashboard_item_card_store.dart';
 import 'pages/solicitacao/solicitacao_controller.dart';
+import 'pages/solicitacao/submodules/decidir_solicitacao/decidir_solicitacao_module.dart';
 
 class MainModule extends Module {
   @override
@@ -23,9 +24,10 @@ class MainModule extends Module {
     i.addSingleton<SolicitacaoRepository>(SolicitacaoRepositoryImpl.new);
     i.addSingleton(SolicitacaoService.new);
 
-    i.addSingleton(HomeController.new);
     i.addSingleton(MainController.new);
-    i.addSingleton(AgendaController.new);
+
+    i.add(HomeController.new);
+    i.add(AgendaController.new);
     i.add(DashboardItemCardStore.new);
     i.add(SolicitacaoController.new);
   }
@@ -42,5 +44,6 @@ class MainModule extends Module {
         );
       },
     );
+    r.module('/decidir-solicitacao/', module: DecidirSolicitacaoModule());
   }
 }

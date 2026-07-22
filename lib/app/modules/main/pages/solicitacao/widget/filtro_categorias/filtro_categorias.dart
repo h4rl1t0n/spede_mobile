@@ -12,22 +12,22 @@ class FiltroCategorias extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final total = categorias.values.fold(0, (soma, valor) => soma + valor);
+    // final total = categorias.values.fold(0, (soma, valor) => soma + valor);
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
-          CategoriaChip(
-            label: 'Todos',
-            count: total,
-            isSelected: selecionada == null,
-            onTap: () {},
+          // CategoriaChip(
+          //   label: 'Todos',
+          //   count: total,
+          //   isSelected: selecionada == null,
+          //   onTap: () {},
 
-            // onTap: () => onSelecionada(null),
-          ),
-          SizedBox(width: 6),
+          //   // onTap: () => onSelecionada(null),
+          // ),
+          //SizedBox(width: 6),
           ...categorias.entries.map((entry) {
             final categoria = entry.key;
             final label = categoria.name;

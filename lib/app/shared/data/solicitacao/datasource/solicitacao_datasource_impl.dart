@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:multiple_result/multiple_result.dart';
 
@@ -8,9 +9,9 @@ import '../../../../core/rest_client/error/custom_message_error.dart';
 import '../../../../enum/tipo_caixa.dart';
 import '../../../../enum/tipo_solicitacao.dart';
 import '../../../../mock/documentos.dart';
+import '../../../../models/dashboard/dashboard_item.dart';
+import '../../../../models/dashboard/dashboard_setor.dart';
 import '../../../../models/documento_model.dart';
-import '../../../../models/setor_model.dart';
-import '../../../../modules/main/pages/home/widgets/dashboard_item_card/dashboard_item_card.dart';
 import '../dto/dashboard_resumo_model.dart';
 import 'solicitacao_datasource.dart';
 
@@ -33,11 +34,10 @@ class SolicitacaoDatasourceImpl extends SolicitacaoDatasource {
       final recebidas = documentos.where((e) => e.tipoCaixa == .recebidas).toList();
       final enviadas = documentos.where((e) => e.tipoCaixa == .enviadas).toList();
 
-      // 3. Sucesso absoluto! Agrupamos os dados e retornamos nosso Modelo Bonitão
       final resumo = DashboardResumoModel(
-        setoresRecebidos: _agruparPorSetor(recebidas),
+        setoresRecebidos: agruparPorSetor(recebidas),
+        setoresEnviados: agruparPorSetor(enviadas),
         totalRecebidos: recebidas.length,
-        setoresEnviados: _agruparPorSetor(enviadas),
         totalEnviados: enviadas.length,
       );
 
@@ -47,52 +47,22 @@ class SolicitacaoDatasourceImpl extends SolicitacaoDatasource {
     }
   }
 
-  List<DashboardSetor> _agruparPorSetor(List<DocumentoModel> documentos) {
-    // Mapa para as contagens
-    final contagemAgrupada = <String, Map<TipoSolicitacao, int>>{};
-    // Mapa auxiliar para guardar o objeto SetorModel inteiro usando a sigla como chave
-    final mapeamentoSetores = <String, SetorModel>{};
+  List<DashboardSetor> agruparPorSetor(List<DocumentoModel> documentos) {
+    final group = groupBy(documentos, (doc) => doc.setor.sigla);
 
-    for (var doc in documentos) {
-      final setor = doc.setorModel;
-      final sigla = setor.sigla;
-      final tipo = doc.tipoSolicitacao;
-
-      // Guarda o objeto do setor no mapa auxiliar
-      mapeamentoSetores[sigla] = setor;
-
-      contagemAgrupada.putIfAbsent(
-        sigla,
-        () => {TipoSolicitacao.assinatura: 0, TipoSolicitacao.ciencia: 0, TipoSolicitacao.visto: 0},
-      );
-
-      contagemAgrupada[sigla]![tipo] = (contagemAgrupada[sigla]![tipo] ?? 0) + 1;
-    }
-
-    return contagemAgrupada.entries.map((entry) {
-      final sigla = entry.key;
-      final contagens = entry.value;
-      // Recupera o objeto SetorModel completo usando a sigla
-      final setorCompleto = mapeamentoSetores[sigla]!;
+    return group.entries.map((entry) {
+      final solicitacoes = entry.value;
+      final setor = solicitacoes.first.setor;
+      int contar(TipoSolicitacao tipo) {
+        return solicitacoes.where((doc) => doc.tipoSolicitacao == tipo).length;
+      }
 
       return DashboardSetor(
-        setor: setorCompleto, // Passando o objeto inteiro aqui
+        setor: setor,
         dashboards: [
-          DashboardItem(
-            'Assinatura',
-            contagens[TipoSolicitacao.assinatura].toString(),
-            const Color(0xFFF44336), // Colors.red
-          ),
-          DashboardItem(
-            'Ciência',
-            contagens[TipoSolicitacao.ciencia].toString(),
-            const Color(0xFFFF9800), // Colors.orange
-          ),
-          DashboardItem(
-            'Visto',
-            contagens[TipoSolicitacao.visto].toString(),
-            const Color(0xFF2196F3), // Colors.blue
-          ),
+          DashboardItem(TipoSolicitacao.assinatura, contar(TipoSolicitacao.assinatura), const Color(0xFFF44336)),
+          DashboardItem(TipoSolicitacao.ciencia, contar(TipoSolicitacao.ciencia), const Color(0xFFFF9800)),
+          DashboardItem(TipoSolicitacao.visto, contar(TipoSolicitacao.visto), const Color(0xFF2196F3)),
         ],
       );
     }).toList();

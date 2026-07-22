@@ -29,7 +29,5 @@ class Routes {
   static String get main => '/main/';
   static String get perfil => '/perfil/';
   static String get notificacao => '/notificacao/';
-
-  // static String get agenda => '/agenda/';
-  // static String get solicitacao => '/solicitacao/';
+  static String get decidirSolicitacao => '${main}decidir-solicitacao/';
 }

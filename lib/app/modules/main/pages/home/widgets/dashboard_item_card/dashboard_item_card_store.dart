@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 import 'package:mobx/mobx.dart';
 
+import '../../../../../../models/dashboard/dashboard_item.dart';
+import '../../../../../../models/dashboard/dashboard_setor.dart';
 import '../../../../../../models/setor_model.dart';
-import 'dashboard_item_card.dart';
 
 part 'dashboard_item_card_store.g.dart';
 
@@ -35,29 +36,26 @@ abstract class DashboardItemCardStoreBase with Store {
 
     if (filtro == 'Todos (Detalhado)') {
       return items;
-    } else if (filtro == 'Todos (Visão Geral)') {
+    }
+
+    if (filtro == 'Todos (Visão Geral)') {
       if (items.isEmpty) return [];
 
-      final Map<String, int> somaAgrupada = {};
-      final Map<String, Color> mapaDeCores = {};
+      final dashboards = items.expand((setor) => setor.dashboards ?? <DashboardItem>[]).toList();
+      final group = groupBy(dashboards, (dash) => dash.solicitacao);
 
-      for (var dashSetor in items) {
-        for (var dash in (dashSetor.dashboards ?? <DashboardItem>[])) {
-          final valorLimpo = int.tryParse(dash.value.replaceAll('.', '')) ?? 0;
-          somaAgrupada[dash.title] = (somaAgrupada[dash.title] ?? 0) + valorLimpo;
-          mapaDeCores[dash.title] = dash.color; // Salva a cor original
-        }
-      }
-
-      final listaAgrupada = somaAgrupada.entries.map((entry) {
-        return DashboardItem(entry.key, entry.value.toString(), mapaDeCores[entry.key] ?? Colors.grey);
+      final listaAgrupada = group.entries.map((entry) {
+        final solicitacao = entry.key;
+        final listaDashes = entry.value;
+        final totalSomado = listaDashes.map((d) => d.value).sum;
+        final cor = listaDashes.first.color;
+        return DashboardItem(solicitacao, totalSomado, cor);
       }).toList();
 
       final setorTotal = SetorModel(id: 0, sigla: 'GERAL', nome: 'Total Geral');
-
       return [DashboardSetor(setor: setorTotal, dashboards: listaAgrupada)];
-    } else {
-      return items.where((e) => e.setor.sigla == filtro).toList();
     }
+
+    return items.where((e) => e.setor.sigla == filtro).toList();
   }
 }

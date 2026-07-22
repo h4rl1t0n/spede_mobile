@@ -41,7 +41,6 @@ class _PerfilPageState extends State<PerfilPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('Perfil', style: TextStyle(color: Colors.white)),
-        centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
         flexibleSpace: Container(
           decoration: BoxDecoration(

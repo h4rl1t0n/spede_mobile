@@ -93,15 +93,20 @@ class _MainPageState extends State<MainPage> with Loader, Messages, SingleTicker
             ],
           ),
 
-          body: TabBarView(
-            controller: tabController,
-            physics: const NeverScrollableScrollPhysics(),
-            children: [
-              HomePage(usuarioLogado: controller.usuario ?? usuario, resumo: resumo,),
-              SolicitacaoPage(caixa: TipoCaixa.recebidas),
-              SolicitacaoPage(caixa: TipoCaixa.enviadas),
-              AgendaPage(),
-            ],
+          body: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(image: const AssetImage('assets/images/logo_tce.png'), fit: BoxFit.cover),
+            ),
+            child: TabBarView(
+              controller: tabController,
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
+                HomePage(usuarioLogado: controller.usuario ?? usuario, resumo: resumo),
+                SolicitacaoPage(caixa: TipoCaixa.recebidas),
+                SolicitacaoPage(caixa: TipoCaixa.enviadas),
+                AgendaPage(),
+              ],
+            ),
           ),
           bottomNavigationBar: NavigationBar(
             selectedIndex: page,
@@ -128,7 +133,6 @@ class _MainPageState extends State<MainPage> with Loader, Messages, SingleTicker
                 label: 'Solic. Enviadas',
                 tooltip: 'Solicitações Enviadas',
               ),
-
               NavigationDestination(
                 icon: Icon(Icons.calendar_month_outlined),
                 selectedIcon: Icon(Icons.calendar_month),

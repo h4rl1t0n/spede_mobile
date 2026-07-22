@@ -50,138 +50,136 @@ class _SolicitacaoPageState extends State<SolicitacaoPage> with Loader, Messages
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Observer(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Observer(
+          builder: (context) {
+            final lista = controller.solicitacoes;
+
+            return Visibility(
+              visible: lista.isNotEmpty,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                child: Row(
+                  spacing: 8,
+                  children: [
+                    Icon(Icons.business_center, color: context.colors.primary),
+                    Text(
+                      '$descricao (${lista.length})',
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: Observer(
             builder: (context) {
+              final categoriaSelecionada = controller.categoriaSelecionada;
+              final categorias = controller.contarCategorias;
               final lista = controller.solicitacoes;
 
               return Visibility(
                 visible: lista.isNotEmpty,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-                  child: Row(
-                    spacing: 8,
-                    children: [
-                      Icon(Icons.business_center, color: context.colors.primary),
-                      Text(
-                        '$descricao (${lista.length})',
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                      ),
-                    ],
-                  ),
+                child: FiltroCategorias(
+                  categorias: categorias,
+                  selecionada: categoriaSelecionada,
+                  onSelecionada: controller.alterarCategoria,
                 ),
               );
             },
           ),
+        ),
 
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Observer(
-              builder: (context) {
-                final categoriaSelecionada = controller.categoriaSelecionada;
-                final categorias = controller.contarCategorias;
-                final lista = controller.solicitacoes;
+        Expanded(
+          child: Observer(
+            builder: (context) {
+              final lista = controller.filtrarPorCategoria;
+              final status = controller.status;
+              final categoriaSelecionada = controller.categoriaSelecionada;
 
-                return Visibility(
-                  visible: lista.isNotEmpty,
-                  child: FiltroCategorias(
-                    categorias: categorias,
-                    selecionada: categoriaSelecionada,
-                    onSelecionada: controller.alterarCategoria,
-                  ),
-                );
-              },
-            ),
-          ),
+              if (lista.isEmpty && status == PageStatus.loading) {
+                return SizedBox.fromSize();
+              }
 
-          Expanded(
-            child: Observer(
-              builder: (context) {
-                final lista = controller.filtrarPorCategoria;
-                final status = controller.status;
-                final categoriaSelecionada = controller.categoriaSelecionada;
+              if (lista.isEmpty) {
+                return SemSocitacao(caixa: caixa, solicitacao: categoriaSelecionada);
+              }
 
-                if (lista.isEmpty && status == PageStatus.loading) {
-                  return Center(child: Text('Carregando ${descricao.toLowerCase()}...'));
-                }
-
-                if (lista.isEmpty) {
-                  return SemSocitacao(caixa: caixa, solicitacao: categoriaSelecionada);
-                }
-
-                return RefreshIndicator.adaptive(
-                  onRefresh: () async {
-                    await controller.carregarSolicitacoes(caixa);
+              return RefreshIndicator.adaptive(
+                onRefresh: () async {
+                  await controller.carregarSolicitacoes(caixa);
+                },
+                child: ListView.separated(
+                  padding: const EdgeInsets.all(12).copyWith(bottom: 20),
+                  itemCount: lista.length,
+                  separatorBuilder: (_, _) => const SizedBox(height: 12),
+                  itemBuilder: (_, index) {
+                    final item = lista[index];
+                    return ItemSolicitacao(solicitacao: item, controller: controller);
                   },
-                  child: ListView.separated(
-                    padding: const EdgeInsets.all(12).copyWith(bottom: 20),
-                    itemCount: lista.length,
-                    separatorBuilder: (_, _) => const SizedBox(height: 12),
-                    itemBuilder: (_, index) {
-                      final item = lista[index];
-                      return ItemSolicitacao(solicitacao: item, controller: controller);
-                    },
-                  ),
-                );
-              },
-            ),
+                ),
+              );
+            },
           ),
-        ],
-      ),
-      bottomNavigationBar: Observer(
-        builder: (context) {
-          final selecionados = controller.selecionados;
+        ),
 
-          if (selecionados.isEmpty) return SizedBox.shrink();
+        Observer(
+          builder: (context) {
+            final selecionados = controller.selecionados;
 
-          return Container(
-            decoration: BoxDecoration(
-              border: Border(top: BorderSide(color: Colors.grey.shade400, width: .5)),
-            ),
-            child: BottomAppBar(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
-              color: Colors.white,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        caixa.descricao,
-                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, letterSpacing: 1),
-                      ),
-                      Row(
-                        spacing: 4,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(Icons.business_center, size: 15),
-                          Text(
-                            '${selecionados.length} '
-                            '${selecionados.length == 1 ? 'solicitação' : 'solicitações'} '
-                            'de ${selecionados.first.tipoSolicitacao.name.toLowerCase()}',
-                            style: const TextStyle(fontSize: 14, fontFamily: 'Cabin'),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: abrirAcoes,
-                    icon: const Icon(Icons.check_circle),
-                    label: const Text('Concluir'),
-                  ),
-                ],
+            if (selecionados.isEmpty) return SizedBox.shrink();
+
+            return Container(
+              decoration: BoxDecoration(
+                border: Border(bottom: BorderSide(color: Colors.grey.shade400, width: .5)),
               ),
-            ),
-          );
-        },
-      ),
+              child: BottomAppBar(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
+                color: Colors.white,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          caixa.descricao,
+                          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, letterSpacing: 1),
+                        ),
+                        Row(
+                          spacing: 4,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.business_center, size: 15),
+                            Text(
+                              '${selecionados.length} '
+                              '${selecionados.length == 1 ? 'item selecionado' : 'itens selecionados'}',
+                              style: const TextStyle(fontSize: 14, fontFamily: 'Cabin'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    ElevatedButton.icon(
+                      onPressed: abrirAcoes,
+                      icon: const Icon(Icons.check_circle),
+                      label: const Text('Concluir'),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 
@@ -192,7 +190,7 @@ class _SolicitacaoPageState extends State<SolicitacaoPage> with Loader, Messages
           case PageStatus.initial:
             break;
           case PageStatus.loading:
-            showLoader();
+            showLoader(messageLoader: controller.messageLoader);
             break;
           case PageStatus.loaded:
             hideLoader();

@@ -1,9 +1,8 @@
-import '../../../../modules/main/pages/home/widgets/dashboard_item_card/dashboard_item_card.dart';
+import '../../../../models/dashboard/dashboard_setor.dart';
 
 class DashboardResumoModel {
   final List<DashboardSetor> setoresRecebidos;
   final int totalRecebidos;
-
   final List<DashboardSetor> setoresEnviados;
   final int totalEnviados;
 

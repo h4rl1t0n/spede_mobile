@@ -7,6 +7,8 @@ import 'package:mobx/mobx.dart';
 import '../../../../core/helpers/loader.dart';
 import '../../../../core/helpers/messages.dart';
 import '../../../../enum/page_status.dart';
+import '../../../../mock/setores.dart';
+import '../../../../models/dashboard/dashboard_setor.dart';
 import '../../../../models/usuario_model.dart';
 import '../../../../shared/data/solicitacao/dto/dashboard_resumo_model.dart';
 import 'home_controller.dart';
@@ -47,74 +49,77 @@ class _HomePageState extends State<HomePage> with Messages, Loader {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    // final primary = colorScheme.primary;
+    final primary = colorScheme.primary;
     final secondary = colorScheme.secondary;
     final tertiary = colorScheme.tertiary;
 
-    return Scaffold(
-      body: SafeArea(
-        child: Observer(
-          builder: (context) {
-            final resumo = controller.resumo;
+    return SafeArea(
+      child: Observer(
+        builder: (context) {
+          final resumo = controller.resumo;
 
-            if (resumo == null) {
-              return Center(child: Text(controller.errorMessage ?? 'Erro ao carregar os dados do dashboard'));
-            }
+          if (resumo == null) {
+            return Center(child: Text(controller.errorMessage ?? 'Erro ao carregar os dados do dashboard'));
+          }
 
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 10),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Olá, ${usuarioLogado.firstName}',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                    ),
+                    Text('Bem-vindo ao sistema', style: TextStyle(color: Colors.grey.shade600)),
+                  ],
+                ),
+              ),
+
+              SizedBox(height: 10),
+
+              Expanded(
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    await controller.carregarResumoDashboard();
+                  },
+                  child: ListView(
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     children: [
-                      Text(
-                        'Olá, ${usuarioLogado.firstName}👋',
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+                      DashboardCard(
+                        title: 'Solicitações Recebidas',
+                        value: resumo.totalRecebidos.toString(),
+                        icon: CupertinoIcons.tray_arrow_down,
+                        color: secondary,
+                        items: resumo.setoresRecebidos,
                       ),
-                      Text('Bem-vindo ao sistema', style: TextStyle(color: Colors.grey.shade600)),
+                      DashboardCard(
+                        title: 'Solicitações Enviadas',
+                        value: resumo.totalEnviados.toString(),
+                        icon: CupertinoIcons.tray_arrow_up,
+                        color: tertiary,
+                        items: resumo.setoresEnviados,
+                      ),
+                      DashboardCard(
+                        title: 'Eventos da Agenda',
+                        value: '26',
+                        icon: CupertinoIcons.calendar,
+                        color: primary,
+                        items: [DashboardSetor(setor: setores.first, dashboards: [])],
+                      ),
                     ],
                   ),
                 ),
-                Expanded(
-                  child: RefreshIndicator(
-                    onRefresh: () async {
-                      await controller.carregarResumoDashboard();
-                    },
-                    child: ListView(
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.all(8),
-                      children: [
-                        DashboardCard(
-                          title: 'Solicitações Recebidas Pendentes',
-                          value: resumo.totalRecebidos.toString(),
-                          icon: CupertinoIcons.tray_arrow_down,
-                          color: secondary,
-                          items: resumo.setoresRecebidos,
-                        ),
-                        DashboardCard(
-                          title: 'Solicitações Enviadas Pendentes',
-                          value: resumo.totalEnviados.toString(),
-                          icon: CupertinoIcons.tray_arrow_up,
-                          color: tertiary,
-                          items: resumo.setoresEnviados,
-                        ),
-                        // DashboardCard(
-                        //   title: 'Eventos da Agenda',
-                        //   value: '256',
-                        //   icon: CupertinoIcons.calendar,
-                        //   color: primary,
-                        //   items: [DashboardSetor(nomeSetor: 'Deap')],
-                        // ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

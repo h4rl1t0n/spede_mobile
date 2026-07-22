@@ -21,7 +21,7 @@ class ThemeConfig {
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         scrolledUnderElevation: 0,
-        centerTitle: false,
+        centerTitle: true,
         iconTheme: IconThemeData(color: colorScheme.surface),
         titleTextStyle: TextStyle(
           fontFamily: 'Cabin',
@@ -131,7 +131,6 @@ class ThemeConfig {
             color: states.contains(WidgetState.selected) ? colorScheme.primary : colorScheme.onSurfaceVariant,
           );
         }),
-        
       ),
 
       dialogTheme: DialogThemeData(

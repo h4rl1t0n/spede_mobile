@@ -101,14 +101,13 @@ class _InicializarPageState extends State<InicializarPage> with SingleTickerProv
                 decoration: BoxDecoration(shape: BoxShape.circle, color: colors.secondary.withValues(alpha: 0.05)),
               ),
             ),
-            // Conteúdo principal centralizado
+
             Center(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // Bloco do Logotipo com animação fluida de escala
                     AnimatedBuilder(
                       animation: _animationController,
                       builder: (context, child) {
@@ -116,8 +115,9 @@ class _InicializarPageState extends State<InicializarPage> with SingleTickerProv
                       },
                       child: Hero(tag: 'app_logo', child: logo),
                     ),
-                    const SizedBox(height: 30),
-                    // Mensagem de Status com Fade animado
+
+                    const SizedBox(height: 15),
+
                     FadeTransition(
                       opacity: _fadeAnimation,
                       child: Column(
@@ -130,7 +130,6 @@ class _InicializarPageState extends State<InicializarPage> with SingleTickerProv
                               letterSpacing: -0.4,
                             ),
                           ),
-                          const SizedBox(height: 8),
                           Text(
                             'Por favor, aguarde um instante...',
                             textAlign: TextAlign.center,
@@ -144,18 +143,8 @@ class _InicializarPageState extends State<InicializarPage> with SingleTickerProv
                       ),
                     ),
                     const SizedBox(height: 20),
-                    // Barra de Progresso Moderna com bordas totalmente arredondadas
-                    SizedBox(
-                      width: 160,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(100),
-                        child: LinearProgressIndicator(
-                          minHeight: 5,
-                          color: colors.primary,
-                          backgroundColor: colors.primary.withValues(alpha: 0.08),
-                        ),
-                      ),
-                    ),
+
+                    CircularProgressIndicator(color: colors.primary),
                   ],
                 ),
               ),

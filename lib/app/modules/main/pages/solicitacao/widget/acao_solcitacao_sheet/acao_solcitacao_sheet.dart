@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
+import '../../../../../../app_module.dart';
+import '../../../../../../core/ui/theme/styles/button_styles.dart';
 import '../../../../../../enum/acao_solicitacao.dart';
 import '../../../../../../enum/tipo_caixa.dart';
-import '../../submodules/decidir_solicitacao/decidir_solicitacao_page.dart';
 import '../../solicitacao_controller.dart';
-import 'action_button.dart';
 import 'item_solicitacao_sheet.dart';
 
 class AcaoSolcitacaoSheet extends StatefulWidget {
@@ -98,52 +99,39 @@ class _AcaoSolcitacaoSheetState extends State<AcaoSolcitacaoSheet> {
                       ),
                     ),
 
+                    const SizedBox(height: 8),
+                    Divider(indent: 20, endIndent: 20, color: Colors.grey.shade400),
+                    const SizedBox(height: 4),
+
                     Container(
-                      padding: EdgeInsets.only(top: 10),
-                      decoration: BoxDecoration(
-                        border: Border(top: BorderSide(color: Colors.grey.shade300)),
-                      ),
+                      decoration: BoxDecoration(),
                       child: Row(
-                        spacing: 5,
+                        spacing: 10,
+                        mainAxisAlignment: .center,
                         children: [
                           Expanded(
-                            child: ActionButton(
-                              icon: controller.acao == .atender ? Icons.radio_button_on : Icons.radio_button_off,
-                              title: 'Atender solicitação',
-                              subtitle: 'Abrir o documento para analisar e registrar a decisão.',
-                              isNull: controller.acao == null,
-                              onTap: () {
-                                controller.acao = .atender;
+                            child: ElevatedButton.icon(
+                              style: ButtonStyles.instance.secondary,
+                              icon: Icon(Icons.check_circle),
+                              label: Text('Atender'.toUpperCase()),
+                              onPressed: () async {
+                                await toRouteDecidirSolicitacaoPage(acao: .atender);
                               },
                             ),
                           ),
                           Expanded(
-                            child: ActionButton(
-                              icon: controller.acao == .rejeitar ? Icons.radio_button_on : Icons.radio_button_off,
-                              title: 'Rejeitar solicitação',
-                              subtitle: 'Recusar a solicitação e informar o motivo da rejeição.',
-                              isNull: controller.acao == null,
-                              onTap: () {
-                                controller.acao = .rejeitar;
+                            child: ElevatedButton.icon(
+                              style: ButtonStyles.instance.secondary.copyWith(
+                                backgroundColor: WidgetStatePropertyAll(colorScheme.error),
+                              ),
+                              icon: Icon(Icons.cancel),
+                              label: Text('Rejeitar'.toUpperCase()),
+                              onPressed: () async {
+                                await toRouteDecidirSolicitacaoPage(acao: .rejeitar);
                               },
                             ),
                           ),
                         ],
-                      ),
-                    ),
-
-                    const SizedBox(height: 10),
-
-                    SizedBox(
-                      width: double.infinity,
-                      child: Observer(
-                        builder: (context) {
-                          final acao = controller.acao;
-                          return ElevatedButton(
-                            onPressed: acao == null ? null : () async => toDecidirSolicitacaoPage(acao: acao),
-                            child: Text(textButton),
-                          );
-                        },
                       ),
                     ),
                   ],
@@ -156,23 +144,12 @@ class _AcaoSolcitacaoSheetState extends State<AcaoSolcitacaoSheet> {
     );
   }
 
-  String get textButton {
-    final acao = controller.acao;
+  Future<void> toRouteDecidirSolicitacaoPage({required AcaoSolicitacao acao}) async {
+    Modular.to.pop(acao);
 
-    if (acao == null) return 'Selecione uma opção';
-    return acao == .atender ? 'Atender' : 'Rejeitar';
-  }
-
-  Future<void> toDecidirSolicitacaoPage({required AcaoSolicitacao acao}) async {
-    Navigator.pop(context, acao);
-
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) {
-          return DecidirSolicitacaoPage(controller: controller);
-        },
-      ),
+    await Modular.to.pushNamed(
+      Routes.decidirSolicitacao,
+      arguments: {'acao': acao, 'selecionados': controller.selecionados},
     );
   }
 }

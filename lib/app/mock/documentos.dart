@@ -22,7 +22,7 @@ final documentos = <DocumentoModel>[
     dias: 2,
     dataSolicitacao: DateTime(2026, 6, 10, 9, 0),
     dataAtendimento: DateTime(2026, 6, 12, 10, 0),
-    setorModel: setores[0],
+    setor: setores[0],
   ),
   DocumentoModel(
     id: '2',
@@ -37,7 +37,7 @@ final documentos = <DocumentoModel>[
     dias: 0,
     dataSolicitacao: DateTime(2026, 6, 15, 14, 0),
     dataAtendimento: DateTime(2026, 6, 15, 15, 0),
-    setorModel: setores[0],
+    setor: setores[0],
   ),
   DocumentoModel(
     id: '3',
@@ -52,7 +52,7 @@ final documentos = <DocumentoModel>[
     dias: 1,
     dataSolicitacao: DateTime(2026, 6, 20, 10, 30),
     dataAtendimento: DateTime(2026, 6, 21, 11, 0),
-    setorModel: setores[0],
+    setor: setores[0],
   ),
   DocumentoModel(
     id: '4',
@@ -67,7 +67,7 @@ final documentos = <DocumentoModel>[
     dias: 5,
     dataSolicitacao: DateTime(2026, 6, 25, 8, 0),
     dataAtendimento: DateTime(2026, 6, 30, 9, 0),
-    setorModel: setores[0],
+    setor: setores[0],
   ),
   DocumentoModel(
     id: '5',
@@ -82,7 +82,7 @@ final documentos = <DocumentoModel>[
     dias: 10,
     dataSolicitacao: DateTime(2026, 7, 1, 14, 0),
     dataAtendimento: DateTime(2026, 7, 11, 16, 0),
-    setorModel: setores[0],
+    setor: setores[0],
   ),
   DocumentoModel(
     id: '6',
@@ -97,7 +97,7 @@ final documentos = <DocumentoModel>[
     dias: 2,
     dataSolicitacao: DateTime(2026, 7, 5, 9, 30),
     dataAtendimento: DateTime(2026, 7, 7, 10, 0),
-    setorModel: setores[0],
+    setor: setores[0],
   ),
   DocumentoModel(
     id: '7',
@@ -112,7 +112,7 @@ final documentos = <DocumentoModel>[
     dias: 1,
     dataSolicitacao: DateTime(2026, 7, 10, 11, 0),
     dataAtendimento: DateTime(2026, 7, 11, 11, 30),
-    setorModel: setores[0],
+    setor: setores[0],
   ),
   DocumentoModel(
     id: '8',
@@ -127,7 +127,7 @@ final documentos = <DocumentoModel>[
     dias: 0,
     dataSolicitacao: DateTime(2026, 7, 15, 14, 20),
     dataAtendimento: DateTime(2026, 7, 15, 16, 0),
-    setorModel: setores[0],
+    setor: setores[0],
   ),
   DocumentoModel(
     id: '9',
@@ -142,7 +142,7 @@ final documentos = <DocumentoModel>[
     dias: 4,
     dataSolicitacao: DateTime(2026, 7, 20, 10, 0),
     dataAtendimento: DateTime(2026, 7, 24, 15, 0),
-    setorModel: setores[0],
+    setor: setores[0],
   ),
   DocumentoModel(
     id: '10',
@@ -157,7 +157,7 @@ final documentos = <DocumentoModel>[
     dias: 0,
     dataSolicitacao: DateTime(2026, 7, 25, 8, 30),
     dataAtendimento: DateTime(2026, 7, 25, 9, 0),
-    setorModel: setores[0],
+    setor: setores[0],
   ),
   DocumentoModel(
     id: '11',
@@ -172,7 +172,7 @@ final documentos = <DocumentoModel>[
     dias: 1,
     dataSolicitacao: DateTime(2026, 7, 28, 14, 0),
     dataAtendimento: DateTime(2026, 7, 29, 10, 0),
-    setorModel: setores[0],
+    setor: setores[0],
   ),
   DocumentoModel(
     id: '12',
@@ -187,7 +187,7 @@ final documentos = <DocumentoModel>[
     dias: 3,
     dataSolicitacao: DateTime(2026, 8, 1, 9, 0),
     dataAtendimento: DateTime(2026, 8, 4, 11, 0),
-    setorModel: setores[0],
+    setor: setores[0],
   ),
   DocumentoModel(
     id: '13',
@@ -202,7 +202,7 @@ final documentos = <DocumentoModel>[
     dias: 2,
     dataSolicitacao: DateTime(2026, 8, 5, 13, 0),
     dataAtendimento: DateTime(2026, 8, 7, 14, 0),
-    setorModel: setores[0],
+    setor: setores[0],
   ),
   DocumentoModel(
     id: '14',
@@ -217,7 +217,7 @@ final documentos = <DocumentoModel>[
     dias: 7,
     dataSolicitacao: DateTime(2026, 8, 10, 10, 0),
     dataAtendimento: DateTime(2026, 8, 17, 10, 0),
-    setorModel: setores[0],
+    setor: setores[0],
   ),
   DocumentoModel(
     id: '15',
@@ -232,7 +232,7 @@ final documentos = <DocumentoModel>[
     dias: 0,
     dataSolicitacao: DateTime(2026, 8, 15, 16, 0),
     dataAtendimento: DateTime(2026, 8, 15, 17, 0),
-    setorModel: setores[0],
+    setor: setores[0],
   ),
 
   // ==========================================
@@ -251,7 +251,7 @@ final documentos = <DocumentoModel>[
     dias: 1,
     dataSolicitacao: DateTime(2026, 6, 5, 8, 0),
     dataAtendimento: DateTime(2026, 6, 6, 9, 0),
-    setorModel: setores[1],
+    setor: setores[1],
   ),
   DocumentoModel(
     id: '17',
@@ -266,7 +266,7 @@ final documentos = <DocumentoModel>[
     dias: 5,
     dataSolicitacao: DateTime(2026, 6, 12, 10, 0),
     dataAtendimento: DateTime(2026, 6, 17, 14, 0),
-    setorModel: setores[1],
+    setor: setores[1],
   ),
   DocumentoModel(
     id: '18',
@@ -281,7 +281,7 @@ final documentos = <DocumentoModel>[
     dias: 0,
     dataSolicitacao: DateTime(2026, 6, 18, 14, 30),
     dataAtendimento: DateTime(2026, 6, 18, 15, 0),
-    setorModel: setores[1],
+    setor: setores[1],
   ),
   DocumentoModel(
     id: '19',
@@ -296,7 +296,7 @@ final documentos = <DocumentoModel>[
     dias: 3,
     dataSolicitacao: DateTime(2026, 6, 25, 9, 0),
     dataAtendimento: DateTime(2026, 6, 28, 10, 0),
-    setorModel: setores[1],
+    setor: setores[1],
   ),
   DocumentoModel(
     id: '20',
@@ -311,7 +311,7 @@ final documentos = <DocumentoModel>[
     dias: 1,
     dataSolicitacao: DateTime(2026, 7, 2, 11, 0),
     dataAtendimento: DateTime(2026, 7, 3, 11, 30),
-    setorModel: setores[1],
+    setor: setores[1],
   ),
   DocumentoModel(
     id: '21',
@@ -326,7 +326,7 @@ final documentos = <DocumentoModel>[
     dias: 2,
     dataSolicitacao: DateTime(2026, 7, 8, 15, 0),
     dataAtendimento: DateTime(2026, 7, 10, 16, 0),
-    setorModel: setores[1],
+    setor: setores[1],
   ),
   DocumentoModel(
     id: '22',
@@ -341,7 +341,7 @@ final documentos = <DocumentoModel>[
     dias: 4,
     dataSolicitacao: DateTime(2026, 7, 12, 9, 30),
     dataAtendimento: DateTime(2026, 7, 16, 10, 0),
-    setorModel: setores[1],
+    setor: setores[1],
   ),
   DocumentoModel(
     id: '23',
@@ -356,7 +356,7 @@ final documentos = <DocumentoModel>[
     dias: 1,
     dataSolicitacao: DateTime(2026, 7, 20, 14, 0),
     dataAtendimento: DateTime(2026, 7, 21, 14, 30),
-    setorModel: setores[1],
+    setor: setores[1],
   ),
   DocumentoModel(
     id: '24',
@@ -371,7 +371,7 @@ final documentos = <DocumentoModel>[
     dias: 0,
     dataSolicitacao: DateTime(2026, 7, 25, 10, 0),
     dataAtendimento: DateTime(2026, 7, 25, 11, 0),
-    setorModel: setores[1],
+    setor: setores[1],
   ),
   DocumentoModel(
     id: '25',
@@ -386,7 +386,7 @@ final documentos = <DocumentoModel>[
     dias: 0,
     dataSolicitacao: DateTime(2026, 8, 2, 8, 45),
     dataAtendimento: DateTime(2026, 8, 2, 9, 15),
-    setorModel: setores[1],
+    setor: setores[1],
   ),
   DocumentoModel(
     id: '26',
@@ -401,7 +401,7 @@ final documentos = <DocumentoModel>[
     dias: 7,
     dataSolicitacao: DateTime(2026, 8, 10, 15, 0),
     dataAtendimento: DateTime(2026, 8, 17, 16, 0),
-    setorModel: setores[1],
+    setor: setores[1],
   ),
   DocumentoModel(
     id: '27',
@@ -416,7 +416,7 @@ final documentos = <DocumentoModel>[
     dias: 1,
     dataSolicitacao: DateTime(2026, 8, 20, 17, 0),
     dataAtendimento: DateTime(2026, 8, 21, 9, 0),
-    setorModel: setores[1],
+    setor: setores[1],
   ),
 
   // ==========================================
@@ -435,7 +435,7 @@ final documentos = <DocumentoModel>[
     dias: 3,
     dataSolicitacao: DateTime(2026, 6, 8, 14, 0),
     dataAtendimento: DateTime(2026, 6, 11, 15, 0),
-    setorModel: setores[2],
+    setor: setores[2],
   ),
   DocumentoModel(
     id: '29',
@@ -450,7 +450,7 @@ final documentos = <DocumentoModel>[
     dias: 0,
     dataSolicitacao: DateTime(2026, 6, 15, 10, 0),
     dataAtendimento: DateTime(2026, 6, 15, 11, 0),
-    setorModel: setores[2],
+    setor: setores[2],
   ),
   DocumentoModel(
     id: '30',
@@ -465,7 +465,7 @@ final documentos = <DocumentoModel>[
     dias: 1,
     dataSolicitacao: DateTime(2026, 6, 22, 16, 0),
     dataAtendimento: DateTime(2026, 6, 23, 9, 0),
-    setorModel: setores[2],
+    setor: setores[2],
   ),
   DocumentoModel(
     id: '31',
@@ -480,7 +480,7 @@ final documentos = <DocumentoModel>[
     dias: 2,
     dataSolicitacao: DateTime(2026, 7, 2, 11, 30),
     dataAtendimento: DateTime(2026, 7, 4, 14, 0),
-    setorModel: setores[2],
+    setor: setores[2],
   ),
   DocumentoModel(
     id: '32',
@@ -495,7 +495,7 @@ final documentos = <DocumentoModel>[
     dias: 0,
     dataSolicitacao: DateTime(2026, 7, 10, 9, 0),
     dataAtendimento: DateTime(2026, 7, 10, 10, 30),
-    setorModel: setores[2],
+    setor: setores[2],
   ),
   DocumentoModel(
     id: '33',
@@ -510,7 +510,7 @@ final documentos = <DocumentoModel>[
     dias: 5,
     dataSolicitacao: DateTime(2026, 7, 15, 15, 0),
     dataAtendimento: DateTime(2026, 7, 20, 16, 0),
-    setorModel: setores[2],
+    setor: setores[2],
   ),
   DocumentoModel(
     id: '34',
@@ -525,7 +525,7 @@ final documentos = <DocumentoModel>[
     dias: 4,
     dataSolicitacao: DateTime(2026, 7, 25, 10, 0),
     dataAtendimento: DateTime(2026, 7, 29, 11, 0),
-    setorModel: setores[2],
+    setor: setores[2],
   ),
   DocumentoModel(
     id: '35',
@@ -540,7 +540,7 @@ final documentos = <DocumentoModel>[
     dias: 1,
     dataSolicitacao: DateTime(2026, 8, 5, 14, 0),
     dataAtendimento: DateTime(2026, 8, 6, 9, 30),
-    setorModel: setores[2],
+    setor: setores[2],
   ),
   DocumentoModel(
     id: '36',
@@ -555,7 +555,7 @@ final documentos = <DocumentoModel>[
     dias: 2,
     dataSolicitacao: DateTime(2026, 8, 12, 11, 0),
     dataAtendimento: DateTime(2026, 8, 14, 14, 0),
-    setorModel: setores[2],
+    setor: setores[2],
   ),
   DocumentoModel(
     id: '37',
@@ -570,7 +570,7 @@ final documentos = <DocumentoModel>[
     dias: 0,
     dataSolicitacao: DateTime(2026, 8, 20, 16, 30),
     dataAtendimento: DateTime(2026, 8, 20, 17, 0),
-    setorModel: setores[2],
+    setor: setores[2],
   ),
 
   // ==========================================
@@ -589,7 +589,7 @@ final documentos = <DocumentoModel>[
     dias: 1,
     dataSolicitacao: DateTime(2026, 6, 2, 9, 0),
     dataAtendimento: DateTime(2026, 6, 3, 10, 0),
-    setorModel: setores[3],
+    setor: setores[3],
   ),
   DocumentoModel(
     id: '39',
@@ -604,7 +604,7 @@ final documentos = <DocumentoModel>[
     dias: 6,
     dataSolicitacao: DateTime(2026, 6, 15, 14, 0),
     dataAtendimento: DateTime(2026, 6, 21, 15, 0),
-    setorModel: setores[3],
+    setor: setores[3],
   ),
   DocumentoModel(
     id: '40',
@@ -619,7 +619,7 @@ final documentos = <DocumentoModel>[
     dias: 2,
     dataSolicitacao: DateTime(2026, 7, 5, 11, 0),
     dataAtendimento: DateTime(2026, 7, 7, 14, 0),
-    setorModel: setores[3],
+    setor: setores[3],
   ),
   DocumentoModel(
     id: '41',
@@ -634,7 +634,7 @@ final documentos = <DocumentoModel>[
     dias: 0,
     dataSolicitacao: DateTime(2026, 7, 18, 8, 30),
     dataAtendimento: DateTime(2026, 7, 18, 9, 0),
-    setorModel: setores[3],
+    setor: setores[3],
   ),
   DocumentoModel(
     id: '42',
@@ -649,7 +649,7 @@ final documentos = <DocumentoModel>[
     dias: 4,
     dataSolicitacao: DateTime(2026, 7, 28, 15, 0),
     dataAtendimento: DateTime(2026, 8, 1, 16, 0),
-    setorModel: setores[3],
+    setor: setores[3],
   ),
   DocumentoModel(
     id: '43',
@@ -664,7 +664,7 @@ final documentos = <DocumentoModel>[
     dias: 1,
     dataSolicitacao: DateTime(2026, 8, 5, 10, 0),
     dataAtendimento: DateTime(2026, 8, 6, 11, 0),
-    setorModel: setores[3],
+    setor: setores[3],
   ),
   DocumentoModel(
     id: '44',
@@ -679,7 +679,7 @@ final documentos = <DocumentoModel>[
     dias: 3,
     dataSolicitacao: DateTime(2026, 8, 12, 14, 0),
     dataAtendimento: DateTime(2026, 8, 15, 15, 0),
-    setorModel: setores[3],
+    setor: setores[3],
   ),
   DocumentoModel(
     id: '45',
@@ -694,7 +694,7 @@ final documentos = <DocumentoModel>[
     dias: 2,
     dataSolicitacao: DateTime(2026, 8, 20, 9, 30),
     dataAtendimento: DateTime(2026, 8, 22, 10, 0),
-    setorModel: setores[3],
+    setor: setores[3],
   ),
 
   // ==========================================
@@ -713,7 +713,7 @@ final documentos = <DocumentoModel>[
     dias: 2,
     dataSolicitacao: DateTime(2026, 6, 1, 8, 0),
     dataAtendimento: DateTime(2026, 6, 3, 9, 0),
-    setorModel: setores[4],
+    setor: setores[4],
   ),
   DocumentoModel(
     id: '47',
@@ -728,7 +728,7 @@ final documentos = <DocumentoModel>[
     dias: 15,
     dataSolicitacao: DateTime(2026, 6, 20, 14, 0),
     dataAtendimento: DateTime(2026, 7, 5, 15, 0),
-    setorModel: setores[4],
+    setor: setores[4],
   ),
   DocumentoModel(
     id: '48',
@@ -743,7 +743,7 @@ final documentos = <DocumentoModel>[
     dias: 10,
     dataSolicitacao: DateTime(2026, 7, 15, 10, 0),
     dataAtendimento: DateTime(2026, 7, 25, 11, 0),
-    setorModel: setores[4],
+    setor: setores[4],
   ),
   DocumentoModel(
     id: '49',
@@ -758,7 +758,7 @@ final documentos = <DocumentoModel>[
     dias: 3,
     dataSolicitacao: DateTime(2026, 8, 1, 16, 0),
     dataAtendimento: DateTime(2026, 8, 4, 17, 0),
-    setorModel: setores[4],
+    setor: setores[4],
   ),
   DocumentoModel(
     id: '50',
@@ -773,6 +773,6 @@ final documentos = <DocumentoModel>[
     dias: 1,
     dataSolicitacao: DateTime(2026, 8, 20, 9, 0),
     dataAtendimento: DateTime(2026, 8, 21, 9, 30),
-    setorModel: setores[4],
+    setor: setores[4],
   ),
 ];

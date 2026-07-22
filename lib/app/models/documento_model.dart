@@ -19,7 +19,7 @@ class DocumentoModel {
   final DateTime dataSolicitacao;
   final DateTime dataAtendimento;
   final TipoEscrito tipoEscrito;
-  final SetorModel setorModel;
+  final SetorModel setor;
 
   DocumentoModel({
     required this.id,
@@ -34,7 +34,7 @@ class DocumentoModel {
     required this.tipoCaixa,
     required this.dataSolicitacao,
     required this.dataAtendimento,
-    required this.setorModel,
+    required this.setor,
   });
 
   Widget get image {
