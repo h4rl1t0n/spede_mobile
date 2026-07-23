@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-import '../../../../../../app_module.dart';
+import '../../../../../../core/constants/routes.dart';
 import '../../../../../../core/ui/theme/styles/button_styles.dart';
 import '../../../../../../enum/acao_solicitacao.dart';
 import '../../../../../../enum/tipo_caixa.dart';

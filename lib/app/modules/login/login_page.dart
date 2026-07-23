@@ -4,7 +4,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:validatorless/validatorless.dart';
 
-import '../../app_module.dart';
+import '../../core/constants/images.dart';
+import '../../core/constants/routes.dart';
 import '../../core/global/local_storage_utils.dart';
 import '../../core/helpers/loader.dart';
 import '../../core/helpers/messages.dart';
@@ -71,12 +72,7 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
                 child: IgnorePointer(
                   child: Opacity(
                     opacity: .7,
-                    child: Image.asset(
-                      'assets/images/background.png',
-                      height: 200,
-                      width: double.infinity,
-                      fit: BoxFit.fill,
-                    ),
+                    child: Image.asset(Images.background, height: 200, width: double.infinity, fit: BoxFit.fill),
                   ),
                 ),
               ),
@@ -194,7 +190,7 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
         padding: const EdgeInsets.all(12),
         child: Hero(
           tag: 'logo',
-          child: Image.asset('assets/images/logo.png', fit: BoxFit.contain),
+          child: Image.asset(Images.logo, fit: BoxFit.contain),
         ),
       ),
     );

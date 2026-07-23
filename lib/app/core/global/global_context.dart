@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-import '../../app_module.dart';
+import '../constants/routes.dart';
 import 'local_storage_utils.dart';
 
 class GlobalContext {

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-import '../../app_module.dart';
+import '../../core/constants/routes.dart';
 import '../../core/global/local_storage_utils.dart';
 import '../../models/usuario_model.dart';
 import 'controller/perfil_controller.dart';

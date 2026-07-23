@@ -4,7 +4,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 
-import '../../app_module.dart';
+import '../../core/constants/images.dart';
+import '../../core/constants/routes.dart';
 import '../../core/helpers/loader.dart';
 import '../../core/helpers/messages.dart';
 import '../../enum/tipo_caixa.dart';
@@ -73,7 +74,7 @@ class _MainPageState extends State<MainPage> with Loader, Messages, SingleTicker
             automaticallyImplyLeading: false,
             titleSpacing: 0,
             toolbarHeight: 80,
-            leading: Image.asset('assets/images/spede_home_prod.png', fit: .contain),
+            leading: Image.asset(Images.spedeAppBar, fit: .contain),
             title: buildTitle(),
             actions: [
               IconButton(
@@ -95,7 +96,7 @@ class _MainPageState extends State<MainPage> with Loader, Messages, SingleTicker
 
           body: Container(
             decoration: BoxDecoration(
-              image: DecorationImage(image: const AssetImage('assets/images/logo_tce.png'), fit: BoxFit.cover),
+              image: DecorationImage(image: AssetImage(Images.logoTCE), fit: BoxFit.cover),
             ),
             child: TabBarView(
               controller: tabController,

@@ -1,5 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 
+import 'core/constants/routes.dart';
 import 'modules/core/core_module.dart';
 import 'modules/inicializar/inicializar_module.dart';
 import 'modules/login/login_module.dart';
@@ -21,13 +22,4 @@ class AppModule extends Module {
     r.module(Routes.main, module: MainModule());
     r.module(Routes.perfil, module: PerfilModule());
   }
-}
-
-class Routes {
-  static String get inicializar => '/inicializar/';
-  static String get login => '/login/';
-  static String get main => '/main/';
-  static String get perfil => '/perfil/';
-  static String get notificacao => '/notificacao/';
-  static String get decidirSolicitacao => '${main}decidir-solicitacao/';
 }

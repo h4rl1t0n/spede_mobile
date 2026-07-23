@@ -30,7 +30,7 @@ abstract class SolicitacaoControllerBase with Store {
   String? errorMessage;
 
   @observable
-  TipoSolicitacao? categoriaSelecionada;
+  var categoriaSelecionada = TipoSolicitacao.visto;
 
   SolicitacaoControllerBase(this.service);
 
@@ -57,7 +57,7 @@ abstract class SolicitacaoControllerBase with Store {
   }
 
   @action
-  void alterarCategoria(TipoSolicitacao? value) {
+  void alterarCategoria(TipoSolicitacao value) {
     categoriaSelecionada = value;
     selecionados.clear();
   }
@@ -78,7 +78,7 @@ abstract class SolicitacaoControllerBase with Store {
 
   @computed
   List<DocumentoModel> get filtrarPorCategoria {
-    if (categoriaSelecionada == null) return solicitacoes;
+    // if (categoriaSelecionada == null) return solicitacoes;
     return solicitacoes.where((e) => e.tipoSolicitacao == categoriaSelecionada).toList();
   }
 }

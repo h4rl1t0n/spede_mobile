@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../core/constants/images.dart';
 import '../enum/tipo_caixa.dart';
 import '../enum/tipo_documento.dart';
 import '../enum/tipo_escrito.dart';
@@ -38,7 +39,7 @@ class DocumentoModel {
   });
 
   Widget get image {
-    final path = tipoEscrito == .rascunho ? 'assets/images/rascunho_20x20.png' : 'assets/images/documento_20x20.png';
+    final path = tipoEscrito == TipoEscrito.rascunho ? Images.rascunho20x20 : Images.documento20x20;
     return Image.asset(path, height: 25, width: 25, fit: BoxFit.contain);
   }
 

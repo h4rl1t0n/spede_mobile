@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 
-import '../../app_module.dart';
+import '../../core/constants/images.dart';
+import '../../core/constants/routes.dart';
 import '../../core/global/local_storage_utils.dart';
 import '../../core/ui/theme/styles/colors_app.dart';
 import '../../core/ui/theme/styles/text_styles.dart';
@@ -156,7 +157,7 @@ class _InicializarPageState extends State<InicializarPage> with SingleTickerProv
   }
 
   Future<void> _iniciarVariaveis() async {
-    logo = Image.asset('assets/images/logo.png', height: 180, width: 180, fit: .contain);
+    logo = Image.asset(Images.logo, height: 180, width: 180, fit: .contain);
   }
 
   Future<void> transition() async {
