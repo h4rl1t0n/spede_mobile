@@ -72,7 +72,7 @@ class _HomePageState extends State<HomePage> with Messages, Loader {
                   children: [
                     Text(
                       'Olá, ${usuarioLogado.firstName}',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                     Text('Bem-vindo ao sistema', style: TextStyle(color: Colors.grey.shade600)),
                   ],

@@ -92,7 +92,13 @@ class UsuarioModel {
   }
 
   String get firstName {
-    return '${nome.split(' ').first} ${nome.split(' ').last}';
+    final nomes = nome.trim().split(RegExp(r'\s+'));
+
+    if (nomes.length == 1) {
+      return nomes.first;
+    }
+
+    return '${nomes[0]} ${nomes[1]}';
   }
 
   String get avatar {

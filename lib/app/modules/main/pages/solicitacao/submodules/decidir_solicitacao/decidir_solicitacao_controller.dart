@@ -34,28 +34,4 @@ abstract class DecidirSolicitacaoControllerBase with Store {
 
   @action
   void setObservacao(String valor) => observacao = valor;
-
-  @computed
-  String? get usuarioErro {
-    if (usuario.trim().isEmpty) return 'O usuário é obrigatório.';
-    return null;
-  }
-
-  @computed
-  String? get senhaErro {
-    if (senha.trim().isEmpty) return 'A senha é obrigatória.';
-    return null;
-  }
-
-  @computed
-  String? get observacaoErro {
-    if (observacao.trim().isEmpty) return 'A observação é obrigatória.';
-    return null;
-  }
-
-  @computed
-  bool get isAutenticacaoValida => usuarioErro == null && senhaErro == null;
-
-  @computed
-  bool get isRejeicaoValida => motivo != null && observacaoErro == null;
 }

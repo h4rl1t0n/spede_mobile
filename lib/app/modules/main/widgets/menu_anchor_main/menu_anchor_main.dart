@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -24,14 +23,17 @@ class _MenuAnchorMainState extends State<MenuAnchorMain> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     return MenuAnchor(
       style: MenuStyle(
-        elevation: WidgetStatePropertyAll(8),
-        backgroundColor: WidgetStatePropertyAll(Colors.white),
-        padding: WidgetStatePropertyAll(EdgeInsets.zero),
-        shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
+        elevation: const WidgetStatePropertyAll(6),
+        backgroundColor: const WidgetStatePropertyAll(Colors.white),
+        padding: const WidgetStatePropertyAll(EdgeInsets.zero),
+        shape: WidgetStatePropertyAll(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+            side: BorderSide(color: Colors.grey.shade200),
+          ),
+        ),
       ),
       animated: true,
       builder: (context, controller, child) {
@@ -39,81 +41,125 @@ class _MenuAnchorMainState extends State<MenuAnchorMain> {
           onPressed: () {
             controller.isOpen ? controller.close() : controller.open();
           },
-          icon: CircleAvatar(child: Text(usuario?.avatar ?? '')),
+          icon: CircleAvatar(
+            backgroundColor: Colors.blueGrey.shade50,
+            foregroundColor: Colors.blueGrey.shade800,
+            child: Text(usuario?.avatar ?? '', style: TextStyle(color: Colors.blueGrey.shade800)),
+          ),
         );
       },
       menuChildren: [
         SizedBox(
-          width: 290,
+          width: 300,
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-                  border: Border(bottom: BorderSide(color: Colors.grey.shade300)),
-                ),
-                child: Row(
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CircleAvatar(
-                      backgroundColor: colorScheme.primary,
-                      radius: 24,
-                      child: Text(
-                        usuario?.avatar ?? '',
-                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
+                    Row(
+                      spacing: 13,
+                      children: [
+                        CircleAvatar(
+                          backgroundColor: Colors.blueGrey.shade50,
+                          foregroundColor: Colors.blueGrey.shade800,
+                          radius: 26,
+                          child: Text(
+                            usuario?.avatar ?? 'AS',
+                            style: TextStyle(
+                              color: Colors.blueGrey.shade800,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                usuario?.firstName.toUpperCase() ?? '',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 15,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              Text(
+                                usuario?.email.toLowerCase() ?? '',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 13,
+                                  color: Colors.grey.shade600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            usuario?.firstName.toUpperCase() ?? '',
-                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                          ),
-                          Observer(
-                            builder: (context) {
-                              final setor = controller.setorSelecionado;
-                              final nome = setor?.nome ?? '';
 
-                              return Text(
-                                nome.toUpperCase(),
-                                textAlign: .start,
-                                style: TextStyle(color: Colors.grey.shade700, fontSize: 13),
-                              );
-                            },
+                    const SizedBox(height: 10),
+
+                    Text(
+                      'Setor Selecionado',
+                      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: Colors.black87),
+                    ),
+
+                    Observer(
+                      builder: (context) {
+                        final setor = controller.setorSelecionado;
+                        final nome = setor?.nome ?? '';
+
+                        return Text(
+                          nome.toUpperCase(),
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 13,
+                            color: Colors.grey.shade600,
+                            height: 1.3,
                           ),
-                        ],
-                      ),
+                        );
+                      },
                     ),
                   ],
                 ),
               ),
 
-              MenuItemButton(
-                leadingIcon: const Icon(Icons.business_outlined),
-                trailingIcon: const Icon(Icons.chevron_right),
-                onPressed: openSelecionarSetorDialog,
-                child: Text('Alterar Setor'),
-              ),
+              Divider(height: 1, color: Colors.grey.shade200, thickness: 1),
 
-              const Divider(height: 5),
+              const SizedBox(height: 8),
 
-              MenuItemButton(
-                leadingIcon: const Icon(CupertinoIcons.square_arrow_right, color: Colors.red),
-                onPressed: sair,
-                trailingIcon: const Icon(Icons.chevron_right),
-                child: Text('Sair', style: TextStyle(color: Colors.red)),
-              ),
+              _buildMenuItem(icon: Icons.domain, label: 'Alterar Setor', onPressed: openSelecionarSetorDialog),
 
-              SizedBox(height: 10),
+              _buildMenuItem(icon: Icons.logout, label: 'Sair', onPressed: sair),
+
+              const SizedBox(height: 8),
             ],
           ),
         ),
       ],
+    );
+  }
+
+  // Widget auxiliar para padronizar os botões do menu
+  Widget _buildMenuItem({required IconData icon, required String label, required VoidCallback onPressed}) {
+    return MenuItemButton(
+      style: MenuItemButton.styleFrom(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+        foregroundColor: Colors.grey.shade700,
+      ),
+      leadingIcon: Icon(icon, color: Colors.grey.shade600, size: 22),
+      onPressed: onPressed,
+      trailingIcon: Icon(Icons.chevron_right_rounded, color: Colors.grey.shade600),
+      child: Text(
+        label,
+        style: TextStyle(fontSize: 15, color: Colors.grey.shade700, fontWeight: FontWeight.w400),
+      ),
     );
   }
 
