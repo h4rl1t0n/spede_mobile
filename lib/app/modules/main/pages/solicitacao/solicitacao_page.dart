@@ -215,7 +215,7 @@ class _SolicitacaoPageState extends State<SolicitacaoPage> with Loader, Messages
       context: context,
       isScrollControlled: true,
       builder: (_) {
-        return AcaoSolcitacaoSheet(controller: controller, caixa: caixa);
+        return AcaoSolcitacaoSheet(selecionados: controller.selecionados, caixa: caixa);
       },
     );
   }

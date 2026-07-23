@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-import '../../../../../../core/ui/theme/styles/text_styles.dart';
 import '../dashboard_item_card/dashboard_item_card_store.dart';
 
 class FiltroBottomSheet extends StatefulWidget {
@@ -86,33 +85,29 @@ class _FiltroBottomSheetState extends State<FiltroBottomSheet> {
 
                           final isSelected = store.selectedFilter == titulo;
 
-                          return ListTile(
-                            dense: true,
-                            leading: Icon(
-                              isSelected ? Icons.check_circle : Icons.circle_outlined,
-                              color: isSelected ? color : Colors.grey,
+                          return Container(
+                            margin: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              color: isSelected ? color.withValues(alpha: .15) : null,
                             ),
-                            title: Text(
-                              titulo.toUpperCase(),
-                              style: context.textStyles.textTitleItemList.copyWith(
-                                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                                color: isSelected ? color : Colors.black87,
-                                fontSize: 15,
+                            child: Material(
+                              color: Colors.transparent,
+                              child: ListTile(
+                                dense: true,
+                                leading: Icon(
+                                  isSelected ? Icons.check_circle : Icons.circle_outlined,
+                                  color: isSelected ? color : Colors.grey,
+                                ),
+                                title: Text(titulo.toUpperCase(), style: TextStyle(fontWeight: .w700, fontSize: 14)),
+                                subtitle: Text(subtitulo, style: TextStyle(fontWeight: .normal)),
+                                trailing: Icon(Icons.chevron_right),
+                                onTap: () {
+                                  store.setFilter(titulo);
+                                  Modular.to.pop();
+                                },
                               ),
                             ),
-                            subtitle: Text(
-                              subtitulo,
-                              style: context.textStyles.textSubTitleItemList.copyWith(
-                                fontSize: 12,
-                                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
-                                color: isSelected ? color.withValues(alpha: 0.8) : Colors.grey.shade600,
-                              ),
-                            ),
-                            trailing: Icon(Icons.chevron_right),
-                            onTap: () {
-                              store.setFilter(titulo);
-                              Modular.to.pop();
-                            },
                           );
                         },
                       );

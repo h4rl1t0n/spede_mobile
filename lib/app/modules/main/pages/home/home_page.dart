@@ -7,8 +7,6 @@ import 'package:mobx/mobx.dart';
 import '../../../../core/helpers/loader.dart';
 import '../../../../core/helpers/messages.dart';
 import '../../../../enum/page_status.dart';
-import '../../../../mock/setores.dart';
-import '../../../../models/dashboard/dashboard_setor.dart';
 import '../../../../models/usuario_model.dart';
 import '../../../../shared/data/solicitacao/dto/dashboard_resumo_model.dart';
 import 'home_controller.dart';
@@ -111,7 +109,7 @@ class _HomePageState extends State<HomePage> with Messages, Loader {
                         value: '26',
                         icon: CupertinoIcons.calendar,
                         color: primary,
-                        items: [DashboardSetor(setor: setores.first, dashboards: [])],
+                        items: [],
                       ),
                     ],
                   ),

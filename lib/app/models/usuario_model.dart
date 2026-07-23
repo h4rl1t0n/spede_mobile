@@ -92,7 +92,7 @@ class UsuarioModel {
   }
 
   String get firstName {
-    return nome.split(' ').first;
+    return '${nome.split(' ').first} ${nome.split(' ').last}';
   }
 
   String get avatar {

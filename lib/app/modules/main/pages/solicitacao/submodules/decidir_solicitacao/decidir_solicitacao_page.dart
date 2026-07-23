@@ -7,6 +7,7 @@ import '../../../../../../core/constants/images.dart';
 import '../../../../../../core/extensions/string_extension.dart';
 import '../../../../../../core/helpers/loader.dart';
 import '../../../../../../core/helpers/messages.dart';
+import '../../../../../../core/ui/theme/styles/button_styles.dart';
 import '../../../../../../enum/acao_solicitacao.dart';
 import '../../../../../../enum/tipo_solicitacao.dart';
 import '../../../../../../models/documento_model.dart';
@@ -36,10 +37,16 @@ class _DecidirSolicitacaoPageState extends State<DecidirSolicitacaoPage> with Lo
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        appBar: AppBar(title: Text(rejeitar ? 'Rejeitar Solicitações' : 'Atender Solicitações (${solicitacao.label})')),
+        appBar: AppBar(
+          title: Text(
+            '${rejeitar ? 'Rejeitar' : 'Atender'} ${selecionados.length == 1 ? 'Solicitação' : 'Solicitações'}',
+          ),
+        ),
         body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(image: AssetImage(Images.logoTCE), fit: BoxFit.cover),
@@ -48,7 +55,7 @@ class _DecidirSolicitacaoPageState extends State<DecidirSolicitacaoPage> with Lo
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _buildFormularioAcao(),
-              const SecaoHeader(title: 'Solicitações Selecionadas'),
+              SecaoHeader(title: 'Solicitações Selecionadas | ${solicitacao.label}'),
               Expanded(
                 child: ListView.builder(
                   padding: const EdgeInsets.all(16),
@@ -61,32 +68,43 @@ class _DecidirSolicitacaoPageState extends State<DecidirSolicitacaoPage> with Lo
             ],
           ),
         ),
-        bottomNavigationBar: bottomNavigationBar(),
-      ),
-    );
-  }
-
-  Widget bottomNavigationBar() {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: Colors.grey.shade300, width: 1)),
-      ),
-      child: BottomAppBar(
-        color: Colors.white,
-        child: Row(
-          spacing: 10,
-          children: [
-            Expanded(
-              child: ElevatedButton(onPressed: _executarAcaoPrincipal, child: Text(acao.name.capitalize())),
+        bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+            border: Border(top: BorderSide(color: Colors.grey.shade300, width: 1)),
+          ),
+          child: BottomAppBar(
+            color: Colors.white,
+            child: Row(
+              spacing: 10,
+              children: [
+                Expanded(
+                  child: SizedBox(
+                    height: 45,
+                    child: ElevatedButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      style: ButtonStyles.instance.primary.copyWith(
+                        backgroundColor: WidgetStatePropertyAll(Colors.grey.shade300),
+                        foregroundColor: WidgetStatePropertyAll(Colors.grey.shade900),
+                      ),
+                      child: const Text('Voltar'),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: SizedBox(
+                    height: 45,
+                    child: ElevatedButton(
+                      style: ButtonStyles.instance.primary.copyWith(
+                        backgroundColor: WidgetStatePropertyAll(rejeitar ? colorScheme.error : colorScheme.secondary),
+                      ),
+                      onPressed: _executarAcaoPrincipal,
+                      child: Text(acao.name.capitalize()),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () => Navigator.of(context).pop(),
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
-                child: const Text('Voltar'),
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

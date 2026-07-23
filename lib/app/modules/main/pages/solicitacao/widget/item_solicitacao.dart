@@ -110,7 +110,7 @@ class ItemSolicitacao extends StatelessWidget {
                                         child: ItemTile(
                                           padding: EdgeInsets.zero,
                                           title: 'Solicitação',
-                                          subTitle: solicitacao.tipoSolicitacao.name,
+                                          subTitle: solicitacao.tipoSolicitacao.label,
                                         ),
                                       ),
                                       Expanded(

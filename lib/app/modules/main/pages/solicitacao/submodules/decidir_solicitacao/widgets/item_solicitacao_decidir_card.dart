@@ -11,16 +11,13 @@ class ItemSolicitacaoDecidirCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 10),
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: Colors.grey.shade300),
-        color: colorScheme.surface,
+        color: Colors.white,
       ),
       child: IntrinsicHeight(
         child: Row(
@@ -50,24 +47,11 @@ class ItemSolicitacaoDecidirCard extends StatelessWidget {
                       ],
                     ),
 
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 10),
 
-                    InfoCard(
-                      
-                      titulo: 'Assunto/Natureza',
-                      valor: solicitacao.assunto,
-                    ),
-                    const SizedBox(height: 8),
-
-                    InfoCard(
-                      
-                      titulo: 'Solicitação',
-                      valor: solicitacao.tipoSolicitacao.name,
-                    ),
-
-                    const SizedBox(height: 8),
-
-                    InfoCard( titulo: 'Remetente', valor: solicitacao.remetente),
+                    InfoCard(titulo: 'Assunto/Natureza', valor: solicitacao.assunto),
+                    const SizedBox(height: 5),
+                    InfoCard(titulo: 'Remetente', valor: solicitacao.remetente),
                   ],
                 ),
               ),

@@ -16,6 +16,7 @@ import 'main_controller.dart';
 import 'pages/agenda/agenda_page.dart';
 import 'pages/home/home_page.dart';
 import 'pages/solicitacao/solicitacao_page.dart';
+import 'widgets/menu_anchor_main/menu_anchor_main.dart';
 import 'widgets/selecionar_setor_dialog/selecionar_setor_dialog.dart';
 
 class MainPage extends StatefulWidget {
@@ -83,14 +84,8 @@ class _MainPageState extends State<MainPage> with Loader, Messages, SingleTicker
                 },
                 icon: Icon(Icons.notifications),
               ),
-              IconButton(
-                onPressed: () async {
-                  await Modular.to.pushNamed(Routes.perfil, arguments: controller.usuario);
-                  await controller.initController();
-                },
-                icon: CircleAvatar(child: Text(controller.usuario?.avatar ?? '')),
-              ),
-              const SizedBox(width: 10),
+              MenuAnchorMain(controller: controller),
+              const SizedBox(width: 5),
             ],
           ),
 

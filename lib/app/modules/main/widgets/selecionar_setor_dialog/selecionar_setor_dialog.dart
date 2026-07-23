@@ -35,11 +35,11 @@ class _SelecionarSetorDialogState extends State<SelecionarSetorDialog> {
                 final setorSelecionado = controller.setorSelecionado;
                 return CustomDropdownSearch<SetorModel>(
                   label: 'Selecione um setor',
-                  title: 'Selecione um setor',
+                  titleDialog: 'Selecione um setor',
                   selectedItem: setorSelecionado,
                   items: setores,
-                  itemAsString: (item) => item.sigla,
-                  //subtitle: (item) => item.nome,
+                  title: (item) => item.sigla,
+                  subtitle: (item) => item.nome,
                   onSelected: (item) {
                     controller.idSetorSelecionado = item?.id;
                   },

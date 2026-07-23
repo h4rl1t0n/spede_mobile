@@ -29,10 +29,10 @@ class RejeitarSolicitacao extends StatelessWidget {
                 builder: (_) {
                   return CustomDropdownSearch<String>(
                     label: 'Selecione um motivo',
-                    title: 'Selecione um motivo',
+                    titleDialog: 'Selecione um motivo',
                     selectedItem: controller.motivo,
                     items: motivos,
-                    itemAsString: (item) => item,
+                    title: (item) => item,
                     onSelected: controller.setMotivo,
                   );
                 },

@@ -84,6 +84,10 @@ class ThemeConfig {
           borderRadius: BorderRadius.circular(14),
           borderSide: BorderSide(color: colorScheme.error, width: 1.25),
         ),
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide(color: colorScheme.outline.withValues(alpha: .30)),
+        ),
         labelStyle: TextStyles.instance.textRegular.copyWith(color: colorScheme.onSurfaceVariant, fontFamily: 'Cabin'),
         hintStyle: TextStyles.instance.textRegular.copyWith(
           color: colorScheme.onSurfaceVariant.withValues(alpha: .7),

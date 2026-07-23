@@ -18,7 +18,7 @@ class FiltroCategorias extends StatelessWidget {
       child: Row(
         children: categorias.entries.map((entry) {
           final categoria = entry.key;
-          final label = categoria.name;
+          final label = categoria.label;
           final count = entry.value;
 
           return Padding(

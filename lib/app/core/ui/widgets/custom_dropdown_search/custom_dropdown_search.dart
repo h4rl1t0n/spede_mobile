@@ -10,11 +10,12 @@ class CustomDropdownSearch<T> extends StatefulWidget {
   final FiltroController? controller;
   final List<T> items;
   final bool enabled;
-  final String Function(T) itemAsString;
+  final String Function(T) title;
+  final String Function(T)? subtitle;
   final T? selectedItem;
   final VoidCallback? onClear;
   final String label;
-  final String title;
+  final String titleDialog;
   final String? Function(T?)? validator;
   final void Function(T?) onSelected;
   final void Function(T?)? onSaved;
@@ -26,11 +27,12 @@ class CustomDropdownSearch<T> extends StatefulWidget {
     this.controller,
     this.enabled = true,
     required this.items,
-    required this.itemAsString,
+    required this.title,
     required this.selectedItem,
     required this.label,
-    required this.title,
+    required this.titleDialog,
     required this.onSelected,
+    this.subtitle,
     this.onSaved,
   });
 
@@ -41,11 +43,12 @@ class CustomDropdownSearch<T> extends StatefulWidget {
 class _CustomDropdownSearchState<T> extends State<CustomDropdownSearch<T>> {
   FiltroController? get controller => widget.controller;
   List<T> get items => widget.items;
-  String Function(T) get itemAsString => widget.itemAsString;
+  String Function(T) get title => widget.title;
+  String Function(T)? get subtitle => widget.subtitle;
   T? get selectedItem => widget.selectedItem;
   VoidCallback? get onClear => widget.onClear;
   String get label => widget.label;
-  String get title => widget.title;
+  String get titleDialog => widget.titleDialog;
   void Function(T?) get onSelected => widget.onSelected;
   void Function(T?)? get onSaved => widget.onSaved;
   String? Function(T?)? get validator => widget.validator;
@@ -54,15 +57,14 @@ class _CustomDropdownSearchState<T> extends State<CustomDropdownSearch<T>> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final primary = colorScheme.primary;
     final secondary = colorScheme.secondary;
 
     return DropdownSearch<T>(
       validator: validator,
       items: (filter, infiniteScrollProps) {
-        return items..sort((a, b) => itemAsString(a).trim().compareTo(itemAsString(b).trim()));
+        return items..sort((a, b) => title(a).trim().compareTo(title(b).trim()));
       },
-      itemAsString: itemAsString,
+      itemAsString: title,
       compareFn: (a, b) => a == b,
       selectedItem: selectedItem,
       enabled: enabled,
@@ -81,7 +83,7 @@ class _CustomDropdownSearchState<T> extends State<CustomDropdownSearch<T>> {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(14),
-            borderSide: BorderSide(color: primary, width: 1.2),
+            borderSide: BorderSide(color: secondary, width: 1.2),
           ),
           labelStyle: TextStyles.instance.textRegular.copyWith(
             color: colorScheme.onSurfaceVariant,
@@ -104,18 +106,23 @@ class _CustomDropdownSearchState<T> extends State<CustomDropdownSearch<T>> {
         showSelectedItems: true,
         constraints: BoxConstraints(minWidth: 500, maxWidth: 500, maxHeight: 375),
         dialogProps: DialogProps(
-          actions: [TextButton(onPressed: () => Modular.to.pop(), child: Text('Fechar'))],
+          actions: [
+            TextButton(
+              onPressed: () => Modular.to.pop(),
+              child: Text('Fechar', style: context.textStyles.textSecondaryButtonLabel.copyWith(fontSize: 17)),
+            ),
+          ],
           actionsPadding: const EdgeInsets.only(bottom: 15, right: 15),
           contentPadding: const EdgeInsets.all(10),
           insetPadding: const EdgeInsets.all(15),
         ),
-        scrollbarProps: ScrollbarProps(thumbColor: primary.withValues(alpha: .5)),
+        scrollbarProps: ScrollbarProps(thumbColor: secondary.withValues(alpha: .5)),
         loadingBuilder: (_, _) => const Center(child: CircularProgressIndicator()),
         showSearchBox: controller != null,
         searchDelay: Duration.zero,
         title: Padding(
           padding: const EdgeInsets.only(top: 10, left: 10, bottom: 5),
-          child: Text(title, style: context.textStyles.textTitle.copyWith(fontSize: 22)),
+          child: Text('$titleDialog (${items.length})', style: context.textStyles.textTitle.copyWith(fontSize: 22)),
         ),
         searchFieldProps: TextFieldProps(
           autofocus: true,
@@ -131,56 +138,68 @@ class _CustomDropdownSearchState<T> extends State<CustomDropdownSearch<T>> {
           },
         ),
         emptyBuilder: (_, _) {
-          return ListTile(
-            dense: true,
-            visualDensity: VisualDensity.compact,
-            title: Builder(
-              builder: (context) {
-                if (controller == null) {
-                  return Text(textAlign: .justify, 'Nenhum item encontrado ', style: TextStyle(fontSize: 15));
-                }
+          return Material(
+            shadowColor: Colors.transparent,
+            color: Colors.transparent,
+            child: ListTile(
+              dense: true,
+              visualDensity: VisualDensity.compact,
+              title: Builder(
+                builder: (context) {
+                  if (controller == null) {
+                    return Text(textAlign: .justify, 'Nenhum item encontrado ', style: TextStyle(fontSize: 15));
+                  }
 
-                return Text(
-                  textAlign: .justify,
-                  'Nenhum item encontrado para o filtro "${controller?.filtro ?? ''}".',
-                  style: TextStyle(fontSize: 15),
-                );
-              },
+                  return Text(
+                    textAlign: .justify,
+                    'Nenhum item encontrado para o filtro "${controller?.filtro ?? ''}".',
+                    style: TextStyle(fontSize: 15),
+                  );
+                },
+              ),
             ),
           );
         },
+
         itemBuilder: (_, item, _, isSelected) {
-          final value = itemAsString(item);
           final isCurrent = item == selectedItem;
           final normQuery = controller != null ? (controller?.filtro ?? '').toLowerCase().normalizar() : '';
-          final text = value.toUpperCase().trim();
+          final text = title(item).trim();
+          final subtext = subtitle?.call(item).trim() ?? '';
 
           if (normQuery.isEmpty) {
             return Container(
               margin: const EdgeInsets.all(5),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                color: isCurrent ? primary.withValues(alpha: .15) : null,
+                color: isCurrent ? secondary.withValues(alpha: .15) : null,
               ),
-              child: ListTile(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                leading: Icon(
-                  isCurrent ? Icons.check_circle_rounded : Icons.circle_outlined,
-                  color: isCurrent ? primary : Colors.grey,
+              child: Material(
+                shadowColor: Colors.transparent,
+                color: Colors.transparent,
+                child: ListTile(
+                  splashColor: Colors.transparent,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  leading: Icon(
+                    isCurrent ? Icons.check_circle_rounded : Icons.circle_outlined,
+                    color: isCurrent ? secondary : Colors.grey,
+                  ),
+                  dense: true,
+                  visualDensity: VisualDensity.compact,
+                  title: Text(
+                    text,
+                    textAlign: .justify,
+                    style: TextStyle(fontWeight: .w700, fontSize: 14),
+                  ),
+                  subtitle: subtext.isNotEmpty
+                      ? Text(
+                          subtext,
+                          textAlign: .justify,
+                          style: TextStyle(fontWeight: .normal),
+                        )
+                      : null,
+                  trailing: Icon(Icons.chevron_right),
                 ),
-                dense: true,
-                visualDensity: VisualDensity.compact,
-                title: Text(
-                  text,
-                  textAlign: .justify,
-                  style: TextStyle(fontWeight: .w700),
-                ),
-                subtitle: Text(
-                  'SSSSSSSSSSSSSSSSSSSSSSSSS',
-                  textAlign: .justify,
-                  style: TextStyle(fontWeight: .normal),
-                ),
-                trailing: Icon(Icons.chevron_right),
               ),
             );
           }
@@ -212,19 +231,24 @@ class _CustomDropdownSearchState<T> extends State<CustomDropdownSearch<T>> {
             margin: const EdgeInsets.all(5),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              color: isCurrent ? primary.withValues(alpha: .15) : null,
+              color: isCurrent ? secondary.withValues(alpha: .15) : null,
             ),
-            child: ListTile(
-              leading: Icon(
-                isCurrent ? Icons.check_circle_rounded : Icons.circle_outlined,
-                color: isCurrent ? primary : Colors.grey,
-              ),
-              dense: true,
-              visualDensity: VisualDensity.compact,
-              title: RichText(
-                text: TextSpan(
-                  children: spans,
-                  style: const TextStyle(color: Colors.black, fontFamily: 'Cabin'),
+            child: Material(
+              shadowColor: Colors.transparent,
+              color: Colors.transparent,
+              child: ListTile(
+                splashColor: Colors.transparent,
+                leading: Icon(
+                  isCurrent ? Icons.check_circle_rounded : Icons.circle_outlined,
+                  color: isCurrent ? secondary : Colors.grey,
+                ),
+                dense: true,
+                visualDensity: VisualDensity.compact,
+                title: RichText(
+                  text: TextSpan(
+                    children: spans,
+                    style: const TextStyle(color: Colors.black, fontFamily: 'Cabin'),
+                  ),
                 ),
               ),
             ),

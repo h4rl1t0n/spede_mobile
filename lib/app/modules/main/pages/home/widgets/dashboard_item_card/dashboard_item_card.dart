@@ -161,7 +161,7 @@ class _DashboardCardState extends State<DashboardCard> {
                                   decoration: BoxDecoration(color: e.color, shape: BoxShape.circle),
                                 ),
                                 const SizedBox(width: 8),
-                                Expanded(child: Text(e.solicitacao.name, style: const TextStyle(fontSize: 13))),
+                                Expanded(child: Text(e.solicitacao.label, style: const TextStyle(fontSize: 13))),
                                 Text(e.value.toString(), style: const TextStyle(fontWeight: FontWeight.bold)),
                               ],
                             ),
