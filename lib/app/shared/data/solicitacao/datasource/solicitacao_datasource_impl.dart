@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:multiple_result/multiple_result.dart';
 
 import '../../../../core/exceptions/failure.dart';
-import '../../../../core/rest_client/error/custom_message_error.dart';
+import '../../../../core/rest_client/error/message_error.dart';
 import '../../../../enum/tipo_caixa.dart';
 import '../../../../enum/tipo_solicitacao.dart';
 import '../../../../mock/documentos.dart';
@@ -23,7 +23,7 @@ class SolicitacaoDatasourceImpl extends SolicitacaoDatasource {
       final lista = documentos.where((e) => e.tipoCaixa == caixa).toList();
       return Success(lista);
     } on DioException catch (err) {
-      return Error(CustomMessageError.getMessage(err));
+      return Error(MessageError.getMessage(err));
     }
   }
 
@@ -43,7 +43,7 @@ class SolicitacaoDatasourceImpl extends SolicitacaoDatasource {
 
       return Success(resumo);
     } on DioException catch (err) {
-      return Error(CustomMessageError.getMessage(err));
+      return Error(MessageError.getMessage(err));
     }
   }
 

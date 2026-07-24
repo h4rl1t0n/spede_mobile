@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:multiple_result/multiple_result.dart';
 
 import '../../../../core/exceptions/failure.dart';
-import '../../../../core/rest_client/error/custom_message_error.dart';
+import '../../../../core/rest_client/error/message_error.dart';
 import '../../../../core/rest_client/error/dio_failure.dart';
 import '../../../../mock/usuarios.dart';
 import '../dto/auth_request_dto.dart';
@@ -29,7 +29,7 @@ class AuthDatasourceImpl implements AuthDatasource {
 
       return Error(DioFailure(message: 'Usuário não encontrado!', statusCode: 404));
     } on DioException catch (err) {
-      return Error(CustomMessageError.getMessage(err));
+      return Error(MessageError.getMessage(err));
     }
   }
 

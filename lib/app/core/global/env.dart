@@ -1,5 +1,8 @@
 class Env {
-  static const Map<String, String> _keys = {'API_URL': String.fromEnvironment('API_URL')};
+  static const Map<String, String> _keys = {
+    'API_URL': String.fromEnvironment('API_URL'),
+    'AMBIENTE': String.fromEnvironment('AMBIENTE'),
+  };
 
   static String _getKey(String key) {
     final value = _keys[key] ?? '';
@@ -12,12 +15,5 @@ class Env {
   }
 
   static String get apiUrl => _getKey('API_URL');
-
-  static String get ambiente {
-    return apiUrl.contains('http:')
-        ? 'Desenvolvimento'
-        : Env.apiUrl.contains('hml')
-        ? 'Homologação'
-        : 'Produção';
-  }
+  static String get ambiente => _getKey('AMBIENTE');
 }

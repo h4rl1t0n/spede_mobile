@@ -4,13 +4,14 @@ import 'dio_failure.dart';
 import 'response_code.dart';
 import 'status_code_error_enum.dart';
 
-class CustomMessageError {
+class MessageError {
   static DioFailure getMessage(e) {
     String message = '';
     int? statusCode;
     if (e.response != null) {
       statusCode = e.response.statusCode;
       message = 'Erro desconhecido [Error ${e.response.statusCode}], tente novamente';
+      
       if (statusCode == ResponseCode.notFound.code ||
           statusCode == ResponseCode.unauthorized.code ||
           statusCode == ResponseCode.badRequest.code) {
@@ -67,6 +68,7 @@ class CustomMessageError {
 
   static String getErrorFromData(dynamic data) {
     // String resultError = 'Objeto não encontrado';
+
     // if (data != null && data['errors'] != null) {
     //   final errorResponse = ErrorResponseDto.fromJson(data);
     //   resultError = errorResponse.errors.join(';\n');
@@ -74,6 +76,8 @@ class CustomMessageError {
     //     resultError = 'Usuário inexistente ou senha inválida';
     //   }
     // }
+    // return resultError;
+
     return 'Houve um erro nesta requisição';
   }
 }

@@ -5,8 +5,7 @@ import '../global/env.dart';
 import 'interceptors/auth_interceptor.dart';
 
 class CustomDio extends DioForNative {
-  CustomDio()
-    : super(
+  CustomDio() : super(
         BaseOptions(
           baseUrl: Env.apiUrl,
           connectTimeout: const Duration(seconds: 60),

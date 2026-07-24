@@ -8,6 +8,8 @@ import '../../models/usuario_model.dart';
 
 enum SessionStorageKeys {
   setorSelecionado('setorSelecionado'),
+  accessToken('accessToken'),
+  refreshToken('refreshToken'),
   username('username');
 
   final String key;
@@ -49,6 +51,9 @@ class LocalStorageUtils {
 
   static Future<void> clean() async {
     await LocalStorageUtils.removeValue(SessionStorageKeys.setorSelecionado.key);
+    await LocalStorageUtils.removeValue(SessionStorageKeys.accessToken.key);
+    await LocalStorageUtils.removeValue(SessionStorageKeys.refreshToken.key);
+
     await LocalStorageUtils.removeValue(SessionStorageKeys.username.key);
   }
 
@@ -70,5 +75,37 @@ class LocalStorageUtils {
   static Future<UsuarioModel> getUsuario() async {
     final String username = await LocalStorageUtils.getValue(SessionStorageKeys.username.key);
     return usuarios.firstWhere((element) => element.username == username);
+  }
+
+  static Future<void> saveTokens({required String accessToken, required String refreshToken}) async {
+    await LocalStorageUtils.setValue(SessionStorageKeys.accessToken.key, accessToken);
+    await LocalStorageUtils.setValue(SessionStorageKeys.refreshToken.key, refreshToken);
+    log('Tokens salvos e atualizados.');
+  }
+
+  static Future<void> saveDataLogin({required String login, required String senha, bool saveData = false}) async {
+    await LocalStorageUtils.setValue(ManterDadosLogin.login.key, login);
+
+    if (saveData) {
+      await LocalStorageUtils.setValue(ManterDadosLogin.senha.key, senha);
+    } else {
+      await LocalStorageUtils.removeValue(ManterDadosLogin.senha.key);
+    }
+  }
+
+  static Future<String> getLogin() async {
+    return LocalStorageUtils.getValue(ManterDadosLogin.login.key);
+  }
+
+  static Future<String> getSenha() async {
+    return LocalStorageUtils.getValue(ManterDadosLogin.senha.key);
+  }
+
+  static Future<String> getAccessToken() async {
+    return LocalStorageUtils.getValue(SessionStorageKeys.accessToken.key);
+  }
+
+  static Future<String> getRefreshToken() async {
+    return LocalStorageUtils.getValue(SessionStorageKeys.refreshToken.key);
   }
 }

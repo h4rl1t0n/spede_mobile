@@ -10,7 +10,7 @@
                "type": "dart",
                "args": [
                     "--dart-define-from-file",
-                    "env-hml.local.json"
+                    "env-dev.json"
                ]
           },
           {
@@ -20,7 +20,7 @@
                "flutterMode": "profile",
                "args": [
                     "--dart-define-from-file",
-                    "env-hml.local.json"
+                    "env-hml.json"
                ]
           },
           {
@@ -30,7 +30,7 @@
                "flutterMode": "release",
                "args": [
                     "--dart-define-from-file",
-                    "env-prod.local.json"
+                    "env-prod.json"
                ]
           }
      ]
