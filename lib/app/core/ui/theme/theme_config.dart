@@ -137,6 +137,8 @@ class ThemeConfig {
         }),
       ),
 
+      checkboxTheme: CheckboxThemeData(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
+
       dialogTheme: DialogThemeData(
         insetPadding: EdgeInsets.all(15),
         backgroundColor: colorScheme.surface,

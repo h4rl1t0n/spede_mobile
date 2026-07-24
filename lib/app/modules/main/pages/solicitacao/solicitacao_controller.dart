@@ -20,6 +20,11 @@ abstract class SolicitacaoControllerBase with Store {
   @observable
   var messageLoader = '';
 
+  @computed
+  bool get todosSelecionados {
+    return selecionados.length == filtrarPorCategoria.length;
+  }
+
   @observable
   var solicitacoes = ObservableList<DocumentoModel>();
 
@@ -64,6 +69,16 @@ abstract class SolicitacaoControllerBase with Store {
 
   @computed
   bool get modoSelecao => selecionados.isNotEmpty;
+
+  @action
+  void selecionarTodos(bool value) {
+    selecionados.clear();
+
+    if (value) {
+      selecionados.addAll(filtrarPorCategoria);
+      return;
+    }
+  }
 
   @computed
   Map<TipoSolicitacao, int> get contarCategorias {

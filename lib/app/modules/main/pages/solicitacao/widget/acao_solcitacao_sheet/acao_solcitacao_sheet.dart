@@ -104,33 +104,49 @@ class _AcaoSolcitacaoSheetState extends State<AcaoSolcitacaoSheet> {
                           Expanded(
                             child: SizedBox(
                               height: 45,
-                              child: ElevatedButton.icon(
+                              child: ElevatedButton(
                                 style: ButtonStyles.instance.secondary,
-                                icon: const Icon(Icons.check_circle),
-                                label: const Text('Atender'),
+                                child: const Text('Atender'),
                                 onPressed: () async {
-                                  await toRouteDecidirSolicitacaoPage(acao: AcaoSolicitacao.atender);
+                                  await navigateToDecidirSolicitacao(acao: AcaoSolicitacao.atender);
                                 },
                               ),
                             ),
                           ),
+
                           const SizedBox(width: 12),
-                        ],
-                        Expanded(
-                          child: SizedBox(
-                            height: 45,
-                            child: ElevatedButton.icon(
-                              style: ButtonStyles.instance.secondary.copyWith(
-                                backgroundColor: WidgetStatePropertyAll(colorScheme.error),
+
+                          Expanded(
+                            child: SizedBox(
+                              height: 45,
+                              child: ElevatedButton(
+                                style: ButtonStyles.instance.secondary.copyWith(
+                                  backgroundColor: WidgetStatePropertyAll(colorScheme.error),
+                                ),
+                                child: Text('Rejeitar'),
+                                onPressed: () async {
+                                  await navigateToDecidirSolicitacao(acao: AcaoSolicitacao.rejeitar);
+                                },
                               ),
-                              icon: const Icon(Icons.cancel),
-                              label: const Text('Rejeitar'),
-                              onPressed: () async {
-                                await toRouteDecidirSolicitacaoPage(acao: AcaoSolicitacao.rejeitar);
-                              },
                             ),
                           ),
-                        ),
+                        ],
+                        if (caixa == TipoCaixa.enviadas) ...[
+                          Expanded(
+                            child: SizedBox(
+                              height: 45,
+                              child: ElevatedButton(
+                                style: ButtonStyles.instance.secondary.copyWith(
+                                  backgroundColor: WidgetStatePropertyAll(colorScheme.error),
+                                ),
+                                child: Text('Cancelar Solicitação'),
+                                onPressed: () async {
+                                  await navigateToDecidirSolicitacao(acao: AcaoSolicitacao.cancelar);
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
                       ],
                     ),
                   ),
@@ -143,7 +159,7 @@ class _AcaoSolcitacaoSheetState extends State<AcaoSolcitacaoSheet> {
     );
   }
 
-  Future<void> toRouteDecidirSolicitacaoPage({required AcaoSolicitacao acao}) async {
+  Future<void> navigateToDecidirSolicitacao({required AcaoSolicitacao acao}) async {
     Modular.to.pop(acao);
     await Modular.to.pushNamed(Routes.decidirSolicitacao, arguments: {'acao': acao, 'selecionados': selecionados});
   }

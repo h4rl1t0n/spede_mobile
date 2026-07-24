@@ -15,6 +15,6 @@ class PerfilModule extends Module {
 
   @override
   void routes(r) {
-    r.child(Modular.initialRoute, child: (context) => PerfilPage(usuario: r.args.data));
+    r.child('/', child: (context) => PerfilPage(usuario: r.args.data));
   }
 }

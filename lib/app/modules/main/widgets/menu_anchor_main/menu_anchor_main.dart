@@ -50,7 +50,7 @@ class _MenuAnchorMainState extends State<MenuAnchorMain> {
       },
       menuChildren: [
         SizedBox(
-          width: 300,
+          width: 290,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,

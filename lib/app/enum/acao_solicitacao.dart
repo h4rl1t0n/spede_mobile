@@ -1,7 +1,8 @@
 enum AcaoSolicitacao {
   atender('Atender'),
-  rejeitar('Rejeitar');
+  rejeitar('Rejeitar'),
+  cancelar('Cancelar');
 
-  final String name;
-  const AcaoSolicitacao(this.name);
+  final String label;
+  const AcaoSolicitacao(this.label);
 }

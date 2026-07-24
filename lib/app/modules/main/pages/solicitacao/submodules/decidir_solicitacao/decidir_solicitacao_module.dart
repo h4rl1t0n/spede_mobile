@@ -16,7 +16,7 @@ class DecidirSolicitacaoModule extends Module {
   @override
   void routes(r) {
     r.child(
-      Modular.initialRoute,
+      '/',
       child: (context) {
         return DecidirSolicitacaoPage(acao: r.args.data['acao'], selecionados: r.args.data['selecionados']);
       },

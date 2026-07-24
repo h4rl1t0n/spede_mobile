@@ -1,18 +1,20 @@
 import 'package:mobx/mobx.dart';
 
+import '../../../../../../enum/page_status.dart';
+
 part 'decidir_solicitacao_controller.g.dart';
 
 class DecidirSolicitacaoController = DecidirSolicitacaoControllerBase with _$DecidirSolicitacaoController;
 
 abstract class DecidirSolicitacaoControllerBase with Store {
   @observable
-  bool obscureText = true;
-
-  @action
-  void togglePassword() => obscureText = !obscureText;
+  var status = PageStatus.initial;
 
   @observable
-  String usuario = '';
+  String? errorMessage;
+
+  @observable
+  bool obscureText = true;
 
   @observable
   String senha = '';
@@ -24,7 +26,7 @@ abstract class DecidirSolicitacaoControllerBase with Store {
   String observacao = '';
 
   @action
-  void setUsuario(String valor) => usuario = valor;
+  void togglePassword() => obscureText = !obscureText;
 
   @action
   void setSenha(String valor) => senha = valor;

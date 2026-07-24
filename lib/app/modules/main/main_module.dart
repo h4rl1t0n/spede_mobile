@@ -35,7 +35,7 @@ class MainModule extends Module {
   @override
   void routes(r) {
     r.child(
-      Modular.initialRoute,
+      '/',
       child: (context) {
         return MainPage(
           usuario: r.args.data['usuario'],

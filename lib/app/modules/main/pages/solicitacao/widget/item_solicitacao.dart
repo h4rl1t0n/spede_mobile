@@ -31,14 +31,11 @@ class ItemSolicitacao extends StatelessWidget {
             children: [
               if (controller.modoSelecao) ...[
                 Checkbox(
+                  visualDensity: .compact,
                   value: isSelecionado,
                   onChanged: (bool? value) {
                     toggleSelecionado();
                   },
-                  activeColor: Theme.of(context).colorScheme.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5), // Deixa um pouco arredondado
-                  ),
                 ),
               ],
               Flexible(

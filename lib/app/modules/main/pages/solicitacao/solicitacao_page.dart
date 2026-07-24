@@ -56,7 +56,6 @@ class _SolicitacaoPageState extends State<SolicitacaoPage> with Loader, Messages
         Observer(
           builder: (context) {
             final lista = controller.solicitacoes;
-
             return Visibility(
               visible: lista.isNotEmpty,
               child: Padding(
@@ -77,12 +76,12 @@ class _SolicitacaoPageState extends State<SolicitacaoPage> with Loader, Messages
         ),
 
         Padding(
-          padding: const EdgeInsets.only(bottom: 8),
+          padding: const EdgeInsets.only(bottom: 4),
           child: Observer(
             builder: (context) {
               final categoriaSelecionada = controller.categoriaSelecionada;
               final categorias = controller.contarCategorias;
-              final lista = controller.solicitacoes;
+              final lista = controller.filtrarPorCategoria;
 
               return Visibility(
                 visible: lista.isNotEmpty,
@@ -94,6 +93,29 @@ class _SolicitacaoPageState extends State<SolicitacaoPage> with Loader, Messages
               );
             },
           ),
+        ),
+
+        Observer(
+          builder: (context) {
+            final lista = controller.filtrarPorCategoria;
+            final modoSelecao = controller.modoSelecao;
+            final todosSelecionados = controller.todosSelecionados;
+
+            return Visibility(
+              visible: lista.isNotEmpty,
+              child: CheckboxListTile(
+                visualDensity: .compact,
+                contentPadding: EdgeInsets.only(left: modoSelecao ? 13 : 2),
+                controlAffinity: .leading,
+                value: todosSelecionados,
+                title: Text(
+                  '${todosSelecionados ? 'Desmarcar' : 'Selecionar'} todos',
+                  style: TextStyle(fontSize: 15, fontWeight: .w700),
+                ),
+                onChanged: (value) => controller.selecionarTodos(value ?? false),
+              ),
+            );
+          },
         ),
 
         Expanded(
@@ -116,7 +138,7 @@ class _SolicitacaoPageState extends State<SolicitacaoPage> with Loader, Messages
                   await controller.carregarSolicitacoes(caixa);
                 },
                 child: ListView.separated(
-                  padding: const EdgeInsets.all(12).copyWith(bottom: 20),
+                  padding: const EdgeInsets.only(left: 12, right: 12, bottom: 20),
                   itemCount: lista.length,
                   separatorBuilder: (_, _) => const SizedBox(height: 12),
                   itemBuilder: (_, index) {

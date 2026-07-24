@@ -5,6 +5,7 @@ import 'modules/core/core_module.dart';
 import 'modules/inicializar/inicializar_module.dart';
 import 'modules/login/login_module.dart';
 import 'modules/main/main_module.dart';
+import 'modules/notificacao/notificacao_module.dart';
 import 'modules/perfil/perfil_module.dart';
 
 class AppModule extends Module {
@@ -21,5 +22,6 @@ class AppModule extends Module {
     r.module(Routes.login, module: LoginModule());
     r.module(Routes.main, module: MainModule());
     r.module(Routes.perfil, module: PerfilModule());
+    r.module(Routes.notificacao, module: NotificacaoModule());
   }
 }

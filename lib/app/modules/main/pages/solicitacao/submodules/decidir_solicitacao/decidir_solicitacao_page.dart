@@ -3,17 +3,18 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:mobx/mobx.dart';
 import 'package:validatorless/validatorless.dart';
 
 // Certifique-se de ajustar os imports abaixo conforme o caminho real no seu projeto
 import '../../../../../../core/constants/images.dart';
-import '../../../../../../core/extensions/string_extension.dart';
 import '../../../../../../core/global/local_storage_utils.dart';
 import '../../../../../../core/helpers/loader.dart';
 import '../../../../../../core/helpers/messages.dart';
 import '../../../../../../core/ui/theme/styles/button_styles.dart';
 import '../../../../../../core/ui/widgets/custom_dropdown_search/custom_dropdown_search.dart';
 import '../../../../../../enum/acao_solicitacao.dart';
+import '../../../../../../enum/page_status.dart';
 import '../../../../../../enum/tipo_solicitacao.dart';
 import '../../../../../../mock/motivos_rejeicao.dart';
 import '../../../../../../models/documento_model.dart';
@@ -33,28 +34,30 @@ class DecidirSolicitacaoPage extends StatefulWidget {
 }
 
 class _DecidirSolicitacaoPageState extends State<DecidirSolicitacaoPage> with Loader, Messages {
-  final controller = Modular.get<DecidirSolicitacaoController>();
-  final _formKey = GlobalKey<FormState>();
+  late final DecidirSolicitacaoController controller;
 
+  late List<ReactionDisposer> disposers = [];
+  late final GlobalKey<FormState> _formKey;
   late final TextEditingController _usuarioTEC;
   late final TextEditingController _senhaTEC;
   late final TextEditingController _observacaoTEC;
 
   AcaoSolicitacao get acao => widget.acao;
-  bool get rejeitar => acao == AcaoSolicitacao.rejeitar;
-  TipoSolicitacao get solicitacao => selecionados.first.tipoSolicitacao;
   List<DocumentoModel> get selecionados => widget.selecionados;
+  TipoSolicitacao get solicitacao => selecionados.first.tipoSolicitacao;
 
   @override
   void initState() {
     super.initState();
+
+    controller = Modular.get<DecidirSolicitacaoController>();
+
+    _formKey = GlobalKey<FormState>();
     _usuarioTEC = TextEditingController();
     _senhaTEC = TextEditingController();
-    _observacaoTEC = TextEditingController(text: controller.observacao);
+    _observacaoTEC = TextEditingController();
 
-    if (acao == AcaoSolicitacao.atender && solicitacao != TipoSolicitacao.ciencia) {
-      WidgetsBinding.instance.addPostFrameCallback((_) async => _carregarUsuario());
-    }
+    WidgetsBinding.instance.addPostFrameCallback((_) async => setupReactions());
   }
 
   @override
@@ -70,14 +73,11 @@ class _DecidirSolicitacaoPageState extends State<DecidirSolicitacaoPage> with Lo
     final colorScheme = Theme.of(context).colorScheme;
 
     return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            '${rejeitar ? 'Rejeitar' : 'Atender'} '
-            '${selecionados.length == 1 ? 'Solicitação' : 'Solicitações'}',
-          ),
-        ),
+        appBar: AppBar(title: Text('${acao.label} ${selecionados.length == 1 ? 'Solicitação' : 'Solicitações'}')),
         body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(image: AssetImage(Images.logoTCE), fit: BoxFit.cover),
@@ -129,10 +129,12 @@ class _DecidirSolicitacaoPageState extends State<DecidirSolicitacaoPage> with Lo
                     height: 45,
                     child: ElevatedButton(
                       style: ButtonStyles.instance.primary.copyWith(
-                        backgroundColor: WidgetStatePropertyAll(rejeitar ? colorScheme.error : colorScheme.secondary),
+                        backgroundColor: WidgetStatePropertyAll(
+                          acao == AcaoSolicitacao.atender ? colorScheme.secondary : colorScheme.error,
+                        ),
                       ),
                       onPressed: _executarAcaoPrincipal,
-                      child: Text(acao.name.capitalize()),
+                      child: Text(acao.label),
                     ),
                   ),
                 ),
@@ -144,7 +146,7 @@ class _DecidirSolicitacaoPageState extends State<DecidirSolicitacaoPage> with Lo
     );
   }
 
-  Widget _buildAtenderForm() {
+  Widget _formAceitar() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -159,7 +161,6 @@ class _DecidirSolicitacaoPageState extends State<DecidirSolicitacaoPage> with Lo
               TextFormField(
                 enabled: false,
                 controller: _usuarioTEC,
-                onChanged: controller.setUsuario,
                 decoration: const InputDecoration(hintText: 'Digite seu usuário'),
                 validator: Validatorless.required('O usuário é obrigatório'),
               ),
@@ -190,7 +191,7 @@ class _DecidirSolicitacaoPageState extends State<DecidirSolicitacaoPage> with Lo
     );
   }
 
-  Widget _buildRejeitarForm() {
+  Widget _formRejeitar() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -233,21 +234,15 @@ class _DecidirSolicitacaoPageState extends State<DecidirSolicitacaoPage> with Lo
   }
 
   Widget _buildFormularioAcao() {
-    if (rejeitar) {
-      return _buildRejeitarForm();
+    if (acao == AcaoSolicitacao.rejeitar) {
+      return _formRejeitar();
     }
 
     if (acao == AcaoSolicitacao.atender && solicitacao != TipoSolicitacao.ciencia) {
-      return _buildAtenderForm();
+      return _formAceitar();
     }
 
     return const SizedBox.shrink();
-  }
-
-  Future<void> _carregarUsuario() async {
-    final usuario = await LocalStorageUtils.getUsuario();
-    _usuarioTEC.text = usuario.username;
-    controller.setUsuario(usuario.username);
   }
 
   void _executarAcaoPrincipal() {
@@ -259,11 +254,17 @@ class _DecidirSolicitacaoPageState extends State<DecidirSolicitacaoPage> with Lo
       return;
     }
 
+    // Se cancelamento, não há inputs para validar
+    if (acao == AcaoSolicitacao.cancelar) {
+      _confirmarCancelamento();
+      return;
+    }
+
     // Validação dos TextFormFields via Validatorless
     final isFormValid = _formKey.currentState?.validate() ?? false;
 
     if (isFormValid) {
-      if (rejeitar) {
+      if (acao == AcaoSolicitacao.rejeitar) {
         _rejeitar();
       } else {
         _assinar();
@@ -272,6 +273,8 @@ class _DecidirSolicitacaoPageState extends State<DecidirSolicitacaoPage> with Lo
   }
 
   void _assinar() {
+    log('--- Atender | ${solicitacao.label} ---');
+
     log('Usuário: ${_usuarioTEC.text}');
     log('Senha: ${_senhaTEC.text}');
     log('Assinando ${selecionados.length} solicitação(ões)');
@@ -279,14 +282,51 @@ class _DecidirSolicitacaoPageState extends State<DecidirSolicitacaoPage> with Lo
   }
 
   void _darCiencia() {
+    log('--- Atender | ${solicitacao.label} ---');
+
     log('Dando ciência em ${selecionados.length} solicitação(ões)');
     showSuccess('Ciência registrada com sucesso!');
   }
 
   void _rejeitar() {
+    log('--- Rejeitar ---');
+
     log('Motivo: ${controller.motivo}');
     log('Observação: ${_observacaoTEC.text}');
     log('Rejeitando ${selecionados.length} solicitação(ões)');
     showSuccess('Solicitação rejeitada com sucesso!');
+  }
+
+  void _confirmarCancelamento() {
+    log('--- Cancelar ---');
+    log('Cancelando ${selecionados.length} solicitação(ões)');
+  }
+
+  void setupReactions() {
+    disposers = [
+      reaction((_) => controller.status, (status) {
+        switch (status) {
+          case PageStatus.initial:
+            break;
+          case PageStatus.loading:
+            showLoader();
+            break;
+          case PageStatus.loaded:
+            hideLoader();
+            break;
+          case PageStatus.success:
+            hideLoader();
+            break;
+          case PageStatus.error:
+            hideLoader();
+            showError(controller.errorMessage ?? '');
+            break;
+        }
+      }),
+      when((_) => acao == AcaoSolicitacao.atender, () async {
+        final usuario = await LocalStorageUtils.getUsuario();
+        _usuarioTEC.text = usuario.username;
+      }),
+    ];
   }
 }
