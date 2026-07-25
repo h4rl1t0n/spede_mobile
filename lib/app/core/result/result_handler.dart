@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
@@ -7,8 +8,8 @@ import '../exceptions/failure.dart';
 
 Future<void> fetch<T>(
   Future<Result<T, Failure>> apiCall, {
-  required Function(T success) onSuccess,
-  required Function(String errorMessage) onError,
+  required FutureOr<void> Function(T success) onSuccess,
+  required FutureOr<void> Function(String errorMessage) onError,
   VoidCallback? onFinally,
 }) async {
   try {

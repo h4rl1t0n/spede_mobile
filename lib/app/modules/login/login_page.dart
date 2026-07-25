@@ -19,20 +19,21 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> with Loader, Messages {
-  final controller = inject<LoginController>();
-  List<ReactionDisposer> disposers = [];
+  late final LoginController controller;
+  late final GlobalKey<FormState> formKey;
+  late final TextEditingController loginUsuarioTEC;
+  late final TextEditingController senhaUsuarioTEC;
 
-  late final TextEditingController usuarioTEC;
-  late final TextEditingController senhaTEC;
-  late final GlobalKey<FormState> _formKey;
+  List<ReactionDisposer> disposers = [];
 
   @override
   void initState() {
     super.initState();
 
-    _formKey = GlobalKey<FormState>();
-    usuarioTEC = TextEditingController();
-    senhaTEC = TextEditingController();
+    controller = inject<LoginController>();
+    formKey = GlobalKey<FormState>();
+    loginUsuarioTEC = TextEditingController();
+    senhaUsuarioTEC = TextEditingController();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       _setupReactions();
@@ -42,31 +43,27 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
 
   @override
   void dispose() {
-    usuarioTEC.dispose();
-    senhaTEC.dispose();
+    loginUsuarioTEC.dispose();
+    senhaUsuarioTEC.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final teste = MediaQuery.of(context).viewInsets.bottom > 0;
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         backgroundColor: Colors.white,
         body: Stack(
           children: [
-            Visibility(
-              visible: !teste,
-              child: Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: IgnorePointer(
-                  child: Opacity(
-                    opacity: .7,
-                    child: Image.asset(Images.background, height: 200, width: double.infinity, fit: BoxFit.fill),
-                  ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: IgnorePointer(
+                child: Opacity(
+                  opacity: .7,
+                  child: Image.asset(Images.background, height: 200, width: double.infinity, fit: BoxFit.fill),
                 ),
               ),
             ),
@@ -103,7 +100,23 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
                                     borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
                                   ),
                                 ),
-                                Transform.translate(offset: const Offset(0, 10), child: _logo()),
+                                Transform.translate(
+                                  offset: const Offset(0, 10),
+                                  child: Card(
+                                    color: Colors.transparent,
+                                    elevation: 7,
+                                    child: Container(
+                                      width: 140,
+                                      height: 140,
+                                      decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+                                      padding: const EdgeInsets.all(12),
+                                      child: Hero(
+                                        tag: 'logo',
+                                        child: Image.asset(Images.logo, fit: BoxFit.contain),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
 
@@ -113,9 +126,8 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
                                 child: ConstrainedBox(
                                   constraints: const BoxConstraints(maxWidth: 430),
                                   child: Form(
-                                    key: _formKey,
+                                    key: formKey,
                                     child: Column(
-                                      // Alterado para MAX para permitir o uso dos Spacers
                                       mainAxisSize: MainAxisSize.max,
                                       crossAxisAlignment: CrossAxisAlignment.stretch,
                                       children: [
@@ -126,6 +138,7 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
                                           textAlign: TextAlign.center,
                                           style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
                                         ),
+
                                         const Text(
                                           'Sistema de Processos e Documentos\nEletrônicos',
                                           textAlign: TextAlign.center,
@@ -133,16 +146,96 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
                                         ),
 
                                         const SizedBox(height: 32),
-                                        _inputUsuario,
+
+                                        TextFormField(
+                                          controller: loginUsuarioTEC,
+                                          textInputAction: TextInputAction.next,
+                                          onChanged: (value) => controller.setAuth(login: value),
+                                          validator: Validatorless.required('Informe seu usuário'),
+                                          decoration: const InputDecoration(
+                                            labelText: 'Usuário',
+                                            hintText: 'Digite seu usuário',
+                                            prefixIcon: Icon(Icons.person_outline),
+                                          ),
+                                        ),
 
                                         const SizedBox(height: 16),
-                                        _inputSenha,
+
+                                        Observer(
+                                          builder: (context) {
+                                            final obscureText = controller.obscureText;
+                                            return TextFormField(
+                                              controller: senhaUsuarioTEC,
+                                              obscureText: obscureText,
+                                              validator: Validatorless.required('Informe sua senha'),
+                                              onChanged: (value) => controller.setAuth(senha: value),
+                                              decoration: InputDecoration(
+                                                labelText: 'Senha',
+                                                hintText: 'Digite sua senha',
+                                                prefixIcon: const Icon(Icons.lock_outline),
+                                                suffixIcon: IconButton(
+                                                  onPressed: controller.changeObscureText,
+                                                  icon: Icon(
+                                                    obscureText
+                                                        ? Icons.visibility_outlined
+                                                        : Icons.visibility_off_outlined,
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+
                                         const SizedBox(height: 10),
 
-                                        _buttonSaveMe,
+                                        Observer(
+                                          builder: (context) {
+                                            if (controller.showManterDados) {
+                                              return CheckboxListTile(
+                                                contentPadding: EdgeInsets.zero,
+                                                controlAffinity: ListTileControlAffinity.leading,
+                                                title: const Text('Lembrar-me', style: TextStyle(fontSize: 14)),
+                                                value: controller.saveData,
+                                                onChanged: (value) => controller.setSaveData(value ?? false),
+                                              );
+                                            }
+
+                                            return const SizedBox.shrink();
+                                          },
+                                        ),
 
                                         const SizedBox(height: 10),
-                                        _buttonEntrar,
+
+                                        SizedBox(
+                                          height: 50,
+                                          child: ElevatedButton(
+                                            onPressed: fazerLogin,
+                                            child: AnimatedSwitcher(
+                                              duration: const Duration(milliseconds: 250),
+                                              child: Observer(
+                                                builder: (context) {
+                                                  final isLoading = controller.status == PageStatus.loading;
+
+                                                  if (isLoading) {
+                                                    return const SizedBox(
+                                                      width: 25,
+                                                      height: 25,
+                                                      child: CircularProgressIndicator(
+                                                        strokeWidth: 3,
+                                                        color: Colors.white,
+                                                      ),
+                                                    );
+                                                  }
+
+                                                  return const Text(
+                                                    'Entrar',
+                                                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                        ),
 
                                         const Spacer(flex: 3),
 
@@ -167,134 +260,16 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
     );
   }
 
-  Widget _logo() {
-    return Card(
-      color: Colors.transparent,
-      elevation: 7,
-      child: Container(
-        width: 140,
-        height: 140,
-        decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.white),
-        padding: const EdgeInsets.all(12),
-        child: Hero(
-          tag: 'logo',
-          child: Image.asset(Images.logo, fit: BoxFit.contain),
-        ),
-      ),
-    );
-  }
-
-  Widget get _inputUsuario {
-    return TextFormField(
-      controller: usuarioTEC,
-      textInputAction: TextInputAction.next,
-      onChanged: (value) {
-        controller.login = value;
-      },
-      validator: Validatorless.required('Informe seu usuário'),
-      decoration: const InputDecoration(
-        labelText: 'Usuário',
-        hintText: 'Digite seu usuário',
-        prefixIcon: Icon(Icons.person_outline),
-      ),
-    );
-  }
-
-  Widget get _inputSenha {
-    return Observer(
-      builder: (context) {
-        final obscureText = controller.obscureText;
-        return TextFormField(
-          controller: senhaTEC,
-          obscureText: obscureText,
-          validator: Validatorless.required('Informe sua senha'),
-          onChanged: (value) {
-            controller.senha = value;
-          },
-          decoration: InputDecoration(
-            labelText: 'Senha',
-            hintText: 'Digite sua senha',
-            prefixIcon: const Icon(Icons.lock_outline),
-            suffixIcon: IconButton(
-              onPressed: () {
-                controller.changeObscureText();
-              },
-              icon: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 250),
-                child: Icon(
-                  obscureText ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-                  key: ValueKey(obscureText),
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget get _buttonEntrar {
-    return SizedBox(
-      height: 50,
-      child: ElevatedButton(
-        onPressed: () async {
-          await toHomePage();
-        },
-        child: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 250),
-          child: Observer(
-            builder: (context) {
-              final isLoading = controller.status == PageStatus.loading;
-
-              if (isLoading) {
-                return const SizedBox(
-                  width: 26,
-                  height: 26,
-                  child: CircularProgressIndicator(strokeWidth: 3, color: Colors.white),
-                );
-              }
-
-              return const Text('Entrar', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600));
-            },
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget get _buttonSaveMe {
-    return Observer(
-      builder: (context) {
-        return Visibility(
-          visible: controller.showManterDados,
-          child: CheckboxListTile(
-            checkboxShape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(4)),
-            contentPadding: EdgeInsets.zero,
-            controlAffinity: ListTileControlAffinity.leading,
-            title: const Text('Lembrar-me', style: TextStyle(fontSize: 14)),
-            value: controller.manterDados,
-            onChanged: (v) => controller.setManterDados(v ?? false),
-          ),
-        );
-      },
-    );
-  }
-
-  Future<void> toHomePage() async {
-    final currentState = _formKey.currentState;
-    if (!(currentState?.validate() ?? false)) {
+  Future<void> fazerLogin() async {
+    if (!(formKey.currentState?.validate() ?? false)) {
       return;
     }
 
-    final success = await controller.auth();
+    final success = await controller.login();
 
-    if (success) {
-      return navigateToInicializar();
+    if (success && mounted) {
+      context.navigate(Routes.inicializar);
     }
-  }
-
-  void navigateToInicializar() async {
-    context.navigate(Routes.inicializar);
   }
 
   void _setupReactions() {
@@ -304,7 +279,7 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
           case PageStatus.initial:
             break;
           case PageStatus.loading:
-            showLoader();
+            hideLoader();
             break;
           case PageStatus.loaded:
             hideLoader();
@@ -320,8 +295,8 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
       }),
       reaction((_) => controller.existeDados, (existDadosLogin) {
         if (existDadosLogin) {
-          usuarioTEC.text = controller.login;
-          senhaTEC.text = controller.senha;
+          loginUsuarioTEC.text = controller.auth.login;
+          senhaUsuarioTEC.text = controller.auth.senha;
         }
       }),
     ];

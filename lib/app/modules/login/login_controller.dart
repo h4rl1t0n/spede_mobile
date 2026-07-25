@@ -20,13 +20,10 @@ abstract class LoginControllerBase with Store {
   String? _errorMessage;
 
   @observable
-  String login = '';
+  var auth = AuthRequestDto(login: '', senha: '');
 
   @observable
-  String senha = '';
-
-  @observable
-  bool manterDados = false;
+  bool saveData = false;
 
   @observable
   bool existeDados = false;
@@ -36,31 +33,29 @@ abstract class LoginControllerBase with Store {
 
   LoginControllerBase(this.service);
 
+  @action
   Future<void> initLogin() async {
     final login = await LocalStorageUtils.getLogin();
     final senha = await LocalStorageUtils.getSenha();
 
     if (login.isNotEmpty && senha.isNotEmpty) {
-      setLogin(login);
-      setSenha(senha);
+      setAuth(login: login, senha: senha);
       setExisteDados(true);
-      manterDados = true;
+      saveData = true;
     }
   }
 
   @action
-  Future<bool> auth() async {
+  Future<bool> login() async {
     bool result = false;
     _errorMessage = null;
-    _status = PageStatus.initial;
-
-    final auth = AuthRequestDto(login: login, senha: senha);
+    _status = PageStatus.loading;
 
     await fetch(
       service.login(auth: auth),
       onSuccess: (value) async {
         result = value;
-        await LocalStorageUtils.saveDataLogin(auth: auth, saveData: manterDados);
+        await LocalStorageUtils.saveDataLogin(auth: auth, saveData: saveData);
         _status = PageStatus.loaded;
       },
       onError: (message) {
@@ -74,20 +69,19 @@ abstract class LoginControllerBase with Store {
   }
 
   @action
+  void setAuth({String? login, String? senha}) {
+    auth = auth.setAuth(login: login, senha: senha);
+  }
+
+  @action
   void setExisteDados(bool value) => existeDados = value;
 
   @action
-  void setManterDados(bool value) => manterDados = value;
-
-  @action
-  void setLogin(String value) => login = value;
-
-  @action
-  void setSenha(String value) => senha = value;
+  void setSaveData(bool value) => saveData = value;
 
   @action
   void changeObscureText() => obscureText = !obscureText;
 
   @computed
-  bool get showManterDados => login.isNotEmpty && senha.isNotEmpty;
+  bool get showManterDados => [auth.login, auth.senha].every((value) => value.isNotEmpty);
 }
