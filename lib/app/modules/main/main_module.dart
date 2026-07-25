@@ -1,5 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 
+import '../../core/constants/routes.dart';
 import '../../shared/data/solicitacao/datasource/solicitacao_datasource.dart';
 import '../../shared/data/solicitacao/datasource/solicitacao_datasource_impl.dart';
 import '../../shared/data/solicitacao/solicitacao_repository_impl.dart';
@@ -14,36 +15,30 @@ import 'pages/home/widgets/dashboard_item_card/dashboard_item_card_store.dart';
 import 'pages/solicitacao/solicitacao_controller.dart';
 import 'pages/solicitacao/submodules/decidir_solicitacao/decidir_solicitacao_module.dart';
 
-class MainModule extends Module {
-  @override
-  List<Module> get imports => [CoreModule()];
+final mainModule = createModule(
+  path: Routes.main,
+  register: (c) {
+    c.module(coreModule);
 
-  @override
-  void binds(i) {
-    i.addSingleton<SolicitacaoDatasource>(SolicitacaoDatasourceImpl.new);
-    i.addSingleton<SolicitacaoRepository>(SolicitacaoRepositoryImpl.new);
-    i.addSingleton(SolicitacaoService.new);
+    c.addSingleton<SolicitacaoDatasource>(SolicitacaoDatasourceImpl.new);
+    c.addSingleton<SolicitacaoRepository>(SolicitacaoRepositoryImpl.new);
+    c.addSingleton(SolicitacaoService.new);
 
-    i.addSingleton(MainController.new);
+    c.addSingleton(MainController.new);
 
-    i.add(HomeController.new);
-    i.add(AgendaController.new);
-    i.add(DashboardItemCardStore.new);
-    i.add(SolicitacaoController.new);
-  }
+    c.add(HomeController.new);
+    c.add(AgendaController.new);
+    c.add(DashboardItemCardStore.new);
+    c.add(SolicitacaoController.new);
 
-  @override
-  void routes(r) {
-    r.child(
+    c.route(
       '/',
-      child: (context) {
-        return MainPage(
-          usuario: r.args.data['usuario'],
-          setores: r.args.data['setores'],
-          resumo: r.args.data['resumo'],
-        );
+      child: (context, state) {
+        final args = state.arguments as Map<String, dynamic>;
+        return MainPage(usuario: args['usuario'], setores: args['setores'], resumo: args['resumo']);
       },
     );
-    r.module('/decidir-solicitacao/', module: DecidirSolicitacaoModule());
-  }
-}
+
+    c.module(decidirSolicitacaoModule);
+  },
+);

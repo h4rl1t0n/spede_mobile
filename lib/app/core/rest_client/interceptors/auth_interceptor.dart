@@ -25,7 +25,7 @@ class AuthInterceptor extends Interceptor {
 
     try {
       final String token = await LocalStorageUtils.getAccessToken();
-      final bool pathIsNotLogin = !options.path.contains('auth/login');
+      final bool pathIsNotLogin = !options.path.contains('login');
 
       if (token.isNotEmpty && pathIsNotLogin) {
         options.headers['Authorization'] = 'Bearer $token';
@@ -44,27 +44,30 @@ class AuthInterceptor extends Interceptor {
     try {
       final response = err.response;
 
-      if (response?.statusCode == 401 && !response!.realUri.path.contains('auth/login')) {
-        final refreshed = await _refreshToken();
+      if (response?.statusCode == 401 && !response!.realUri.path.contains('login')) {
+        await GlobalContext.instance.loginExpire();
+        handler.next(err);
 
-        if (refreshed) {
-          // Se o token fou atualizado, adiciona o novo token ao cabeçalho
-          final token = await LocalStorageUtils.getAccessToken();
-          final opts = err.requestOptions;
-          opts.headers['Authorization'] = 'Bearer $token';
+        // final refreshed = await _refreshToken();
 
-          // Refaz a requisição original com o novo token
-          final cloneReq = await dioRefreshToken.request(
-            opts.path,
-            options: Options(method: opts.method, headers: opts.headers),
-            data: opts.data,
-            queryParameters: opts.queryParameters,
-          );
-          return handler.resolve(cloneReq);
-        } else {
-          await GlobalContext.instance.loginExpire();
-          handler.next(err);
-        }
+        // if (refreshed) {
+        //   // Se o token fou atualizado, adiciona o novo token ao cabeçalho
+        //   final token = await LocalStorageUtils.getAccessToken();
+        //   final opts = err.requestOptions;
+        //   opts.headers['Authorization'] = 'Bearer $token';
+
+        //   // Refaz a requisição original com o novo token
+        //   final cloneReq = await dioRefreshToken.request(
+        //     opts.path,
+        //     options: Options(method: opts.method, headers: opts.headers),
+        //     data: opts.data,
+        //     queryParameters: opts.queryParameters,
+        //   );
+        //   return handler.resolve(cloneReq);
+        // } else {
+        //   await GlobalContext.instance.loginExpire();
+        //   handler.next(err);
+        // }
       } else {
         handler.next(err);
       }
@@ -75,25 +78,25 @@ class AuthInterceptor extends Interceptor {
     super.onError(err, handler);
   }
 
-  Future<bool> _refreshToken() async {
-    try {
-      final String refreshToken = await LocalStorageUtils.getRefreshToken();
+  // Future<bool> _refreshToken() async {
+  //   try {
+  //     final String refreshToken = await LocalStorageUtils.getRefreshToken();
 
-      if (refreshToken.isNotEmpty) {
-        final response = await dioRefreshToken.post('/auth/refresh-token', data: {'refreshToken': refreshToken});
-        if (response.statusCode == 200) {
-          final access = response.data['token'];
-          final refresh = response.data['refreshToken'];
+  //     if (refreshToken.isNotEmpty) {
+  //       final response = await dioRefreshToken.post('/auth/refresh-token', data: {'refreshToken': refreshToken});
+  //       if (response.statusCode == 200) {
+  //         final access = response.data['token'];
+  //         final refresh = response.data['refreshToken'];
 
-          await LocalStorageUtils.saveTokens(accessToken: access, refreshToken: refresh);
-          return true;
-        }
-      }
-    } catch (e) {
-      log('Error during token refresh request: ${e.toString()}');
-    }
+  //         await LocalStorageUtils.saveTokens(accessToken: access, refreshToken: refresh);
+  //         return true;
+  //       }
+  //     }
+  //   } catch (e) {
+  //     log('Error during token refresh request: ${e.toString()}');
+  //   }
 
-    await LocalStorageUtils.clean();
-    return false;
-  }
+  //   await LocalStorageUtils.clean();
+  //   return false;
+  // }
 }

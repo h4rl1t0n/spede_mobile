@@ -20,7 +20,7 @@ class PerfilPage extends StatefulWidget {
 }
 
 class _PerfilPageState extends State<PerfilPage> {
-  final controller = Modular.get<PerfilController>();
+  final controller = inject<PerfilController>();
   UsuarioModel get usuario => widget.usuario;
 
   @override
@@ -102,6 +102,9 @@ class _PerfilPageState extends State<PerfilPage> {
 
   Future<void> sair() async {
     await LocalStorageUtils.clean();
-    Modular.to.navigate(Routes.inicializar);
+
+    if (mounted) {
+      context.navigate(Routes.inicializar);
+    }
   }
 }

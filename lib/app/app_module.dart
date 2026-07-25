@@ -1,6 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
 
-import 'core/constants/routes.dart';
 import 'modules/core/core_module.dart';
 import 'modules/inicializar/inicializar_module.dart';
 import 'modules/login/login_module.dart';
@@ -8,20 +7,13 @@ import 'modules/main/main_module.dart';
 import 'modules/notificacao/notificacao_module.dart';
 import 'modules/perfil/perfil_module.dart';
 
-class AppModule extends Module {
-  @override
-  List<Module> get imports => [CoreModule()];
-
-  @override
-  void binds(i) {}
-
-  @override
-  void routes(r) {
-    r.module('/', module: InicializarModule());
-    r.module(Routes.inicializar, module: InicializarModule());
-    r.module(Routes.login, module: LoginModule());
-    r.module(Routes.main, module: MainModule());
-    r.module(Routes.perfil, module: PerfilModule());
-    r.module(Routes.notificacao, module: NotificacaoModule());
-  }
-}
+final appModule = createModule(
+  register: (c) {
+    c.module(coreModule);
+    c.module(inicializarModule);
+    c.module(loginModule);
+    c.module(mainModule);
+    c.module(perfilModule);
+    c.module(notificacaoModule);
+  },
+);

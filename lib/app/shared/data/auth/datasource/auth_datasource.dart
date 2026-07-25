@@ -4,5 +4,5 @@ import '../../../../core/exceptions/failure.dart';
 import '../dto/auth_request_dto.dart';
 
 abstract class AuthDatasource {
-  Future<Result<String, Failure>> login({required AuthRequestDto auth});
+  Future<Result<bool, Failure>> login({required AuthRequestDto auth});
 }

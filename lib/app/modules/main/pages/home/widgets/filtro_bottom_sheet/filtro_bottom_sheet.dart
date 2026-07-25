@@ -104,7 +104,7 @@ class _FiltroBottomSheetState extends State<FiltroBottomSheet> {
                                 trailing: Icon(Icons.chevron_right),
                                 onTap: () {
                                   store.setFilter(titulo);
-                                  Modular.to.pop();
+                                  context.pop();
                                 },
                               ),
                             ),

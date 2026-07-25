@@ -4,22 +4,17 @@ import '../../../../../core/core_module.dart';
 import 'decidir_solicitacao_controller.dart';
 import 'decidir_solicitacao_page.dart';
 
-class DecidirSolicitacaoModule extends Module {
-  @override
-  List<Module> get imports => [CoreModule()];
-
-  @override
-  void binds(i) {
-    i.add(DecidirSolicitacaoController.new);
-  }
-
-  @override
-  void routes(r) {
-    r.child(
+final decidirSolicitacaoModule = createModule(
+  path: '/decidir-solicitacao/',
+  register: (c) {
+    c.module(coreModule);
+    c.add(DecidirSolicitacaoController.new);
+    c.route(
       '/',
-      child: (context) {
-        return DecidirSolicitacaoPage(acao: r.args.data['acao'], selecionados: r.args.data['selecionados']);
+      child: (context, state) {
+        final args = state.arguments as Map<String, dynamic>;
+        return DecidirSolicitacaoPage(acao: args['acao'], selecionados: args['selecionados']);
       },
     );
-  }
-}
+  },
+);

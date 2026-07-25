@@ -160,7 +160,7 @@ class _AcaoSolcitacaoSheetState extends State<AcaoSolcitacaoSheet> {
   }
 
   Future<void> navigateToDecidirSolicitacao({required AcaoSolicitacao acao}) async {
-    Modular.to.pop(acao);
-    await Modular.to.pushNamed(Routes.decidirSolicitacao, arguments: {'acao': acao, 'selecionados': selecionados});
+    context.pop(acao);
+    await context.pushNamed(Routes.decidirSolicitacao, arguments: {'acao': acao, 'selecionados': selecionados});
   }
 }

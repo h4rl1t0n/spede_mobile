@@ -40,7 +40,7 @@ class _DashboardCardState extends State<DashboardCard> {
   @override
   void initState() {
     super.initState();
-    store = Modular.get<DashboardItemCardStore>();
+    store = inject<DashboardItemCardStore>();
     store.items.addAll(items);
     controller = PageController(viewportFraction: 1);
   }

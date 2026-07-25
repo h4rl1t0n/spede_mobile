@@ -20,7 +20,7 @@ import 'widgets/menu_anchor_main/menu_anchor_main.dart';
 import 'widgets/selecionar_setor_dialog/selecionar_setor_dialog.dart';
 
 class MainPage extends StatefulWidget {
-  final UsuarioModel usuario;
+  final UsuarioModel? usuario;
   final DashboardResumoModel resumo;
   final List<SetorModel> setores;
 
@@ -31,10 +31,10 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> with Loader, Messages, SingleTickerProviderStateMixin {
-  final controller = Modular.get<MainController>();
+  final controller = inject<MainController>();
 
   DashboardResumoModel get resumo => widget.resumo;
-  UsuarioModel get usuario => widget.usuario;
+  UsuarioModel? get usuario => widget.usuario;
   List<SetorModel>? get setores => widget.setores;
   late List<ReactionDisposer> disposers = [];
   late final TabController tabController;
@@ -80,7 +80,7 @@ class _MainPageState extends State<MainPage> with Loader, Messages, SingleTicker
             actions: [
               IconButton(
                 onPressed: () async {
-                  await Modular.to.pushNamed(Routes.notificacao);
+                  await context.pushNamed(Routes.notificacao);
                 },
                 icon: Icon(Icons.notifications),
               ),
@@ -97,7 +97,7 @@ class _MainPageState extends State<MainPage> with Loader, Messages, SingleTicker
               controller: tabController,
               physics: const NeverScrollableScrollPhysics(),
               children: [
-                HomePage(usuarioLogado: controller.usuario ?? usuario, resumo: resumo),
+                HomePage(usuarioLogado: controller.usuario!, resumo: resumo),
                 SolicitacaoPage(caixa: TipoCaixa.recebidas),
                 SolicitacaoPage(caixa: TipoCaixa.enviadas),
                 AgendaPage(),

@@ -50,7 +50,7 @@ class _DecidirSolicitacaoPageState extends State<DecidirSolicitacaoPage> with Lo
   void initState() {
     super.initState();
 
-    controller = Modular.get<DecidirSolicitacaoController>();
+    controller = inject<DecidirSolicitacaoController>();
 
     _formKey = GlobalKey<FormState>();
     _usuarioTEC = TextEditingController();
@@ -324,8 +324,8 @@ class _DecidirSolicitacaoPageState extends State<DecidirSolicitacaoPage> with Lo
         }
       }),
       when((_) => acao == AcaoSolicitacao.atender, () async {
-        final usuario = await LocalStorageUtils.getUsuario();
-        _usuarioTEC.text = usuario.username;
+        final usuario = await LocalStorageUtils.loadUser();
+        _usuarioTEC.text = usuario?.username ?? '';
       }),
     ];
   }

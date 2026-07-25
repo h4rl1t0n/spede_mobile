@@ -11,7 +11,7 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this.datasource);
 
   @override
-  Future<Result<String, Failure>> login({required AuthRequestDto auth}) async {
+  Future<Result<bool, Failure>> login({required AuthRequestDto auth}) async {
     return datasource.login(auth: auth);
   }
 }

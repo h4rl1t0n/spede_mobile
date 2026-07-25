@@ -165,7 +165,10 @@ class _MenuAnchorMainState extends State<MenuAnchorMain> {
 
   Future<void> sair() async {
     await LocalStorageUtils.clean();
-    Modular.to.navigate(Routes.inicializar);
+
+    if (mounted) {
+      context.navigate(Routes.inicializar);
+    }
   }
 
   Future<void> openSelecionarSetorDialog() async {

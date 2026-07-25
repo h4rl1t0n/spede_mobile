@@ -22,7 +22,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with Messages, Loader {
-  final controller = Modular.get<HomeController>();
+  final controller = inject<HomeController>();
 
   UsuarioModel get usuarioLogado => widget.usuarioLogado;
   DashboardResumoModel get resumo => widget.resumo;

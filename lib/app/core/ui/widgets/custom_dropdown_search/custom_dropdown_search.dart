@@ -108,7 +108,7 @@ class _CustomDropdownSearchState<T> extends State<CustomDropdownSearch<T>> {
         dialogProps: DialogProps(
           actions: [
             TextButton(
-              onPressed: () => Modular.to.pop(),
+              onPressed: () => context.pop(),
               child: Text('Fechar', style: context.textStyles.textSecondaryButtonLabel.copyWith(fontSize: 17)),
             ),
           ],

@@ -6,27 +6,26 @@ import 'core/global/global_context.dart';
 import 'core/ui/theme/theme_config.dart';
 
 class AppWidget extends StatelessWidget {
-  final _navigatorKey = GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> navigatorKey;
 
-  AppWidget({super.key}) {
-    GlobalContext.instance.navigatorKey = _navigatorKey;
+  AppWidget({super.key, required this.navigatorKey}) {
+    GlobalContext.instance.navigatorKey = navigatorKey;
   }
 
   @override
   Widget build(BuildContext context) {
-    Modular.setNavigatorKey(_navigatorKey);
     return MaterialApp.router(
       title: 'Flutter Demo',
       themeMode: ThemeMode.light,
       theme: ThemeConfig.lightTheme,
-      routerConfig: Modular.routerConfig,
+      routerConfig: ModularApp.routerConfigOf(context),
+
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [Locale('pt', 'BR')],
-      // home: const InicializarAppPage(),
     );
   }
 }

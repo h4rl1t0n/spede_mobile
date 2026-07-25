@@ -2,15 +2,15 @@ import 'dart:developer';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../mock/usuarios.dart';
 import '../../models/setor_model.dart';
 import '../../models/usuario_model.dart';
+import '../../shared/data/auth/dto/auth_request_dto.dart';
 
 enum SessionStorageKeys {
+  usuarioLogado('usuarioLogado'),
   setorSelecionado('setorSelecionado'),
-  accessToken('accessToken'),
-  refreshToken('refreshToken'),
-  username('username');
+  accessToken('accessToken');
+  // refreshToken('refreshToken'),
 
   final String key;
   const SessionStorageKeys(this.key);
@@ -52,9 +52,7 @@ class LocalStorageUtils {
   static Future<void> clean() async {
     await LocalStorageUtils.removeValue(SessionStorageKeys.setorSelecionado.key);
     await LocalStorageUtils.removeValue(SessionStorageKeys.accessToken.key);
-    await LocalStorageUtils.removeValue(SessionStorageKeys.refreshToken.key);
-
-    await LocalStorageUtils.removeValue(SessionStorageKeys.username.key);
+    // await LocalStorageUtils.removeValue(SessionStorageKeys.refreshToken.key);
   }
 
   static Future<SetorModel?> carregarSetorSelecionado() async {
@@ -72,22 +70,32 @@ class LocalStorageUtils {
     await LocalStorageUtils.setValue(SessionStorageKeys.setorSelecionado.key, setor?.toJson() ?? '{}');
   }
 
-  static Future<UsuarioModel> getUsuario() async {
-    final String username = await LocalStorageUtils.getValue(SessionStorageKeys.username.key);
-    return usuarios.firstWhere((element) => element.username == username);
+  static Future<void> saveUser({required UsuarioModel? user}) async {
+    await LocalStorageUtils.setValue(SessionStorageKeys.usuarioLogado.key, user?.toJson() ?? '{}');
   }
 
-  static Future<void> saveTokens({required String accessToken, required String refreshToken}) async {
+  static Future<UsuarioModel?> loadUser() async {
+    final usuarioLogado = await LocalStorageUtils.getValue(SessionStorageKeys.usuarioLogado.key);
+
+    if (usuarioLogado.isNotEmpty) {
+      log('Obtendo usuário logado');
+      return UsuarioModel?.fromJson(usuarioLogado);
+    }
+
+    return null;
+  }
+
+  static Future<void> saveTokens({required String accessToken /*required String refreshToken*/}) async {
     await LocalStorageUtils.setValue(SessionStorageKeys.accessToken.key, accessToken);
-    await LocalStorageUtils.setValue(SessionStorageKeys.refreshToken.key, refreshToken);
+    //await LocalStorageUtils.setValue(SessionStorageKeys.refreshToken.key, refreshToken);
     log('Tokens salvos e atualizados.');
   }
 
-  static Future<void> saveDataLogin({required String login, required String senha, bool saveData = false}) async {
-    await LocalStorageUtils.setValue(ManterDadosLogin.login.key, login);
+  static Future<void> saveDataLogin({required AuthRequestDto auth, bool saveData = false}) async {
+    await LocalStorageUtils.setValue(ManterDadosLogin.login.key, auth.login);
 
     if (saveData) {
-      await LocalStorageUtils.setValue(ManterDadosLogin.senha.key, senha);
+      await LocalStorageUtils.setValue(ManterDadosLogin.senha.key, auth.senha);
     } else {
       await LocalStorageUtils.removeValue(ManterDadosLogin.senha.key);
     }
@@ -105,7 +113,7 @@ class LocalStorageUtils {
     return LocalStorageUtils.getValue(SessionStorageKeys.accessToken.key);
   }
 
-  static Future<String> getRefreshToken() async {
-    return LocalStorageUtils.getValue(SessionStorageKeys.refreshToken.key);
-  }
+  // static Future<String> getRefreshToken() async {
+  //   return LocalStorageUtils.getValue(SessionStorageKeys.refreshToken.key);
+  // }
 }

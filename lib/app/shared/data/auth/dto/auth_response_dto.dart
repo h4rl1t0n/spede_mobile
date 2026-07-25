@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import '../../../../models/usuario_model.dart';
+
 class AuthResponseDto {
   int? id;
   String? username;
@@ -21,29 +25,49 @@ class AuthResponseDto {
     this.exp,
   });
 
-  AuthResponseDto.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    username = json['username'];
-    nome = json['nome'];
-    email = json['email'];
-    cpf = json['cpf'];
-    setor = json['setor'];
-    nomeSetor = json['nomeSetor'];
-    iat = json['iat'];
-    exp = json['exp'];
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'username': username,
+      'nome': nome,
+      'email': email,
+      'cpf': cpf,
+      'setor': setor,
+      'nomeSetor': nomeSetor,
+      'iat': iat,
+      'exp': exp,
+    };
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['username'] = username;
-    data['nome'] = nome;
-    data['email'] = email;
-    data['cpf'] = cpf;
-    data['setor'] = setor;
-    data['nomeSetor'] = nomeSetor;
-    data['iat'] = iat;
-    data['exp'] = exp;
-    return data;
+  factory AuthResponseDto.fromMap(Map<String, dynamic> map) {
+    return AuthResponseDto(
+      id: map['id'] != null ? map['id'] as int : null,
+      username: map['username'] != null ? map['username'] as String : null,
+      nome: map['nome'] != null ? map['nome'] as String : null,
+      email: map['email'] != null ? map['email'] as String : null,
+      cpf: map['cpf'] != null ? map['cpf'] as String : null,
+      setor: map['setor'] != null ? map['setor'] as int : null,
+      nomeSetor: map['nomeSetor'] != null ? map['nomeSetor'] as String : null,
+      iat: map['iat'] != null ? map['iat'] as int : null,
+      exp: map['exp'] != null ? map['exp'] as int : null,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory AuthResponseDto.fromJson(String source) {
+    return AuthResponseDto.fromMap(json.decode(source) as Map<String, dynamic>);
+  }
+
+  UsuarioModel toModel() {
+    return UsuarioModel(
+      id: id ?? 0,
+      username: username ?? '',
+      nome: nome ?? '',
+      email: email ?? '',
+      cpf: cpf ?? '',
+      idSetor: setor ?? 0,
+      nomeSetor: nome ?? '',
+    );
   }
 }

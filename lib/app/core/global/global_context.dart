@@ -29,6 +29,7 @@ class GlobalContext {
         content: const Text('Login Expirado, faça login novamente'),
       ),
     );
-    Modular.to.navigate(Routes.inicializar);
+    
+    _navigatorKey.currentContext?.navigate(Routes.inicializar);
   }
 }

@@ -18,7 +18,7 @@ class AgendaPage extends StatefulWidget {
 }
 
 class _AgendaPageState extends State<AgendaPage> {
-  final controller = Modular.get<AgendaController>();
+  final controller = inject<AgendaController>();
 
   @override
   Widget build(BuildContext context) {

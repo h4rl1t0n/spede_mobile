@@ -23,7 +23,7 @@ class SolicitacaoPage extends StatefulWidget {
 }
 
 class _SolicitacaoPageState extends State<SolicitacaoPage> with Loader, Messages, AutomaticKeepAliveClientMixin {
-  final controller = Modular.get<SolicitacaoController>();
+  final controller = inject<SolicitacaoController>();
 
   TipoCaixa get caixa => widget.caixa;
   String get descricao => caixa.descricao;

@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:mobx/mobx.dart';
 import 'package:validatorless/validatorless.dart';
 
 import '../../core/constants/images.dart';
 import '../../core/constants/routes.dart';
-import '../../core/global/local_storage_utils.dart';
 import '../../core/helpers/loader.dart';
 import '../../core/helpers/messages.dart';
 import '../../enum/page_status.dart';
-import 'controller/login_controller.dart';
+import 'login_controller.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -20,7 +19,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> with Loader, Messages {
-  final controller = Modular.get<LoginController>();
+  final controller = inject<LoginController>();
+  List<ReactionDisposer> disposers = [];
 
   late final TextEditingController usuarioTEC;
   late final TextEditingController senhaTEC;
@@ -32,18 +32,11 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
 
     _formKey = GlobalKey<FormState>();
     usuarioTEC = TextEditingController();
-    senhaTEC = TextEditingController(text: '123456789');
+    senhaTEC = TextEditingController();
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      usuarioTEC.text == await LocalStorageUtils.getValue(SessionStorageKeys.username.key);
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-      SystemChrome.setSystemUIOverlayStyle(
-        const SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
-          statusBarBrightness: Brightness.light,
-          statusBarIconBrightness: Brightness.dark,
-        ),
-      );
+      _setupReactions();
+      controller.initLogin();
     });
   }
 
@@ -126,7 +119,6 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
                                       mainAxisSize: MainAxisSize.max,
                                       crossAxisAlignment: CrossAxisAlignment.stretch,
                                       children: [
-                                        // Preenche espaço superior de forma dinâmica
                                         const Spacer(flex: 2),
 
                                         const Text(
@@ -152,12 +144,8 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
                                         const SizedBox(height: 10),
                                         _buttonEntrar,
 
-                                        // Empurra a Central de Ajuda lá para baixo dinamicamente
                                         const Spacer(flex: 3),
 
-                                        // const CentralDeAjuda(),
-
-                                        // Respiro de 90 de altura garante que o botão não bata na arte azul do rodapé
                                         const SizedBox(height: 90),
                                       ],
                                     ),
@@ -275,19 +263,25 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
   }
 
   Widget get _buttonSaveMe {
-    return CheckboxListTile(
-      checkboxShape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(4)),
-      contentPadding: EdgeInsets.zero,
-      controlAffinity: ListTileControlAffinity.leading,
-      title: const Text('Lembrar-me', style: TextStyle(fontSize: 14)),
-      value: true,
-      onChanged: (value) {},
+    return Observer(
+      builder: (context) {
+        return Visibility(
+          visible: controller.showManterDados,
+          child: CheckboxListTile(
+            checkboxShape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(4)),
+            contentPadding: EdgeInsets.zero,
+            controlAffinity: ListTileControlAffinity.leading,
+            title: const Text('Lembrar-me', style: TextStyle(fontSize: 14)),
+            value: controller.manterDados,
+            onChanged: (v) => controller.setManterDados(v ?? false),
+          ),
+        );
+      },
     );
   }
 
   Future<void> toHomePage() async {
     final currentState = _formKey.currentState;
-
     if (!(currentState?.validate() ?? false)) {
       return;
     }
@@ -297,11 +291,39 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
     if (success) {
       return navigateToInicializar();
     }
-
-    showError(controller.errorMessage ?? '');
   }
 
-  Future<void> navigateToInicializar() async {
-    Modular.to.navigate(Routes.inicializar);
+  void navigateToInicializar() async {
+    context.navigate(Routes.inicializar);
+  }
+
+  void _setupReactions() {
+    disposers = [
+      reaction((_) => controller.status, (status) {
+        switch (status) {
+          case PageStatus.initial:
+            break;
+          case PageStatus.loading:
+            showLoader();
+            break;
+          case PageStatus.loaded:
+            hideLoader();
+            break;
+          case PageStatus.success:
+            hideLoader();
+            break;
+          case PageStatus.error:
+            hideLoader();
+            showError(controller.errorMessage ?? 'Erro, tente novamente');
+            break;
+        }
+      }),
+      reaction((_) => controller.existeDados, (existDadosLogin) {
+        if (existDadosLogin) {
+          usuarioTEC.text = controller.login;
+          senhaTEC.text = controller.senha;
+        }
+      }),
+    ];
   }
 }

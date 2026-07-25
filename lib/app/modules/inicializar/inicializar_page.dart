@@ -20,7 +20,7 @@ class InicializarPage extends StatefulWidget {
 }
 
 class _InicializarPageState extends State<InicializarPage> with SingleTickerProviderStateMixin {
-  final controller = Modular.get<InicializarController>();
+  final controller = inject<InicializarController>();
 
   late Image logo;
   List<ReactionDisposer> disposers = [];
@@ -161,25 +161,27 @@ class _InicializarPageState extends State<InicializarPage> with SingleTickerProv
   }
 
   Future<void> transition() async {
-    final String username = await LocalStorageUtils.getValue(SessionStorageKeys.username.key);
+    final String accessToken = await LocalStorageUtils.getAccessToken();
 
-    if (username.isEmpty) {
+    if (accessToken.isEmpty) {
       await Future.delayed(const Duration(milliseconds: 2000));
       await navigateToLogin();
     } else {
       await Future.delayed(const Duration(milliseconds: 3000));
-      final usuario = await LocalStorageUtils.getUsuario();
+      final usuario = await LocalStorageUtils.loadUser();
       final resumo = await controller.carregarResumoDashboard();
       await navigateToMain(usuario: usuario, resumo: resumo);
     }
   }
 
   Future<void> navigateToLogin() async {
-    await Modular.to.pushReplacementNamed(Routes.login);
+    //  await Modular.to.pushReplacementNamed(Routes.login);
+    await context.popAndPushNamed(Routes.login);
   }
 
-  Future<void> navigateToMain({required UsuarioModel usuario, required DashboardResumoModel resumo}) async {
+  Future<void> navigateToMain({required UsuarioModel? usuario, required DashboardResumoModel resumo}) async {
     final arguments = {'usuario': usuario, 'setores': setores, 'resumo': resumo};
-    await Modular.to.pushReplacementNamed(Routes.main, arguments: arguments);
+    // await Modular.to.pushReplacementNamed(Routes.main, arguments: arguments);
+    await context.popAndPushNamed(Routes.main, arguments: arguments);
   }
 }

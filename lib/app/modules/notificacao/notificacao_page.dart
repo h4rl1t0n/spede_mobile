@@ -11,7 +11,7 @@ class NotificacaoPage extends StatefulWidget {
 }
 
 class _NotificacaoPageState extends State<NotificacaoPage> {
-  final controller = Modular.get<NotificacaoController>();
+  final controller = inject<NotificacaoController>();
 
   @override
   Widget build(BuildContext context) {

@@ -9,7 +9,7 @@ class AuthService {
 
   AuthService(this.repository);
 
-  Future<Result<String, Failure>> login({required AuthRequestDto auth}) async {
+  Future<Result<bool, Failure>> login({required AuthRequestDto auth}) async {
     return repository.login(auth: auth);
   }
 }

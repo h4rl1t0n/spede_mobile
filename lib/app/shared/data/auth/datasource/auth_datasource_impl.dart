@@ -1,60 +1,47 @@
-import 'package:collection/collection.dart';
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:multiple_result/multiple_result.dart';
 
 import '../../../../core/exceptions/failure.dart';
-import '../../../../core/rest_client/error/message_error.dart';
+import '../../../../core/global/local_storage_utils.dart';
 import '../../../../core/rest_client/error/dio_failure.dart';
-import '../../../../mock/usuarios.dart';
+import '../../../../core/rest_client/error/message_error.dart';
 import '../dto/auth_request_dto.dart';
+import '../dto/auth_response_dto.dart';
 import 'auth_datasource.dart';
 
 class AuthDatasourceImpl implements AuthDatasource {
+  final DioForNative client;
+
+  AuthDatasourceImpl(this.client);
+
   @override
-  Future<Result<String, Failure>> login({required AuthRequestDto auth}) async {
+  Future<Result<bool, Failure>> login({required AuthRequestDto auth}) async {
     try {
-      await Future.delayed(Duration(seconds: 3));
+      final response = await client.post('login', data: auth.toJson());
 
-      final usuario = usuarios.firstWhereOrNull((element) => element.username == auth.login);
+      if (response.statusCode == 200) {
+        final accessToken = response.headers.value('x-auth-token') ?? '';
+        final user = AuthResponseDto.fromMap(response.data).toModel();
 
-      if (usuario != null) {
-        final ativo = usuario.ativo;
+        log(accessToken);
+        log(user.toString());
 
-        if (ativo) {
-          return Success(usuario.username);
-        }
-
-        return Error(DioFailure(message: 'Usuário ${usuario.username} inativo.', statusCode: 404));
+        await LocalStorageUtils.saveUser(user: user);
+        await LocalStorageUtils.saveTokens(accessToken: accessToken);
+        return Success(true);
       }
 
-      return Error(DioFailure(message: 'Usuário não encontrado!', statusCode: 404));
+      if (response.statusCode == 401) {
+        final message = response.data['errors'] ?? 'Usuário ou senha inválidos!';
+        return Error(DioFailure(message: message, statusCode: response.statusCode));
+      }
+
+      return Error(DioFailure(message: 'Erro ao fazer login, tente novamente!', statusCode: 404));
     } on DioException catch (err) {
       return Error(MessageError.getMessage(err));
     }
   }
-
-  // @override
-  // Future<Result<AuthResponseDto, Failure>> login({required AuthRequestDto auth}) async {
-  //   try {
-  //     final response = await client.post('auth', data: auth.toJson());
-
-  //     if (response.statusCode == 200) {
-  //       final result = AuthResponseDto.fromMap(response.data);
-  //       return Success(result);
-  //     }
-
-  //     if (response.statusCode == 401) {
-  //       return Error(
-  //         DioFailure(
-  //           message: response.data['errors'] ?? 'Erro ao fazer login, tente novamente!',
-  //           statusCode: response.statusCode,
-  //         ),
-  //       );
-  //     }
-
-  //     return Error(DioFailure(message: 'Erro ao fazer login, tente novamente!', statusCode: 404));
-  //   } on DioException catch (err) {
-  //     return Error(CustomMessageError.getMessage(err));
-  //   }
-  // }
 }
