@@ -86,11 +86,7 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
                                 SizedBox(
                                   height: 280,
                                   width: double.infinity,
-                                  child: Image.asset(
-                                    'assets/images/predio.jpeg',
-                                    fit: BoxFit.cover,
-                                    alignment: Alignment.topCenter,
-                                  ),
+                                  child: Image.asset(Images.predio, fit: BoxFit.cover, alignment: Alignment.topCenter),
                                 ),
                                 Container(
                                   height: 50,
@@ -176,9 +172,7 @@ class _LoginPageState extends State<LoginPage> with Loader, Messages {
                                                 suffixIcon: IconButton(
                                                   onPressed: controller.changeObscureText,
                                                   icon: Icon(
-                                                    obscureText
-                                                        ? Icons.visibility_outlined
-                                                        : Icons.visibility_off_outlined,
+                                                    obscureText? Icons.visibility_outlined : Icons.visibility_off_outlined,
                                                   ),
                                                 ),
                                               ),
