@@ -3,11 +3,12 @@ import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../../../../../core/extensions/string_extension.dart';
+import '../../../../../../../core/ui/theme/color_schemes.dart';
 import '../../../../../../../models/lembrete_model.dart';
 
 class CalendarioBuilders {
-  static CalendarBuilders<LembreteModel> getBuilders(ThemeData theme, String? setor) {
-    final colorScheme = theme.colorScheme;
+  static CalendarBuilders<LembreteModel> getBuilders() {
+    final colorScheme = lightColorScheme;
     final dateFormat = DateFormat('MMMM \'de\' yyyy', 'pt_BR');
 
     return CalendarBuilders<LembreteModel>(
@@ -29,35 +30,16 @@ class CalendarioBuilders {
       headerTitleBuilder: (context, day) {
         final theme = Theme.of(context);
         final colorScheme = theme.colorScheme;
+        final date = dateFormat.format(day);
 
-        final date = dateFormat.format(day).replaceFirstMapped(RegExp(r'^\w'), (m) => m.group(0)!.toUpperCase());
-
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              date,
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.w700,
-                color: colorScheme.onSurface,
-                letterSpacing: .3,
-              ),
-            ),
-            SizedBox(height: 2),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(color: colorScheme.primaryContainer, borderRadius: BorderRadius.circular(20)),
-              child: Text(
-                setor != null ? 'Filtrando por: $setor' : 'Todos os setores',
-                style: theme.textTheme.labelMedium?.copyWith(
-                  fontSize: 14,
-                  color: colorScheme.onPrimaryContainer,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
-            SizedBox(height: 10),
-          ],
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(color: colorScheme.primaryContainer, borderRadius: BorderRadius.circular(12)),
+          child: Text(
+            date.toUpperCase(),
+            textAlign: .center,
+            style: TextStyle(fontSize: 15.5, fontWeight: FontWeight.w700, color: colorScheme.primary),
+          ),
         );
       },
 
@@ -75,7 +57,7 @@ class CalendarioBuilders {
             decoration: BoxDecoration(
               color: colorScheme.secondary,
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: theme.colorScheme.surface, width: 1.5),
+              border: Border.all(color: colorScheme.surface, width: 1.5),
             ),
             child: Text(
               '${events.length}',

@@ -1,10 +1,15 @@
 import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../core/constants/routes.dart';
+import '../../shared/data/agenda/agenda_repository_impl.dart';
+import '../../shared/data/agenda/datasource/agenda_datasource.dart';
+import '../../shared/data/agenda/datasource/agenda_datasource_impl.dart';
 import '../../shared/data/solicitacao/datasource/solicitacao_datasource.dart';
 import '../../shared/data/solicitacao/datasource/solicitacao_datasource_impl.dart';
 import '../../shared/data/solicitacao/solicitacao_repository_impl.dart';
+import '../../shared/domain/agenda/agenda_repository.dart';
 import '../../shared/domain/solicitacao/solicitacao_repository.dart';
+import '../../shared/service/agenda/agenda_service.dart';
 import '../../shared/service/solicitacao/solicitacao_service.dart';
 import '../core/core_module.dart';
 import 'main_controller.dart';
@@ -23,14 +28,18 @@ final mainModule = createModule(
     c.addSingleton<SolicitacaoDatasource>(SolicitacaoDatasourceImpl.new);
     c.addSingleton<SolicitacaoRepository>(SolicitacaoRepositoryImpl.new);
     c.addSingleton(SolicitacaoService.new);
-
-    c.addSingleton(MainController.new);
-
-    c.add(HomeController.new);
-    c.add(AgendaController.new);
-    c.add(DashboardItemCardStore.new);
     c.add(SolicitacaoController.new);
 
+    c.addSingleton<AgendaDatasource>(AgendaDatasourceImpl.new);
+    c.addSingleton<AgendaRepository>(AgendaRepositoryImpl.new);
+    c.addSingleton(AgendaService.new);
+    c.add(AgendaController.new);
+
+    c.add(HomeController.new);
+    c.add(DashboardItemCardStore.new);
+
+    c.addSingleton(MainController.new);
+    
     c.route(
       '/',
       child: (context, state) {

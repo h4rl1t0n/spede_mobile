@@ -6,7 +6,6 @@ import 'builders/calendario_builders.dart';
 import 'styles/calendario_styles.dart';
 
 class CalendarioItem extends StatelessWidget {
-  final String? setor;
   final CalendarFormat calendarFormat;
   final DateTime mes;
   final DateTime selectedDate;
@@ -24,14 +23,10 @@ class CalendarioItem extends StatelessWidget {
     required this.lembretesList,
     required this.calendarFormat,
     required this.onFormatChanged,
-    this.setor,
   });
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-
     return TableCalendar<LembreteModel>(
       locale: 'pt_BR',
       firstDay: DateTime.utc(2020),
@@ -40,8 +35,9 @@ class CalendarioItem extends StatelessWidget {
       enabledDayPredicate: (day) => day.month == mes.month,
       selectedDayPredicate: (day) => isSameDay(day, selectedDate),
       onDaySelected: (selectedDay, focusedDay) {
-        onDateSelected(selectedDay);
-        onMonthChanged(focusedDay);
+        if (!isSameDay(selectedDate, selectedDay)) {
+          onDateSelected(selectedDay);
+        }
       },
       onPageChanged: onMonthChanged,
       eventLoader: (day) {
@@ -54,9 +50,9 @@ class CalendarioItem extends StatelessWidget {
       availableGestures: AvailableGestures.all,
       availableCalendarFormats: const {CalendarFormat.month: 'Mês', CalendarFormat.week: 'Semana'},
       sixWeekMonthsEnforced: true,
-      calendarStyle: CalendarioStyles.getCalendarStyle(colorScheme),
-      headerStyle: CalendarioStyles.getHeaderStyle(colorScheme),
-      calendarBuilders: CalendarioBuilders.getBuilders(theme, setor),
+      calendarStyle: CalendarioStyles.getCalendarStyle(),
+      headerStyle: CalendarioStyles.getHeaderStyle(),
+      calendarBuilders: CalendarioBuilders.getBuilders(),
     );
   }
 }

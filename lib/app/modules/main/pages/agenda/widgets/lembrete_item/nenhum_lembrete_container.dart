@@ -8,17 +8,10 @@ class NenhumLembreteContainer extends StatelessWidget {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          spacing: 5,
-          children: [
-            const Text('Nenhum lembrete encontrado', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-            Text(
-              'Não há lembretes cadastrados para esta data.',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.grey.shade600),
-            ),
-          ],
+        child: Text(
+          'Não há lembretes cadastrados para esta data.',
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.grey.shade600),
         ),
       ),
     );

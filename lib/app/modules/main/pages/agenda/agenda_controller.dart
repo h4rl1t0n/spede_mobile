@@ -2,18 +2,31 @@ import 'package:collection/collection.dart';
 import 'package:mobx/mobx.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../../../../mock/lembretes.dart';
+import '../../../../core/result/result_handler.dart';
+import '../../../../enum/page_status.dart';
 import '../../../../mock/setores.dart';
 import '../../../../models/lembrete_model.dart';
 import '../../../../models/setor_model.dart';
+import '../../../../shared/service/agenda/agenda_service.dart';
 
 part 'agenda_controller.g.dart';
 
 class AgendaController = AgendaControllerBase with _$AgendaController;
 
 abstract class AgendaControllerBase with Store {
+  final AgendaService service;
+
   @observable
-  var listLembretes = ObservableList.of(lembretes);
+  var status = PageStatus.initial;
+
+  @observable
+  var messageLoader = '';
+
+  @observable
+  String? errorMessage;
+
+  @observable
+  var listEventos = ObservableList<LembreteModel>();
 
   @observable
   SetorModel? setorFiltrado;
@@ -30,37 +43,56 @@ abstract class AgendaControllerBase with Store {
   @observable
   DateTime data = DateTime.now();
 
+  AgendaControllerBase(this.service);
+
   @action
-  void alterarFormato(CalendarFormat formato) {
-    calendarFormat = formato;
+  Future<void> carregarEventos() async {
+    status = PageStatus.loading;
+    messageLoader = 'Carregando eventos..';
+    errorMessage = null;
+
+    await fetch(
+      service.carregarTodosEventos(mes: mes, idSetor: setorFiltrado?.id),
+      onSuccess: (result) {
+        listEventos.clear();
+        listEventos.addAll(result);
+        status = PageStatus.loaded;
+        messageLoader = '';
+      },
+      onError: (message) {
+        status = PageStatus.error;
+        errorMessage = message;
+        messageLoader = '';
+      },
+    );
   }
 
   @action
   Future<void> alterarSetor() async {
-    mes = DateTime.now();
-    data = DateTime.now();
+    // mes = DateTime.now();
+    // data = DateTime.now();
     final int idSetor = idSetorSelecionado ?? setorFiltrado?.id ?? -1;
     setorFiltrado = setores.firstWhereOrNull((element) => element.id == idSetor);
+
+    await carregarEventos();
   }
 
   @action
   Future<void> limparSetor() async {
-    mes = DateTime.now();
-    data = DateTime.now();
+    // mes = DateTime.now();
+    // data = DateTime.now();
     setorFiltrado = null;
     idSetorSelecionado = null;
+
+    await carregarEventos();
   }
 
-  @computed
-  List<LembreteModel> get lembretesFiltrados {
-    final filtro = setorFiltrado;
-    if (filtro == null) return listLembretes;
-    return listLembretes.where((e) => e.setorModel.id == filtro.id).toList();
-  }
+  @action
+  void alterarFormato(CalendarFormat formato) => calendarFormat = formato;
 
   @computed
-  List<LembreteModel> get lista {
-    return lembretesFiltrados.where((evento) {
+  List<LembreteModel> get listEventosPorDia {
+    return listEventos.where((evento) {
       return isSameDay(evento.data, data);
     }).toList();
   }

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../../../../../../../core/ui/theme/color_schemes.dart';
+
 class CalendarioStyles {
-  static CalendarStyle getCalendarStyle(ColorScheme colorScheme) {
+  static CalendarStyle getCalendarStyle() {
+    final colorScheme = lightColorScheme;
     return CalendarStyle(
       outsideDaysVisible: false,
       cellMargin: const EdgeInsets.all(6.0),
@@ -16,7 +19,8 @@ class CalendarioStyles {
     );
   }
 
-  static HeaderStyle getHeaderStyle(ColorScheme colorScheme) {
+  static HeaderStyle getHeaderStyle() {
+    final colorScheme = lightColorScheme;
     return HeaderStyle(
       titleCentered: true,
       formatButtonVisible: false,
@@ -28,7 +32,7 @@ class CalendarioStyles {
         padding: const EdgeInsets.all(6),
         decoration: BoxDecoration(
           color: colorScheme.surface,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(50),
           boxShadow: [
             BoxShadow(color: colorScheme.shadow.withValues(alpha: 0.19), blurRadius: 3, offset: const Offset(0, 1)),
           ],
@@ -39,7 +43,7 @@ class CalendarioStyles {
         padding: const EdgeInsets.all(6),
         decoration: BoxDecoration(
           color: colorScheme.surface,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(50),
           boxShadow: [
             BoxShadow(color: colorScheme.shadow.withValues(alpha: 0.19), blurRadius: 3, offset: const Offset(0, 1)),
           ],
