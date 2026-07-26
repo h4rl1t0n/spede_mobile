@@ -5,14 +5,12 @@ class NenhumLembreteContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Text(
-          'Não há lembretes cadastrados para esta data.',
-          textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.grey.shade600),
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(32),
+      child: Text(
+        'Não há lembretes cadastrados para esta data.',
+        textAlign: TextAlign.center,
+        style: TextStyle(color: Colors.grey.shade600),
       ),
     );
   }

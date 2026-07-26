@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
+import 'package:sliding_up_panel/sliding_up_panel.dart'; // <-- Importe o pacote
 
+import '../../../../core/extensions/size_extension.dart';
 import '../../../../core/helpers/loader.dart';
 import '../../../../core/helpers/messages.dart';
 import '../../../../enum/page_status.dart';
@@ -22,7 +24,7 @@ class AgendaPage extends StatefulWidget {
 
 class _AgendaPageState extends State<AgendaPage> with Loader, Messages {
   final controller = inject<AgendaController>();
-
+  final panelController = PanelController();
   late List<ReactionDisposer> disposers = [];
 
   @override
@@ -41,128 +43,120 @@ class _AgendaPageState extends State<AgendaPage> with Loader, Messages {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final screenHeight = context.screenHeight;
 
-    return Scaffold(
-      body: Observer(
-        builder: (context) {
-          final mes = controller.mes;
-          final data = controller.data;
-          final listEventosPorDia = controller.listEventosPorDia;
-          final setorFiltrado = controller.setorFiltrado;
+    return Observer(
+      builder: (context) {
+        final mes = controller.mes;
+        final data = controller.data;
+        final listEventosPorDia = controller.listEventosPorDia;
+        final setorFiltrado = controller.setorFiltrado;
 
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            spacing: 10,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-                child: Row(
-                  children: [
-                    Icon(Icons.calendar_month_rounded, color: colorScheme.primary, size: 28),
-                    const SizedBox(width: 12),
-                    const Text('Agenda', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-
-                    const Spacer(),
-
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: colorScheme.primaryContainer,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Row(
-                        spacing: 6,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.tune_rounded, size: 16, color: colorScheme.onPrimaryContainer),
-                          Text(
-                            setorFiltrado == null ? 'Todos os Setores' : setorFiltrado.sigla,
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w700,
-                              color: colorScheme.onPrimaryContainer,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 250),
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                decoration: BoxDecoration(
-                  color: colorScheme.surface,
-                  borderRadius: BorderRadius.circular(24),
-                  boxShadow: [
-                    BoxShadow(color: Colors.black.withValues(alpha: .05), blurRadius: 15, offset: const Offset(0, 5)),
-                  ],
-                ),
-                child: Observer(
-                  builder: (context) {
-                    return CalendarioItem(
-                      mes: mes,
-                      selectedDate: data,
-                      lembretesList: controller.listEventos,
-                      calendarFormat: controller.calendarFormat,
-                      onMonthChanged: (novoMes) async {
-                        controller.mes = novoMes;
-                        await controller.carregarEventos();
-                      },
-                      onDateSelected: (novaData) {
-                        controller.data = novaData;
-                      },
-                      onFormatChanged: controller.alterarFormato,
-                    );
-                  },
-                ),
-              ),
-              Flexible(
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
-                  child: Material(
-                    color: colorScheme.surface,
-                    child: Column(
-                      children: [
-                        HeaderLembrete(data: data, quantidade: listEventosPorDia.length),
-                        SizedBox(height: 5),
-                        Expanded(
-                          child: Builder(
-                            builder: (context) {
-                              if (listEventosPorDia.isEmpty) {
-                                return const NenhumLembreteContainer();
-                              }
-
-                              return ListView.separated(
-                                padding: const EdgeInsets.all(16).copyWith(bottom: kFloatingActionButtonMargin + 60),
-                                itemCount: listEventosPorDia.length,
-                                separatorBuilder: (_, _) => const SizedBox(height: 12),
-                                itemBuilder: (_, index) {
-                                  return LembreteItem(lembrete: listEventosPorDia[index]);
-                                },
-                              );
-                            },
-                          ),
+        return SlidingUpPanel(
+          controller: panelController,
+          minHeight: screenHeight * 0.26,
+          maxHeight: screenHeight * 0.60,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(30)),
+          color: Colors.white,
+          body: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+                  child: Row(
+                    children: [
+                      FilledButton.tonalIcon(
+                        onPressed: abrirFiltroSetor,
+                        icon: const Icon(Icons.tune_rounded, size: 18),
+                        label: Text(
+                          setorFiltrado == null ? 'Filtro: Todos os Setores' : 'Filtro: Setor ${setorFiltrado.sigla}',
+                          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
+                AnimatedContainer(
+                  color: Colors.transparent,
+                  duration: const Duration(milliseconds: 250),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  margin: const EdgeInsets.symmetric(horizontal: 8),
+                  child: CalendarioItem(
+                    mes: mes,
+                    selectedDate: data,
+                    lembretesList: controller.listEventos,
+                    calendarFormat: controller.calendarFormat,
+                    onMonthChanged: (novoMes) async {
+                      controller.mes = novoMes;
+                      controller.data = novoMes;
+                      await controller.carregarEventos();
+                    },
+                    onDateSelected: (novaData) {
+                      controller.data = novaData;
+                    },
+                    onFormatChanged: controller.alterarFormato,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          panelBuilder: (ScrollController sc) {
+            return Container(
+              decoration: BoxDecoration(
+                border: Border(bottom: BorderSide(color: Colors.grey.shade300)),
               ),
-            ],
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: abrirFiltroSetor,
-        label: Text('Filtros por Setor'),
-        icon: Icon(Icons.tune_rounded, color: Colors.white),
-      ),
+              child: Column(
+                children: [
+                  const SizedBox(height: 10),
+
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 5,
+                      decoration: BoxDecoration(color: Colors.grey.shade400, borderRadius: BorderRadius.circular(10)),
+                    ),
+                  ),
+
+                  const SizedBox(height: 10),
+
+                  HeaderLembrete(data: data, quantidade: listEventosPorDia.length),
+
+                  const SizedBox(height: 5),
+
+                  Expanded(
+                    child: Builder(
+                      builder: (context) {
+                        if (listEventosPorDia.isEmpty) {
+                          return const NenhumLembreteContainer();
+                        }
+
+                        return ListView.separated(
+                          controller: sc,
+                          padding: const EdgeInsets.all(16).copyWith(bottom: kFloatingActionButtonMargin + 80),
+                          itemCount: listEventosPorDia.length,
+                          separatorBuilder: (_, _) => const SizedBox(height: 12),
+                          itemBuilder: (_, index) {
+                            return LembreteItem(lembrete: listEventosPorDia[index]);
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
+
+  // floatingActionButton: FloatingActionButton.extended(
+  //   onPressed = abrirFiltroSetor,
+  //   label = const Text('Filtros por Setor'),
+  //   icon = const Icon(Icons.tune_rounded, color: Colors.white),
+  // ),
 
   Future<void> abrirFiltroSetor() async {
     await showDialog(

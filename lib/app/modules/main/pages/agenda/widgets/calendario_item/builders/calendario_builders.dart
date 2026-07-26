@@ -28,18 +28,12 @@ class CalendarioBuilders {
       },
 
       headerTitleBuilder: (context, day) {
-        final theme = Theme.of(context);
-        final colorScheme = theme.colorScheme;
         final date = dateFormat.format(day);
 
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          decoration: BoxDecoration(color: colorScheme.primaryContainer, borderRadius: BorderRadius.circular(12)),
-          child: Text(
-            date.toUpperCase(),
-            textAlign: .center,
-            style: TextStyle(fontSize: 15.5, fontWeight: FontWeight.w700, color: colorScheme.primary),
-          ),
+        return Text(
+          date.toUpperCase(),
+          textAlign: .center,
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Colors.black),
         );
       },
 

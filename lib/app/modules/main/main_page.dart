@@ -132,8 +132,8 @@ class _MainPageState extends State<MainPage> with Loader, Messages, SingleTicker
               NavigationDestination(
                 icon: Icon(Icons.calendar_month_outlined),
                 selectedIcon: Icon(Icons.calendar_month),
-                label: 'Lembretes',
-                tooltip: 'Lembretes',
+                label: 'Agenda',
+                tooltip: 'Agenda',
               ),
             ],
           ),
