@@ -4,6 +4,7 @@ import 'colors_app.dart';
 
 class TextStyles {
   static TextStyles? _instance;
+  static const String fontFamily = 'Cabin';
 
   TextStyles._();
 
@@ -13,27 +14,27 @@ class TextStyles {
   }
 
   TextStyle get textLight {
-    return const TextStyle(fontWeight: FontWeight.w300, fontFamily: 'Cabin');
+    return const TextStyle(fontWeight: FontWeight.w300, fontFamily: fontFamily);
   }
 
   TextStyle get textRegular {
-    return const TextStyle(fontWeight: FontWeight.w400, fontFamily: 'Cabin');
+    return const TextStyle(fontWeight: FontWeight.w400, fontFamily: fontFamily);
   }
 
   TextStyle get textMedium {
-    return const TextStyle(fontWeight: FontWeight.w500, fontFamily: 'Cabin', fontSize: 16, color: Colors.black);
+    return const TextStyle(fontWeight: FontWeight.w500, fontFamily: fontFamily, fontSize: 16, color: Colors.black);
   }
 
   TextStyle get textSemiBold {
-    return const TextStyle(fontWeight: FontWeight.w600, fontFamily: 'Cabin');
+    return const TextStyle(fontWeight: FontWeight.w600, fontFamily: fontFamily);
   }
 
   TextStyle get textBold {
-    return const TextStyle(fontWeight: FontWeight.w700, fontFamily: 'Cabin');
+    return const TextStyle(fontWeight: FontWeight.w700, fontFamily: fontFamily);
   }
 
   TextStyle get textExtraBold {
-    return const TextStyle(fontWeight: FontWeight.w800, fontFamily: 'Cabin');
+    return const TextStyle(fontWeight: FontWeight.w800, fontFamily: fontFamily);
   }
 
   TextStyle get textButtonLabel {

@@ -35,7 +35,9 @@ class CalendarioItem extends StatelessWidget {
       enabledDayPredicate: (day) => day.month == mes.month,
       selectedDayPredicate: (day) => isSameDay(day, selectedDate),
       onDaySelected: (selectedDay, focusedDay) {
-        if (!isSameDay(selectedDate, selectedDay)) {
+        final mesmoDia = isSameDay(selectedDate, selectedDay);
+
+        if (!mesmoDia) {
           onDateSelected(selectedDay);
         }
       },
