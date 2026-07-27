@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import '../../global/env.dart';
 import '../../global/global_context.dart';
 import '../../global/local_storage_utils.dart';
+import '../error/response_code.dart';
 
 class AuthInterceptor extends Interceptor {
   final Dio dioRefreshToken = Dio(
@@ -21,6 +22,7 @@ class AuthInterceptor extends Interceptor {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+    log('\x1B[2J\x1B[0;0H');
     log('[onRequest] /"${options.uri}"', name: options.method);
 
     try {
@@ -43,12 +45,16 @@ class AuthInterceptor extends Interceptor {
 
   @override
   Future onError(DioException err, ErrorInterceptorHandler handler) async {
-    log('[${err.requestOptions.method}] /"${err.requestOptions.uri}"', name: 'onError - ${err.response?.statusCode}');
+    final requestOptions = err.requestOptions;
+    final statusCode = err.response?.statusCode;
+
+    log('[${requestOptions.method}] /"${requestOptions.uri}"', name: 'onError - $statusCode');
 
     try {
-      final response = err.response;
+      final unauthorized = ResponseCode.unauthorized;
+      final path = err.response!.realUri.path;
 
-      if (response?.statusCode == 401 && !response!.realUri.path.contains('login')) {
+      if (statusCode == unauthorized.code && !path.contains('login')) {
         await GlobalContext.instance.loginExpire();
         handler.next(err);
 
@@ -58,7 +64,7 @@ class AuthInterceptor extends Interceptor {
         //   // Se o token fou atualizado, adiciona o novo token ao cabeçalho
         //   final token = await LocalStorageUtils.getAccessToken();
         //   final opts = err.requestOptions;
-        //   options.headers['x-auth-token'] = token;
+        //   opts.headers['x-auth-token'] = token;
 
         //   // Refaz a requisição original com o novo token
         //   final cloneReq = await dioRefreshToken.request(

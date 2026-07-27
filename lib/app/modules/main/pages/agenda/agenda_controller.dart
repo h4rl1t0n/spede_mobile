@@ -5,8 +5,8 @@ import 'package:table_calendar/table_calendar.dart';
 import '../../../../core/result/result_handler.dart';
 import '../../../../enum/page_status.dart';
 import '../../../../mock/setores.dart';
-import '../../../../models/lembrete_model.dart';
 import '../../../../models/setor_model.dart';
+import '../../../../shared/domain/agenda/entities/agenda_entity.dart';
 import '../../../../shared/service/agenda/agenda_service.dart';
 
 part 'agenda_controller.g.dart';
@@ -26,7 +26,7 @@ abstract class AgendaControllerBase with Store {
   String? errorMessage;
 
   @observable
-  var listEventos = ObservableList<LembreteModel>();
+  var listEventos = ObservableList<AgendaEntity>();
 
   @observable
   SetorModel? setorFiltrado;
@@ -52,7 +52,7 @@ abstract class AgendaControllerBase with Store {
     errorMessage = null;
 
     await fetch(
-      service.carregarTodosEventos(mes: mes, idSetor: setorFiltrado?.id),
+      service.carregarEventosPorSetor(idSetor: setorFiltrado?.id ?? 1),
       onSuccess: (result) {
         listEventos.clear();
         listEventos.addAll(result);
@@ -91,9 +91,9 @@ abstract class AgendaControllerBase with Store {
   void alterarFormato(CalendarFormat formato) => calendarFormat = formato;
 
   @computed
-  List<LembreteModel> get listEventosPorDia {
+  List<AgendaEntity> get listEventosPorDia {
     return listEventos.where((evento) {
-      return isSameDay(evento.data, data);
+      return isSameDay(evento.dataAgenda, data);
     }).toList();
   }
 }

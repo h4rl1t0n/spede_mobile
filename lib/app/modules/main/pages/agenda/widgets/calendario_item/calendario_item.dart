@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../../../../../../models/lembrete_model.dart';
+import '../../../../../../shared/domain/agenda/entities/agenda_entity.dart';
 import 'builders/calendario_builders.dart';
 import 'styles/calendario_styles.dart';
 
@@ -11,7 +11,7 @@ class CalendarioItem extends StatelessWidget {
   final DateTime selectedDate;
   final ValueChanged<DateTime> onDateSelected;
   final ValueChanged<DateTime> onMonthChanged;
-  final List<LembreteModel> lembretesList;
+  final List<AgendaEntity> lembretesList;
   final ValueChanged<CalendarFormat> onFormatChanged;
 
   const CalendarioItem({
@@ -27,7 +27,7 @@ class CalendarioItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TableCalendar<LembreteModel>(
+    return TableCalendar<AgendaEntity>(
       locale: 'pt_BR',
       firstDay: DateTime.utc(2020),
       lastDay: DateTime.utc(2035),
@@ -44,7 +44,7 @@ class CalendarioItem extends StatelessWidget {
       onPageChanged: onMonthChanged,
       eventLoader: (day) {
         return lembretesList.where((e) {
-          return isSameDay(e.data, day);
+          return isSameDay(e.dataAgenda, day);
         }).toList();
       },
       calendarFormat: calendarFormat,

@@ -1,3 +1,5 @@
+import '../../../domain/agenda/entities/agenda_entity.dart';
+
 class AgendaDTO {
   int? id;
   String? titulo;
@@ -83,5 +85,23 @@ class AgendaDTO {
     // }
     data['possuiNotificacao'] = possuiNotificacao;
     return data;
+  }
+
+  AgendaEntity toEntity() {
+    return AgendaEntity(
+      id: id,
+      titulo: titulo ?? '-',
+      descricao: descricao ?? '-',
+      dataAgenda: DateTime.parse(dataAgenda!),
+      visibilidade: visibilidade ?? '-',
+      idProcesso: idEscrito,
+      numeroProcesso: numeroEscrito ?? '-',
+      descricaoProcesso: descricaoEscrito ?? '-',
+      tipoProcesso: tipoEscrito ?? '-',
+      orgaoProcesso: orgaoEscrito ?? '-',
+      idUsuario: idUsuario,
+      nomeUsuario: nomeUsuario ?? '',
+      possuiNotificacao: possuiNotificacao ?? false,
+    );
   }
 }

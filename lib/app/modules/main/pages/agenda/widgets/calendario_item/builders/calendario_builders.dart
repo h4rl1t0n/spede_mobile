@@ -4,14 +4,14 @@ import 'package:table_calendar/table_calendar.dart';
 
 import '../../../../../../../core/extensions/string_extension.dart';
 import '../../../../../../../core/ui/theme/color_schemes.dart';
-import '../../../../../../../models/lembrete_model.dart';
+import '../../../../../../../shared/domain/agenda/entities/agenda_entity.dart';
 
 class CalendarioBuilders {
-  static CalendarBuilders<LembreteModel> getBuilders() {
+  static CalendarBuilders<AgendaEntity> getBuilders() {
     final colorScheme = lightColorScheme;
     final dateFormat = DateFormat('MMMM \'de\' yyyy', 'pt_BR');
 
-    return CalendarBuilders<LembreteModel>(
+    return CalendarBuilders<AgendaEntity>(
       dowBuilder: (context, day) {
         final text = DateFormat.E('pt_BR').format(day).toLowerCase();
 
