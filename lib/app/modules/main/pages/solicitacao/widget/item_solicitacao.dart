@@ -7,31 +7,51 @@ import '../../../../../core/ui/widgets/item_tile.dart';
 import '../../../../../models/documento_model.dart';
 import '../solicitacao_controller.dart';
 
-class ItemSolicitacao extends StatelessWidget {
+class ItemSolicitacao extends StatefulWidget {
   final SolicitacaoController controller;
   final DocumentoModel solicitacao;
 
   const ItemSolicitacao({super.key, required this.solicitacao, required this.controller});
 
   @override
+  State<ItemSolicitacao> createState() => _ItemSolicitacaoState();
+}
+
+class _ItemSolicitacaoState extends State<ItemSolicitacao> {
+  SolicitacaoController get controller => widget.controller;
+  DocumentoModel get solicitacao => widget.solicitacao;
+  late final ExpansibleController expansibleController;
+
+  @override
+  void initState() {
+    super.initState();
+    expansibleController = ExpansibleController();
+  }
+
+  @override
+  void dispose() {
+    expansibleController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final secondary = Theme.of(context).colorScheme.secondary.withValues(alpha: .08);
-    final expansibleController = ExpansibleController();
-    final corDocumento = solicitacao.corDocumento();
+    final corDocumento = widget.solicitacao.corDocumento();
 
     return Observer(
       builder: (context) {
-        final documentos = controller.selecionados;
-        final isSelecionado = documentos.contains(solicitacao);
+        final documentos = widget.controller.selecionados;
+        final isSelecionado = documentos.contains(widget.solicitacao);
         final color = isSelecionado ? secondary : Colors.white;
 
         return Dismissible(
-          key: ValueKey(solicitacao.id),
+          key: ValueKey(widget.solicitacao.id),
           dismissThresholds: const {DismissDirection.endToStart: 0.1},
           confirmDismiss: confirmDismiss,
           child: Row(
             children: [
-              if (controller.modoSelecao) ...[
+              if (widget.controller.modoSelecao) ...[
                 Checkbox(
                   visualDensity: .compact,
                   value: isSelecionado,
@@ -42,8 +62,13 @@ class ItemSolicitacao extends StatelessWidget {
               ],
               Flexible(
                 child: GestureDetector(
+                  //  New
+                  onTap: controller.modoSelecao ? toggleSelecionado : null,
+
                   onLongPress: toggleSelecionado,
-                  child: Container(
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.easeOut,
                     clipBehavior: Clip.hardEdge,
                     decoration: BoxDecoration(
                       color: Colors.transparent,
@@ -56,6 +81,9 @@ class ItemSolicitacao extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(left: 5.0),
                           child: ExpansionTile(
+                            //  New
+                            enabled: !controller.modoSelecao,
+
                             splashColor: Colors.transparent,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                             controller: expansibleController,
@@ -68,9 +96,9 @@ class ItemSolicitacao extends StatelessWidget {
                                 spacing: 10,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  solicitacao.image,
+                                  widget.solicitacao.image,
                                   Expanded(
-                                    child: Text(solicitacao.numero, style: context.textStyles.textTitleItemList),
+                                    child: Text(widget.solicitacao.numero, style: context.textStyles.textTitleItemList),
                                   ),
                                   Icon(expansibleController.isExpanded ? Icons.expand_less : Icons.expand_more),
                                 ],
@@ -84,14 +112,14 @@ class ItemSolicitacao extends StatelessWidget {
                                     child: ItemTile(
                                       padding: EdgeInsets.zero,
                                       title: 'Documento',
-                                      subTitle: solicitacao.tipoDocumento.name,
+                                      subTitle: widget.solicitacao.tipoDocumento.name,
                                     ),
                                   ),
                                   Expanded(
                                     child: ItemTile(
                                       padding: EdgeInsets.zero,
                                       title: 'Assunto',
-                                      subTitle: solicitacao.assunto,
+                                      subTitle: widget.solicitacao.assunto,
                                     ),
                                   ),
                                 ],
@@ -109,14 +137,14 @@ class ItemSolicitacao extends StatelessWidget {
                                         child: ItemTile(
                                           padding: EdgeInsets.zero,
                                           title: 'Solicitação',
-                                          subTitle: solicitacao.tipoSolicitacao.label,
+                                          subTitle: widget.solicitacao.tipoSolicitacao.label,
                                         ),
                                       ),
                                       Expanded(
                                         child: ItemTile(
                                           padding: EdgeInsets.zero,
                                           title: 'Data Solicitação',
-                                          subTitle: DateFormat('dd/MM/yyyy').format(solicitacao.dataSolicitacao),
+                                          subTitle: DateFormat('dd/MM/yyyy').format(widget.solicitacao.dataSolicitacao),
                                         ),
                                       ),
                                     ],
@@ -125,13 +153,13 @@ class ItemSolicitacao extends StatelessWidget {
                                   ItemTile(
                                     padding: EdgeInsets.zero,
                                     title: 'Remetente',
-                                    subTitle: solicitacao.remetente,
+                                    subTitle: widget.solicitacao.remetente,
                                   ),
                                   const SizedBox(height: 5),
                                   ItemTile(
                                     padding: EdgeInsets.zero,
                                     title: 'Destinatário',
-                                    subTitle: solicitacao.destinatario,
+                                    subTitle: widget.solicitacao.destinatario,
                                   ),
                                 ],
                               ),
@@ -151,7 +179,7 @@ class ItemSolicitacao extends StatelessWidget {
   }
 
   void toggleSelecionado() {
-    controller.toggle(solicitacao);
+    widget.controller.toggle(widget.solicitacao);
   }
 
   Future<bool?> confirmDismiss(DismissDirection direction) async {
