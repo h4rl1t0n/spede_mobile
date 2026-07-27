@@ -27,9 +27,13 @@ class AuthInterceptor extends Interceptor {
       final String token = await LocalStorageUtils.getAccessToken();
       final bool pathIsNotLogin = !options.path.contains('login');
 
+      log('Antes => Headers: ${options.headers}');
+
       if (token.isNotEmpty && pathIsNotLogin) {
-        options.headers['Authorization'] = 'Bearer $token';
+        options.headers['x-auth-token'] = token;
       }
+
+      log('Depois => Headers: ${options.headers}');
     } catch (e) {
       log('Error fetching token: ${e.toString()}');
     }
@@ -54,7 +58,7 @@ class AuthInterceptor extends Interceptor {
         //   // Se o token fou atualizado, adiciona o novo token ao cabeçalho
         //   final token = await LocalStorageUtils.getAccessToken();
         //   final opts = err.requestOptions;
-        //   opts.headers['Authorization'] = 'Bearer $token';
+        //   options.headers['x-auth-token'] = token;
 
         //   // Refaz a requisição original com o novo token
         //   final cloneReq = await dioRefreshToken.request(

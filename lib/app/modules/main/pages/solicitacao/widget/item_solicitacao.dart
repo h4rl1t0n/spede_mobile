@@ -83,7 +83,6 @@ class _ItemSolicitacaoState extends State<ItemSolicitacao> {
                           child: ExpansionTile(
                             //  New
                             enabled: !controller.modoSelecao,
-
                             splashColor: Colors.transparent,
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                             controller: expansibleController,
@@ -100,7 +99,6 @@ class _ItemSolicitacaoState extends State<ItemSolicitacao> {
                                   Expanded(
                                     child: Text(widget.solicitacao.numero, style: context.textStyles.textTitleItemList),
                                   ),
-                                  Icon(expansibleController.isExpanded ? Icons.expand_less : Icons.expand_more),
                                 ],
                               ),
                             ),
@@ -119,13 +117,14 @@ class _ItemSolicitacaoState extends State<ItemSolicitacao> {
                                     child: ItemTile(
                                       padding: EdgeInsets.zero,
                                       title: 'Assunto',
+                                      textAlign: .start,
                                       subTitle: widget.solicitacao.assunto,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                            showTrailingIcon: false,
+                            //  showTrailingIcon: false,
                             children: [
                               const SizedBox(height: 10),
                               Column(

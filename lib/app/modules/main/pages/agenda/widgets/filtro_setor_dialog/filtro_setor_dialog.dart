@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 import '../../../../../../core/extensions/size_extension.dart';
 import '../../../../../../core/ui/widgets/custom_dropdown_search/custom_dropdown_search.dart';
@@ -21,7 +22,7 @@ class _FiltroSetorDialogState extends State<FiltroSetorDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Filtrar Por Setor'),
+      title: const Text('Filtros da Agenda'),
       content: SingleChildScrollView(
         child: SizedBox(
           width: context.widthDialog,
@@ -39,7 +40,7 @@ class _FiltroSetorDialogState extends State<FiltroSetorDialog> {
                   controller.idSetorSelecionado = item?.id;
                 },
                 onClear: () {
-                  Navigator.of(context).pop();
+                  context.pop();
                   controller.limparSetor();
                 },
               );
@@ -52,22 +53,25 @@ class _FiltroSetorDialogState extends State<FiltroSetorDialog> {
           spacing: 5,
           mainAxisAlignment: .end,
           children: [
-            Flexible(child: SizedBox.shrink()),
-            Flexible(
-              child: Observer(
-                builder: (context) {
-                  final idSetorSelecionado = controller.idSetorSelecionado;
-                  return ElevatedButton(
-                    onPressed: idSetorSelecionado == null
-                        ? null
-                        : () {
-                            Navigator.of(context).pop();
-                            controller.alterarSetor();
-                          },
-                    child: Text('Selecionar'),
-                  );
-                },
-              ),
+            TextButton(
+              onPressed: () {
+                context.pop();
+              },
+              child: Text('Fechar'),
+            ),
+            Observer(
+              builder: (context) {
+                final idSetorSelecionado = controller.idSetorSelecionado;
+                return ElevatedButton(
+                  onPressed: idSetorSelecionado == null
+                      ? null
+                      : () {
+                          context.pop();
+                          controller.alterarSetor();
+                        },
+                  child: Text('Selecionar'),
+                );
+              },
             ),
           ],
         ),

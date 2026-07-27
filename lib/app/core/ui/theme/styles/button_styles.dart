@@ -13,7 +13,6 @@ class ButtonStyles {
 
   ButtonStyle get primary {
     return ElevatedButton.styleFrom(
-      // minimumSize: const Size.fromHeight(45),
       backgroundColor: ColorsApp.instance.primary,
       textStyle: TextStyles.instance.textMedium,
       foregroundColor: Colors.white,
@@ -26,7 +25,10 @@ class ButtonStyles {
   }
 
   ButtonStyle get text {
-    return TextButton.styleFrom(foregroundColor: ColorsApp.instance.primary);
+    return TextButton.styleFrom(
+      foregroundColor: ColorsApp.instance.primary,
+      textStyle: TextStyles.instance.textSecondaryButtonLabel.copyWith(fontSize: 17, fontWeight: FontWeight.w500),
+    );
   }
 }
 

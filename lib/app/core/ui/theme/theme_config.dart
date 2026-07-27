@@ -60,6 +60,7 @@ class ThemeConfig {
       ),
 
       elevatedButtonTheme: ElevatedButtonThemeData(style: ButtonStyles.instance.primary),
+      
       textButtonTheme: TextButtonThemeData(style: ButtonStyles.instance.text),
 
       inputDecorationTheme: InputDecorationTheme(
