@@ -23,6 +23,8 @@ class ItemSolicitacao extends StatelessWidget {
       builder: (context) {
         final documentos = controller.selecionados;
         final isSelecionado = documentos.contains(solicitacao);
+        final color = isSelecionado ? secondary : Colors.white;
+
         return Dismissible(
           key: ValueKey(solicitacao.id),
           dismissThresholds: const {DismissDirection.endToStart: 0.1},
@@ -58,8 +60,8 @@ class ItemSolicitacao extends StatelessWidget {
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                             controller: expansibleController,
                             dense: true,
-                            collapsedBackgroundColor: isSelecionado ? secondary : Colors.white,
-                            backgroundColor: isSelecionado ? secondary : Colors.white,
+                            collapsedBackgroundColor: color,
+                            backgroundColor: color,
                             title: Padding(
                               padding: const EdgeInsets.only(top: 10),
                               child: Row(
@@ -149,20 +151,11 @@ class ItemSolicitacao extends StatelessWidget {
   }
 
   void toggleSelecionado() {
-    final documentos = controller.selecionados;
-
-    if (documentos.contains(solicitacao)) {
-      documentos.remove(solicitacao);
-    } else {
-      documentos.add(solicitacao);
-    }
+    controller.toggle(solicitacao);
   }
 
   Future<bool?> confirmDismiss(DismissDirection direction) async {
-    if (direction == DismissDirection.endToStart) {
-      toggleSelecionado();
-    }
-
+    if (direction == .endToStart) toggleSelecionado();
     return false;
   }
 }

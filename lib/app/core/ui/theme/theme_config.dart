@@ -100,18 +100,81 @@ class ThemeConfig {
       textTheme: TextTheme(
         titleLarge: TextStyle(
           fontFamily: 'Cabin',
+          fontSize: 28,
           fontWeight: FontWeight.w700,
-          fontSize: 24,
+          height: 1.2,
+          letterSpacing: -0.4,
           color: colorScheme.onSurface,
+          decoration: TextDecoration.none,
+          overflow: TextOverflow.ellipsis,
+          leadingDistribution: TextLeadingDistribution.even,
         ),
+
         titleMedium: TextStyle(
           fontFamily: 'Cabin',
+          fontSize: 20,
           fontWeight: FontWeight.w600,
-          fontSize: 18,
+          height: 1.3,
+          letterSpacing: -0.2,
+          color: colorScheme.onSurface,
+          decoration: TextDecoration.none,
+          overflow: TextOverflow.ellipsis,
+          leadingDistribution: TextLeadingDistribution.even,
+        ),
+
+        titleSmall: TextStyle(
+          fontFamily: 'Cabin',
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          height: 1.3,
+          letterSpacing: 0,
           color: colorScheme.onSurface,
         ),
-        bodyLarge: TextStyle(fontFamily: 'Cabin', fontSize: 16, color: colorScheme.onSurface),
-        bodyMedium: TextStyle(fontFamily: 'Cabin', fontSize: 14, color: colorScheme.onSurface),
+
+        bodyLarge: TextStyle(
+          fontFamily: 'Cabin',
+          fontSize: 16,
+          fontWeight: FontWeight.w400,
+          height: 1.5,
+          letterSpacing: 0.15,
+          color: colorScheme.onSurface,
+        ),
+
+        bodyMedium: TextStyle(
+          fontFamily: 'Cabin',
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          height: 1.45,
+          letterSpacing: 0.25,
+          color: colorScheme.onSurface,
+        ),
+
+        bodySmall: TextStyle(
+          fontFamily: 'Cabin',
+          fontSize: 12,
+          fontWeight: FontWeight.w400,
+          height: 1.4,
+          letterSpacing: 0.3,
+          color: colorScheme.onSurfaceVariant,
+        ),
+
+        labelLarge: TextStyle(
+          fontFamily: 'Cabin',
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+          height: 1.2,
+          letterSpacing: 0.5,
+          color: colorScheme.onPrimary,
+        ),
+
+        labelMedium: TextStyle(
+          fontFamily: 'Cabin',
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+          height: 1.2,
+          letterSpacing: 0.4,
+          color: colorScheme.onSurface,
+        ),
       ),
 
       navigationBarTheme: NavigationBarThemeData(

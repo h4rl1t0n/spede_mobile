@@ -30,9 +30,7 @@
   "[dart]": {
     "editor.formatOnSave": true,
     "editor.formatOnType": true,
-    "editor.rulers": [
-      120
-    ],
+    "editor.rulers": [120],
     "editor.selectionHighlight": false,
     "editor.suggestSelection": "first",
     "editor.tabCompletion": "onlySnippets",
@@ -42,5 +40,10 @@
     "source.fixAll": "always",
     "source.organizeImports": "always"
   },
-  "dart.lineLength": 120
+  "dart.lineLength": 120,
+  "flutterTools.displayGetxContextMenu": false,
+  "flutterTools.displayMobxContextMenu": true,
+  "flutterTools.displayRiverpodContextMenu": false,
+  "flutterTools.displayModularContextMenu": true,
+  "flutterTools.displaySignalsContextMenu": false
 }

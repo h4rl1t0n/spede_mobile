@@ -96,4 +96,14 @@ abstract class SolicitacaoControllerBase with Store {
     // if (categoriaSelecionada == null) return solicitacoes;
     return solicitacoes.where((e) => e.tipoSolicitacao == categoriaSelecionada).toList();
   }
+
+  @action
+  void toggle(DocumentoModel solicitacao) {
+    if (selecionados.contains(solicitacao)) {
+      selecionados.remove(solicitacao);
+      return;
+    }
+
+    selecionados.add(solicitacao);
+  }
 }

@@ -1,6 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import '../core/extensions/string_extension.dart';
+
 class UsuarioModel {
   final int id;
   final String username;
@@ -75,7 +77,7 @@ class UsuarioModel {
       return nomes.first;
     }
 
-    return '${nomes[0]} ${nomes[1]}';
+    return '${nomes[0].capitalize()} ${nomes[1].capitalize()}';
   }
 
   String get avatar {
