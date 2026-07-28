@@ -6,31 +6,51 @@ import 'categoria_chip.dart';
 class FiltroCategorias extends StatelessWidget {
   final Map<TipoSolicitacao, int> categorias;
   final TipoSolicitacao? selecionada;
-  final ValueChanged<TipoSolicitacao> onSelecionada;
+  final ValueChanged<TipoSolicitacao?> onChangeSelecionada;
 
-  const FiltroCategorias({super.key, required this.categorias, required this.selecionada, required this.onSelecionada});
+  const FiltroCategorias({
+    super.key,
+    required this.categorias,
+    required this.selecionada,
+    required this.onChangeSelecionada,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final total = categorias.values.fold(0, (soma, valor) => soma + valor);
+
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
-        children: categorias.entries.map((entry) {
-          final categoria = entry.key;
-          final label = categoria.label;
-          final count = entry.value;
+        children: [
+          CategoriaChip(
+            label: 'Todos',
+            count: total,
+            isSelected: selecionada == null,
+            onTap: () {
+              onChangeSelecionada(null);
+            },
+          ),
+          SizedBox(width: 6),
+          ...categorias.entries.map((entry) {
+            final categoria = entry.key;
+            final label = categoria.label;
+            final count = entry.value;
 
-          return Padding(
-            padding: const EdgeInsets.only(right: 8),
-            child: CategoriaChip(
-              label: label,
-              count: count,
-              isSelected: selecionada == categoria,
-              onTap: () => onSelecionada(categoria),
-            ),
-          );
-        }).toList(),
+            return Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: CategoriaChip(
+                label: label,
+                count: count,
+                isSelected: selecionada == categoria,
+                onTap: () {
+                  onChangeSelecionada(categoria);
+                },
+              ),
+            );
+          }),
+        ],
       ),
     );
   }

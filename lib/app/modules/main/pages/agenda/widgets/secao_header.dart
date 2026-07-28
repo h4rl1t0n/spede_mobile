@@ -13,19 +13,13 @@ class SecaoHeader extends StatelessWidget {
       width: double.infinity,
       color: colorScheme.secondaryContainer,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            title,
-            style: textTheme.titleMedium?.copyWith(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: colorScheme.onSurfaceVariant,
-            ),
-          ),
-          const Icon(Icons.tune_rounded, size: 20),
-        ],
+      child: Text(
+        title,
+        style: textTheme.titleMedium?.copyWith(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          color: colorScheme.onSurfaceVariant,
+        ),
       ),
     );
   }

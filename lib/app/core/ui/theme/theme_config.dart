@@ -60,7 +60,7 @@ class ThemeConfig {
       ),
 
       elevatedButtonTheme: ElevatedButtonThemeData(style: ButtonStyles.instance.primary),
-      
+
       textButtonTheme: TextButtonThemeData(style: ButtonStyles.instance.text),
 
       inputDecorationTheme: InputDecorationTheme(
@@ -225,9 +225,9 @@ class ThemeConfig {
         collapsedBackgroundColor: Colors.white,
         backgroundColor: Colors.white,
         collapsedTextColor: colorScheme.onSurface,
-        collapsedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        collapsedShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(16),
           side: BorderSide(color: colorScheme.outlineVariant.withValues(alpha: .5), width: 0.5),
         ),
         tilePadding: const EdgeInsets.symmetric(horizontal: 16),

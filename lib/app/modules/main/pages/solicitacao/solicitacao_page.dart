@@ -88,7 +88,7 @@ class _SolicitacaoPageState extends State<SolicitacaoPage> with Loader, Messages
                 child: FiltroCategorias(
                   categorias: categorias,
                   selecionada: categoriaSelecionada,
-                  onSelecionada: controller.alterarCategoria,
+                  onChangeSelecionada: controller.alterarCategoria,
                 ),
               );
             },
@@ -100,6 +100,11 @@ class _SolicitacaoPageState extends State<SolicitacaoPage> with Loader, Messages
             final lista = controller.filtrarPorCategoria;
             final modoSelecao = controller.modoSelecao;
             final todosSelecionados = controller.todosSelecionados;
+            final categoriaSelecionada = controller.categoriaSelecionada;
+
+            if (categoriaSelecionada == null) {
+              return SizedBox(child: Padding(padding: EdgeInsetsGeometry.only(top: 10)));
+            }
 
             return Visibility(
               visible: lista.isNotEmpty,
@@ -142,8 +147,12 @@ class _SolicitacaoPageState extends State<SolicitacaoPage> with Loader, Messages
                   itemCount: lista.length,
                   separatorBuilder: (_, _) => const SizedBox(height: 12),
                   itemBuilder: (_, index) {
-                    final item = lista[index];
-                    return ItemSolicitacao(solicitacao: item, controller: controller);
+                    final solicitacao = lista[index];
+                    return ItemSolicitacao(
+                      solicitacao: solicitacao,
+                      categoriaSelecionada: categoriaSelecionada,
+                      controller: controller,
+                    );
                   },
                 ),
               );

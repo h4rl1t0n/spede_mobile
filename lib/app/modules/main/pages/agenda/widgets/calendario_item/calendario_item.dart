@@ -52,6 +52,7 @@ class CalendarioItem extends StatelessWidget {
       availableGestures: AvailableGestures.all,
       availableCalendarFormats: const {CalendarFormat.month: 'Mês', CalendarFormat.week: 'Semana'},
       sixWeekMonthsEnforced: true,
+      rowHeight: 45,
       calendarStyle: CalendarioStyles.getCalendarStyle(),
       headerStyle: CalendarioStyles.getHeaderStyle(),
       calendarBuilders: CalendarioBuilders.getBuilders(),
